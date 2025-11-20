@@ -1,0 +1,328 @@
+<div class="gestion-app">
+  <!--Sidebar-->
+  <div class="gest-sidebar" [class.d-block]="openSidebar">
+    <div class="sidebar-content" id="sidebar-content">
+      <div class="sidebar-item bg-white">
+        <a href=""
+          ><img src="assets/images/logo.png" alt="" class="img-fluid"
+        /></a>
+      </div>
+
+      <div class="sidebar-item bg-white p-2 py-3">
+        <app-auto-ecole btn-class="btn-outline-primary w-100" />
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/dashboard"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="arrow-left" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">Retour</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/gestions/home"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="columns-gap" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">Tableau de bord</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/gestions/statut-validations"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="person-check" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">Statut des validations</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/gestions/monitoring"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="fan" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">Suivi candidat</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/gestions/statut-candidat-formation"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="journal-bookmark" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">Statut des candidats en formation</span></a
+            >
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/gestions/candidats"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="people" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">Tous les candidats</span></a
+            >
+          </li>
+
+          <!--
+            <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/gestions/absences"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="person-slash" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">Gestion des absences</span></a
+            >
+          </li>
+          -->
+
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/gestions/agenda"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="calendar2-date" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">Agenda des sessions</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/dashboard/affiliations"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="patch-question" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">Affilier un candiat</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/gestions/faqs"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="patch-question" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">FAQs</span></a
+            >
+          </li>
+
+          <!--
+            <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/gestions/service-client"
+              routerLinkActive="active"
+            >
+              <span class="nav-icon"
+                ><app-icon icon="headset" [size]="18"></app-icon
+              ></span>
+              <span class="nav-text">Service Client</span></a
+            >
+          </li>
+          -->
+        </ul>
+      </div>
+
+      <div class="sidebar-item text-center">
+        <a
+          routerLink="/dashboard"
+          class="btn btn-outline-light w-100 d-flex mb-3 justify-content-between"
+        >
+          <app-icon icon="arrow-left"></app-icon>
+          Retour
+        </a>
+        <div class="bg-white rounded p-3">
+          <h6 class="fw-semibold">{{ auth.name }}</h6>
+          <div class="text-muted my-3" *ngIf="!!ae && !!ae.codeLicence">
+            <span>N° Licence: {{ ae.codeLicence }}</span>
+            <br />
+
+            <span
+              class="p-1 rounded d-inline-block"
+              [ngClass]="'text-' + licenceTextColor"
+              *ngIf="expireLicence != null"
+            >
+              Licence
+              <ng-container *ngIf="expireLicence >= 1">
+                expire dans <br />
+                <b
+                  >({{ expireLicence }} jour{{
+                    expireLicence > 1 ? "s" : ""
+                  }}
+                  )</b
+                >
+              </ng-container>
+              <ng-container *ngIf="expireLicence < 1">
+                <ng-container *ngIf="expireLicence == 0">
+                  expire aujourd'hui
+                </ng-container>
+                <ng-container *ngIf="expireLicence != 0">
+                  expirée
+                </ng-container>
+              </ng-container>
+            </span>
+          </div>
+
+          <a routerLink="/logout" class="btn btn-logout btn-light"
+            >Se déconnecter</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Sidebar fin-->
+  <div class="gest-main">
+    <!--Header-->
+    <header class="sticky-top px-3 py-4">
+      <div class="col">
+        <!--Mobile navbar-->
+        <div
+          class="d-flex d-md-none justify-content-between align-items-center border-bottom mb-2"
+        >
+          <a href=""><img src="assets/images/logo.png" width="250" /></a>
+          <!-- -->
+          <button class="btn" (click)="toggleSidebar()" id="mobile-sidebar">
+            <app-icon [icon]="!openSidebar ? 'list' : 'x'"></app-icon>
+          </button>
+        </div>
+        <!--Mobile navbar fin-->
+        <div class="row">
+          <div class="col-md-5 col-lg-4">
+            <app-breadcrumb></app-breadcrumb>
+          </div>
+          <div class="col-md-7 col-lg-8" *ngIf="false">
+            <div class="row justify-content-end align-items-center">
+              <div class="col-md-5 order-1 order-md-0 mt-1 mt-md-0">
+                <div class="d-flex">
+                  <input
+                    type="text"
+                    class="form-control bg-white py-3 top-search-input"
+                    placeholder="Taper un NPI ..."
+                    name="searchInput"
+                    [(ngModel)]="searchInput"
+                  />
+                  <button
+                    class="btn btn-primary p-3 ms-1 top-search-button"
+                    (click)="search()"
+                    data-bs-toggle="modal"
+                    data-bs-target="#search-modal"
+                    [disabled]="searchInput.length < 3 || onSearching"
+                  >
+                    <app-icon icon="search"></app-icon>
+                  </button>
+                </div>
+                <ng-container *ngIf="onSearching"
+                  >Recherche en cours ...</ng-container
+                >
+              </div>
+
+              <!--<div class="col-md-4 order-0 order-md-1 mt-1 mt-md-0">
+                <div class="h-100 bg-white top-alert" role="alert">
+                  <div class="top-alert-content">
+                    <span class="fw-normal"
+                      >0 alertes non lues
+                      <app-icon icon="arrow-right"></app-icon>
+                    </span>
+                    <br />
+                    <small style="font-size: 12px" class="fw-lighter"
+                      >0 Dossier rejeté</small
+                    >
+                  </div>
+                </div>
+              </div>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!--Header FIN-->
+    <div class="m-3 mb-3">
+      <div class="card">
+        <div class="card-body p-2">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="search-modal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">Résultat de recherche</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group" *ngIf="!onSearching && candidatFound.length">
+          <li
+            class="list-group-item bd-color-0 p-2"
+            *ngFor="
+              let candidat of candidatFound
+                | paginate : { itemsPerPage: 10, currentPage: 1 }
+            "
+          >
+            <app-fiche-candidat [candidat]="candidat"></app-fiche-candidat>
+          </li>
+        </ul>
+        <div *ngIf="!onSearching && !candidatFound.length">Aucun résultat</div>
+        <div *ngIf="onSearching" class="p-3 text-center">
+          Recherche en cours ...
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

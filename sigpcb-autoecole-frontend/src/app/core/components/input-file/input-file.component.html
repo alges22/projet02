@@ -1,0 +1,98 @@
+<div class="input-styled input-file" (click)="openFileInput()">
+  <div class="form-control py-2" style="font-size: 12px">
+    <input
+      hidden
+      type="file"
+      [name]="name"
+      [accept]="accept"
+      [required]="required"
+      (change)="onChange($event)"
+      (click)="onChange($event)"
+      [multiple]="multiple"
+    />
+    {{ placeholder }}
+  </div>
+  <a class="indicator">
+    <ng-container *ngIf="type == 'img'">
+      <app-icon icon="file-earmark-image" classe="text-primary fw-bold">
+      </app-icon>
+    </ng-container>
+    <ng-container *ngIf="type == 'pdf'">
+      <app-icon icon="file-earmark-pdf" classe="text-danger fw-bold">
+      </app-icon>
+    </ng-container>
+    <ng-container *ngIf="type == 'word'">
+      <app-icon icon="file-word" classe="text-blue fw-bold"> </app-icon>
+    </ng-container>
+    <ng-container *ngIf="type == 'file'">
+      <app-icon icon="files" classe="text-primary fw-bold"> </app-icon>
+    </ng-container>
+  </a>
+</div>
+
+<ng-container *ngIf="!multiple">
+  <div class="text-end mt-1" *ngIf="isSelected || !!selectedURL">
+    <!-- <app-icon icon="trash3" (click)="remove()" classe="text-danger"></app-icon>-->
+    <ng-container>
+      <app-icon icon="eye" (click)="openModal()"></app-icon>
+    </ng-container>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="multiple">
+  <div class="row align-items-center justify-content-around">
+    <div class="col-sm-4">
+      <small class="small text-muted" style="font-size: 12px"
+        >Sélection multiple possible</small
+      >
+    </div>
+    <div class="col-sm-8">
+      <div class="d-flex align-items-center justify-content-end gap-2 mt-2">
+        <ng-container *ngFor="let pv of multiplepreviews">
+          <a
+            class="d-flex align-items-center justify-content-center border p-1"
+            style="width: 40px; height: 40px"
+            [href]="pv"
+            target="_blank"
+          >
+            <app-icon icon="eye"></app-icon>
+          </a>
+        </ng-container>
+        <!--<ng-container *ngIf="multiplepreviews.length">
+          <app-icon
+            icon="trash3"
+            (click)="remove()"
+            classe="text-danger"
+          ></app-icon>
+        </ng-container>-->
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<!-- <app-modal [action]="inputId" size="modal-md" *ngIf="file">
+  <div class="modal-body p-0">
+    <img [src]="selectedImage" alt="Aperçu de l'image" class="img-fluid">
+  </div>
+</app-modal> -->
+
+<div
+  class="modal fade"
+  [id]="this.inputId"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+  *ngIf="selectedURL && selectedURL.length"
+>
+  <div
+    class="modal-dialog bg-transparent modal-dialog-scrollable modal-dialog-centered modal-lg"
+    role="document"
+  >
+    <div class="modal-content rounded-0 p-0">
+      <div class="modal-body p-0">
+        <img [src]="selectedURL" alt="Aperçu de l'image" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>

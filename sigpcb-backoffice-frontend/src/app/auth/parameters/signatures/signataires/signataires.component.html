@@ -1,0 +1,118 @@
+<div class="row align-items-center">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <!-- <app-search [url]="searchUrl" (results)="onSearches($event)">
+              </app-search> -->
+  </div>
+  <div class="col-sm-2 text-end">
+    <button
+      class="btn border btn-icons btn-primary"
+      (click)="openModal('store')"
+    >
+      <app-icon icon="plus"></app-icon>
+      Signataire
+    </button>
+  </div>
+</div>
+<app-md-loader
+  [show]="signataires.length < 1 && signataires.length != 0"
+></app-md-loader>
+<table class="table mt-0">
+  <thead>
+    <tr>
+      <th scope="col">Signataire</th>
+      <th scope="col" width="10%">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let signataire of signataires; let i = index">
+      <td>
+        {{ signataire.user.first_name }}
+        {{ signataire.user.last_name }}
+      </td>
+      <td>
+        <div class="btn-actions">
+          <app-delete
+            (canDelete)="destroy($event)"
+            [activateId]="signataire.id"
+          ></app-delete>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  <tbody class="text-center" *ngIf="signataires.length == 0">
+    <tr>
+      <td colspan="12">Aucune donnée</td>
+    </tr>
+  </tbody>
+</table>
+<app-modal [action]="modalId" size="">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+
+  <div *ngIf="action !== 'show'">
+    <form action="" method="post" quickv id="signataire-form">
+      <div class="row mb-2">
+        <div class="col-sm">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="user_id">Utilisateur</label>
+                <div class="col-6 text-end">
+                  <span info="Sélectionner un utilisateur">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="user_id"
+                qv-rules="min:1"
+                qv-messages="L'utilisateur est requis"
+                [(ngModel)]="signataire.user_id"
+              >
+                <option value="" disabled selected>
+                  Sélectionner un utilisateur
+                </option>
+                <option [value]="user.id" *ngFor="let user of users">
+                  {{ user.first_name }} {{ user.last_name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="user_id"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="onLoading"
+            qv-submit
+            (click)="save($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>

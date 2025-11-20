@@ -1,0 +1,128 @@
+<div class="row align-items-center justify-content-between">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon
+          icon="arrow-clockwise"
+          [size]="18"
+          classe="text-dark"
+        ></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="col-sm-3 text-end">
+    <button
+      class="btn border btn-icons btn-primary"
+      (click)="openModal('store')"
+    >
+      <app-icon icon="plus" [size]="18"></app-icon>
+      Titre
+    </button>
+  </div>
+</div>
+<table class="table mt-0 table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Nom</th>
+      <th scope="col">Statut</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="titres.length > 0">
+    <tr *ngFor="let titre of titres">
+      <td>
+        {{ titre.name }}
+      </td>
+      <td>
+        <app-switch
+          [checked]="titre.status"
+          (statusChangeEvent)="confirmSwitch($event)"
+          [activateId]="titre.id"
+        ></app-switch>
+      </td>
+      <td>
+        <div class="btn-actions">
+          <app-icon
+            icon="pencil"
+            (click)="edit(titre.id)"
+            [size]="16"
+            classe="text-success"
+          ></app-icon>
+          <app-delete
+            (canDelete)="destroy($event)"
+            [activateId]="titre.id"
+          ></app-delete>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<app-modal [action]="modalId" size="modal-md">
+  <div heading class="fw-semibold text-primary text-center">
+    {{ titre_formulaire }}
+  </div>
+  <form action="" quickv id="admin-titres-form">
+    <div class="mb-4">
+      <label for="" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-6 required">Nom</div>
+          <div class="col-6 text-end">
+            <span info="Le titre de l'agent">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input
+          qv-rules="required"
+          qv-messages="L'intitulé du titre"
+          required
+          type="text"
+          name="name"
+          class="form-control"
+          [(ngModel)]="titre.name"
+        />
+      </div>
+      <div qv-feedback="name"></div>
+    </div>
+
+    <div class="mb-4">
+      <div class="d-flex">
+        <label for="admin-status" class="me-2">Statut (Actif / Inactif)</label>
+        <div class="form-check form-switch mb-0">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="admin-status"
+            name="status"
+            checked
+            [(ngModel)]="titre.status"
+            value="1"
+          />
+        </div>
+      </div>
+      <p>
+        <button
+          class="btn btn-primary w-100"
+          qv-submit
+          (click)="save($event)"
+          [disabled]="onLoading"
+        >
+          Enregistrer
+          <span *ngIf="onLoading">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+      </p>
+    </div>
+  </form>
+</app-modal>

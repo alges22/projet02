@@ -1,0 +1,90 @@
+<div class="row align-items-center">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon
+          icon="arrow-clockwise"
+          [size]="18"
+          classe="text-dark"
+        ></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+</div>
+<table class="table mt-0">
+  <thead>
+    <tr>
+      <th scope="col">Nom</th>
+      <th scope="col" width="10%" class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="departements.length > 0">
+    <tr *ngFor="let departement of departements; let i = index">
+      <td>{{ departement.name }}</td>
+      <td class="text-center">
+        <app-icon
+          (click)="showDepartement(departement.id, 'edit')"
+          icon="pencil"
+          [size]="16"
+          classe="text-success"
+        ></app-icon>
+      </td>
+    </tr>
+  </tbody>
+  <tbody class="text-center" *ngIf="departements.length < 1">
+    <tr>
+      <td colspan="12">Chargement en cours ...</td>
+    </tr>
+  </tbody>
+</table>
+
+<app-modal [action]="modalId">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+
+  <div *ngIf="action !== 'show'">
+    <form action="" method="post" quickv id="departement-form">
+      <div class="row mb-2">
+        <div class="col-sm">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6 required">Nom</div>
+                <div class="col-6 text-end">
+                  <span info="Le nom du département">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required|minlength:2|maxlength:80"
+                qv-messages="Le nom est requis | Le nom est trop court | Le nom est trop long"
+                required
+                type="text"
+                name="name"
+                placeholder="Taper le nom"
+                class="form-control"
+                [(ngModel)]="departement.name"
+              />
+            </div>
+            <div qv-feedback="name"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            (click)="save($event)"
+          >
+            Enregistrer
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>

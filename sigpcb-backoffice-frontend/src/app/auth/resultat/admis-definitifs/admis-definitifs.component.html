@@ -1,0 +1,124 @@
+<div class="m-2">
+  <div class="row p-2 justify-content-between align-items-center">
+    <div class="col-lg-5">
+      <div class="d-flex align-items-center justify-content-between">
+        <button class="btn btn-refresh" (click)="getResultats()">
+          <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+          <span class="text-muted" style="font-size: 10px">Actualiser</span>
+        </button>
+        <div class="input-group ms-1">
+          <span class="input-group-text" role="button" (click)="getResultats()">
+            <app-icon icon="search"></app-icon>
+          </span>
+          <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Taper un NPI ..."
+            [(ngModel)]="filters.search"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 text-end">
+      <div class="row filter-box">
+        <div class="col-sm-6">
+          <select
+            class="form-select"
+            name="permisSelected"
+            [(ngModel)]="filters.categorie_permis_id"
+            (change)="getResultats()"
+          >
+            <option [value]="null">Tous les permis</option>
+            <option [value]="item.id" *ngFor="let item of categories">
+              {{ item.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="liste.length">
+    <div class="row mb-2 justify-content-end align-items-center">
+      <div class="col-sm-2 col-6 text-end">
+        <button class="btn btn-primary" (click)="download()">
+          Télécharger
+          <app-icon icon="download"></app-icon>
+        </button>
+      </div>
+    </div>
+    <div class="resultat-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">N°</th>
+              <th scope="col">PHOTO</th>
+              <th scope="col">N° DU PERMIS</th>
+              <th scope="col">NOM ET PRENOMS</th>
+              <th scope="col">NPI</th>
+              <th scope="col">TELEPHONE</th>
+              <th scope="col">CATEGORIE</th>
+              <th scope="col">DATE DELIVRANCE</th>
+              <th scope="col">DATE EXPIRATION</th>
+              <th scope="col">DATE NAISSANCE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container
+              *ngFor="let ds of liste | paginate : paginateArgs; let i = index"
+            >
+              <tr>
+                <td scope="row">{{ i + 1 }}</td>
+                <td>
+                  <img [src]="ds.candidat.avatar" width="30" alt="" />
+                </td>
+                <td>
+                  <span>{{ ds.code }}</span>
+                </td>
+                <td>
+                  <p class="pt-2">
+                    {{ ds.candidat.nom }}
+                    {{ ds.candidat.prenoms }}
+                  </p>
+                </td>
+                <td>
+                  <p class="pt-2">{{ ds.npi }}</p>
+                </td>
+                <td>
+                  <p class="pt-2">{{ ds.candidat.telephone }}</p>
+                </td>
+                <td>
+                  <p class="pt-2">{{ ds.categorie_permis.name }}</p>
+                </td>
+                <td>
+                  <p class="pt-2">{{ ds.delivered_at | date }}</p>
+                </td>
+                <td>
+                  <p class="pt-2">{{ ds.expired_at | date }}</p>
+                </td>
+                <td>
+                  <p class="pt-2">
+                    {{ ds.candidat.date_de_naissance | date }}
+                  </p>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+
+      <app-pagination
+        *ngIf="total > 10"
+        [total]="total"
+        (pageChange)="paginate($event)"
+        [pageNumber]="filters.page"
+      ></app-pagination>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!liste.length">
+    <div class="alert alert-primary text-center w-100" role="alert">
+      Aucune résultat
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,6 @@
+<router-outlet></router-outlet>
+<div class="whatsapp" *ngIf="phone">
+  <button class="btn rounded-circle" (click)="openWhatsApp()">
+    <app-icon icon="whatsapp" classe="text-light" [size]="26"> </app-icon>
+  </button>
+</div>

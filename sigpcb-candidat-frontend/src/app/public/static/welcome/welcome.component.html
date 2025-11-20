@@ -1,0 +1,132 @@
+<div class="bg-primary-gradient py-3 py-md-5 welcome">
+  <div class="container">
+    <div class="col-lg-10 mx-auto">
+      <div
+        class="row flex-md-row-reverse align-items-center justify-content-between"
+      >
+        <div class="col-10 col-sm-7 col-md-3 mx-auto d-none d-md-block">
+          <img
+            src="assets/images/login-left.png"
+            class="d-block mx-lg-auto img-fluid"
+            loading="lazy"
+          />
+        </div>
+        <div class="col-md-6">
+          <p class="lead text-light fw-semibold">
+            {{ "Welcome" | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container my-5">
+  <div class="col-lg-11 col-xl-10 mx-auto">
+    <h3 class="text-center fw-semibold my-5">
+      {{ "What service would you like to request" | translate }}
+    </h3>
+    <div class="row">
+      <div class="col-lg-3 mb-3" *ngFor="let ps of prestations">
+        <app-service-card [prestation]="ps">
+          <div class="d-none d-md-block">
+            <a
+              *ngIf="userConnected() && ps.slug === 'inscription-examen'"
+              (click)="demande(ps.slug)"
+              class="btn btn-outline-primary rounded-0 d-block"
+            >
+              {{ "Submit my application" | translate }}</a
+            >
+
+            <button
+              *ngIf="userConnected() && ps.slug !== 'inscription-examen'"
+              [routerLink]="'/services/' + ps.slug"
+              type="button"
+              class="btn btn-outline-primary rounded-0 d-block"
+            >
+              {{ "Submit my application" | translate }}
+            </button>
+            <!-- [disabled]="ps.slug == 'demande-permis-numerique' && !permis?.has_permis" -->
+
+            <a
+              *ngIf="!userConnected()"
+              [routerLink]="'/connexion'"
+              class="btn btn-outline-primary rounded-0 d-block"
+            >
+              {{ "Submit my application" | translate }}</a
+            >
+          </div>
+          <div
+            class="d-md-none d-flex w-100 align-items-center justify-content-center"
+          >
+            <a
+              *ngIf="userConnected() && ps.slug === 'inscription-examen'"
+              (click)="demande(ps.slug)"
+              class="btn btn-primary rounded-0"
+            >
+              Lancer
+            </a>
+
+            <button
+              *ngIf="userConnected() && ps.slug !== 'inscription-examen'"
+              [routerLink]="'/services/' + ps.slug"
+              type="button"
+              class="btn btn-primary rounded-0"
+            >
+              Lancer
+            </button>
+            <!-- [disabled]="ps.slug == 'demande-permis-numerique' && !permis?.has_permis" -->
+
+            <a
+              *ngIf="!userConnected()"
+              [routerLink]="'/connexion'"
+              class="btn btn-primary rounded-0"
+            >
+              Lancer</a
+            >
+          </div>
+        </app-service-card>
+      </div>
+    </div>
+    <div
+      class="p-3 bg-modal rounded-3 text-primary d-sm-none fw-semibold"
+      style="font-size: 14px"
+    >
+      Tout savoir sur une démarche
+      <app-icon
+        icon="box-arrow-up-right"
+        classe="fw-bolder d-inline"
+      ></app-icon>
+    </div>
+  </div>
+</div>
+
+<!--Prestation modal-->
+<div
+  class="modal fade"
+  id="prestation-demande"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title fs-6" [innerHTML]="prestation.title"></h5> -->
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <app-inscription-examen></app-inscription-examen>
+      </div>
+    </div>
+  </div>
+</div>

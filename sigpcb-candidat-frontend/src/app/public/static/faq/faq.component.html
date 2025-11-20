@@ -1,0 +1,106 @@
+<div class="bg-primary-gradient py-5 welcome d-none d-md-block">
+  <div class="container">
+    <div class="col-lg-10 mx-auto">
+      <div
+        class="row flex-md-row-reverse align-items-center justify-content-between"
+      >
+        <div class="col-10 col-sm-7 col-md-3 mx-auto">
+          <img
+            src="assets/images/login-left.png"
+            class="d-block mx-lg-auto img-fluid"
+            loading="lazy"
+          />
+        </div>
+        <div class="col-md-6">
+          <p class="lead text-light fw-semibold">
+            {{ "Welcome" | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container my-5">
+  <div class="col-lg-11 col-xl-10 mx-auto">
+    <h3 class="text-center fw-semibold my-5">
+      Trouvez les réponses à vos interrogations ici
+    </h3>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-4" *ngFor="let faq of faqLeft">
+          <div
+            class="border p-3 rounded-1 faq"
+            [class.active]="faq.id === currentFaqId"
+          >
+            <div
+              class="d-flex align-items-center"
+              (click)="onFaqueSelected(faq.id)"
+              role="button"
+            >
+              <button
+                class="btn btn-sm btn-primary"
+                *ngIf="faq.id !== currentFaqId"
+              >
+                <app-icon icon="plus"></app-icon>
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                *ngIf="faq.id === currentFaqId"
+              >
+                <app-icon icon="x"></app-icon>
+              </button>
+              <span class="faq-title ms-2">{{ faq.question }} </span>
+            </div>
+            <div
+              class="faq-body bg-white p-3 mt-3 mb-1 rounded-1"
+              *ngIf="currentFaqId === faq.id"
+            >
+              {{ faq.response }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-4" *ngFor="let faq of faqRight">
+          <div
+            class="border p-3 rounded-1 faq"
+            [class.active]="faq.id === currentFaqId"
+          >
+            <div
+              class="d-flex align-items-center"
+              (click)="onFaqueSelected(faq.id)"
+              role="button"
+            >
+              <button
+                class="btn btn-sm btn-primary"
+                *ngIf="faq.id !== currentFaqId"
+              >
+                <app-icon icon="plus"></app-icon>
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                *ngIf="faq.id === currentFaqId"
+              >
+                <app-icon icon="x"></app-icon>
+              </button>
+              <span class="faq-title ms-2">{{ faq.question }}</span>
+            </div>
+            <div
+              class="faq-body bg-white p-3 mt-3 mb-1 rounded-1"
+              *ngIf="currentFaqId === faq.id"
+            >
+              {{ faq.response }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h6 class="text-center mb-3">
+      Si vous n'avez pas trouvé la réponse à votre préoccupation <br />
+      écrivez-nous un message ici
+    </h6>
+    <p class="text-center">
+      <a href="" class="btn btn-primary">Contactez-nous</a>
+    </p>
+  </div>
+</div>

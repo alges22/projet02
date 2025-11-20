@@ -1,0 +1,136 @@
+<div class="vh-100">
+  <div class="row h-100 m-0">
+    <div class="col-sm-5 bg-primary gradient-box px-5 order-1 order-sm-0">
+      <div
+        class="d-flex align-items-center flex-column h-100 text-light justify-content-center"
+      >
+        <div class="col-sm-7">
+          <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+        </div>
+        <div class="login-desc h4 text-center my-3">
+          Système de Gestion du <br />
+          Permis de Conduire au Bénin
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-7 bg-white px-0">
+      <div
+        class="bg-body p-3 d-flex align-items-center justify-content-between"
+      >
+        <div class="col-sm-4 col-3">
+          <img src="assets/images/logo.png" class="img-fluid" alt="" />
+        </div>
+        <div class="col-sm-3">
+          <div class="d-flex justify-content-end">
+            <span
+              class="border border-primary px-2 text-center rounded d-flex justify-content-center align-items-center"
+              style="width: 35px"
+              ><app-icon icon="list" classe="text-primary fw-bold" [size]="24"
+            /></span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-sm-6 mx-auto d-flex flex-column pt-5 justify-content-center"
+      >
+        <form quickv id="login" *ngIf="page == 'login'">
+          <h3 class="mt-3 mb-5 fw-semibold text-primary">Connexion</h3>
+          <div class="mb-3">
+            <label for="email" class="mb-1 d-block"> Adresse email </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required|email|maxlength:100"
+                [qv-messages]="emailErrors"
+                required
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Tapez votre adresse e-mail"
+                class="form-control border"
+                [(ngModel)]="form.email"
+                (keypress)="onEnter($event)"
+              />
+            </div>
+            <div qv-feedback="email"></div>
+          </div>
+          <p class="my-4">
+            <button
+              type="button"
+              class="btn btn-primary rounded w-100"
+              qv-submit
+              (click)="onSubmit($event)"
+              type="button"
+              [disabled]="isloading"
+            >
+              <span *ngIf="isloading">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Loading...</span>
+              </span>
+              Se connecter
+            </button>
+          </p>
+        </form>
+        <form quickv id="forgot-password" *ngIf="page == 'otp'">
+          <h6 class="fw-semibold text-primary my-3">
+            Un code à 06 chiffres a été envoyé sur numéro de téléphone
+          </h6>
+
+          <p class="mt-3">
+            Si vous n'avez pas reçu de code après quelques minutes, cliquez sur
+            le bouton Renvoyer le code ci-dessous pour en demander un nouveau.
+          </p>
+
+          <div class="my-3">
+            <app-single-inputs
+              [count]="6"
+              (isValid)="getOtp($event)"
+              height="35px"
+            ></app-single-inputs>
+          </div>
+          <div qv-feedback="code" class="my-3"></div>
+          <button
+            (click)="connect($event)"
+            type="submit"
+            qv-submit
+            class="btn btn-primary btn-lg"
+            [disabled]="isloading"
+          >
+            Valider
+          </button>
+          <button
+            type="button"
+            class="btn ms-2"
+            [disabled]="isloading"
+            (click)="resendCode()"
+          >
+            Renvoyer le code
+          </button>
+          <br />
+          <span *ngIf="isloading">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer ms-auto bg-light text-center py-2 col-sm-6">
+    <h6>République du Bénin</h6>
+    <p>
+      Ministère du Cadre de Vie et des Transports en Charge du Développement
+      Durable
+    </p>
+    <p>© Tous Droits Réservés 2023.</p>
+  </div>
+</footer>

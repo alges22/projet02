@@ -1,0 +1,125 @@
+<ng-container *ngIf="!onLoadCurrentSession">
+  <ng-container *ngIf="currentSession && annexe">
+    <div *ngIf="listeLoaded">
+      <div class="start-card p-2 mt-2">
+        <div class="row">
+          <div class="col-sm-6">
+            <p>
+              <span class="fw-semibold me-3">Session</span> :
+              {{ currentSession.session_long }}
+            </p>
+            <p>
+              <span class="fw-semibold me-3">Présentés</span> :
+              {{ statCode.presentes | padding : 2 }}
+            </p>
+            <p>
+              <span class="fw-semibold me-3">Admis</span> :
+              {{ statCode.admis | padding : 2 }}
+            </p>
+
+            <p>
+              <span class="fw-semibold me-3">Recalés</span> :
+              {{ statCode.recales | padding : 2 }}
+            </p>
+
+            <p>
+              <span class="fw-semibold me-3">Absents</span> :
+              {{ statCode.abscents | padding }}
+            </p>
+          </div>
+          <div class="col-sm-6">
+            <div class="row align-items-center justify-content-between">
+              <div class="col-6">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    name="result_type"
+                    type="radio"
+                    id="all-result"
+                    [value]="null"
+                    [(ngModel)]="filter.resultat_code"
+                    (change)="codes()"
+                    checked
+                  />
+                  <label class="form-check-label" for="all-result">
+                    Tous les candidats
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    name="result_type"
+                    type="radio"
+                    [value]="'success'"
+                    [(ngModel)]="filter.resultat_code"
+                    (change)="fetch('admis')"
+                    id="all-admis"
+                  />
+                  <label class="form-check-label" for="all-admis">
+                    Les admis
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    name="result_type"
+                    type="radio"
+                    [value]="'failed'"
+                    [(ngModel)]="filter.resultat_code"
+                    id="all-rejected"
+                    (change)="fetch('recales')"
+                  />
+                  <label class="form-check-label" for="all-rejected">
+                    Les récalés
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    name="result_type"
+                    type="radio"
+                    [value]="'absent'"
+                    id="all-abscent"
+                    (change)="fetch('absent')"
+                  />
+                  <label class="form-check-label" for="all-abscent">
+                    Les absents
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <ng-container *ngIf="!resultats.length">
+          <div class="text-center p-3">
+            <strong>Aucun résultat </strong>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="filtered.length">
+          <div class="card my-3" style="max-height: 500px; overflow: auto">
+            <resultat-list
+              [resultats]="filtered"
+              [meta]="{ annexe: annexe, agenda: currentSession }"
+            />
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!annexe || !currentSession">
+    <div class="alert alert-light text-center m-3" role="alert">
+      <strong
+        >Veuillez sélectionner une annexe et une session pour voir les
+        résultats</strong
+      >
+    </div>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="onLoadCurrentSession">
+  <div class="py-5 text-center">Chargement en cours</div>
+</ng-container>

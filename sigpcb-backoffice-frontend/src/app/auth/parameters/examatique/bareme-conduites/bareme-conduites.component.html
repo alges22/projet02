@@ -1,0 +1,186 @@
+<div class="row align-items-center">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-5"></div>
+  <div class="col-sm-2 text-end"></div>
+</div>
+<h6 class="m-3">
+  Permis <button (click)="openModal('store')">Ajouter</button>
+</h6>
+<div class="d-flex m-3">
+  <button
+    *ngFor="let baremebycategorie of baremebycategories; let i = index"
+    class="btn px-3 me-2"
+    [class.btn-outline-primary]="categoryBareme.id != baremebycategorie.id"
+    [class.btn-primary]="categoryBareme.id == baremebycategorie.id"
+    (click)="setBaremeCategory(i)"
+  >
+    {{ baremebycategorie.name }}
+  </button>
+</div>
+<table class="table" *ngIf="categoryBareme">
+  <thead>
+    <tr>
+      <th scope="col">Barèmes ({{ categoryBareme.name }})</th>
+      <th scope="col" width="10%" class="text-center">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let bareme of categoryBareme.baremes; let i = index">
+      <tr>
+        <td>
+          {{ bareme.name }} (noté sur <strong>{{ bareme.poids }}</strong
+          >)
+          <div class="bg-modal p-3" *ngIf="bareme.id === selectedBaremeId">
+            <app-subbareme [baremeId]="bareme.id"></app-subbareme>
+          </div>
+        </td>
+
+        <td class="text-center">
+          <app-icon
+            icon="chevron-down"
+            [size]="16"
+            title="Gestion de ses barèmes"
+            classe="text-muted"
+            (click)="openBareme(bareme)"
+          ></app-icon>
+          <app-icon
+            icon="gear"
+            [size]="16"
+            (click)="show(categoryBareme.id, 'show')"
+            title="Gestion de ses barèmes"
+            classe="text-warning"
+          ></app-icon>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+  <tbody class="text-center" *ngIf="baremebycategories.length == 0">
+    <tr>
+      <td colspan="12">Aucune donnée</td>
+    </tr>
+  </tbody>
+</table>
+<app-modal [action]="modalId" size="modal-lg">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+    ( {{ categoryBareme?.name }})
+  </div>
+
+  <div *ngIf="action !== 'edit'">
+    <form action="" method="post" quickv>
+      <div class="row mb-2">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="name">Libellé</label>
+                <div class="col-6 text-end">
+                  <span info="Le libellé du barème">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Taper le libellé"
+                qv-rules="required|minlength:2|maxlength:80"
+                qv-messages="Le libellé est requis | Le libellé est trop court | Le libellé est trop long"
+                class="form-control"
+                [(ngModel)]="baremeconduite.name"
+              />
+            </div>
+            <div qv-feedback="name"></div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6 required">Note</div>
+                <div class="col-6 text-end">
+                  <span info="La note du barème">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required|int|between:1,20"
+                qv-messages="La  note est requise | {1,2}La note doit être un entier compris entre 1 et 20"
+                type="text"
+                name="poids"
+                placeholder="Taper la  note"
+                class="form-control"
+                [(ngModel)]="baremeconduite.poids"
+              />
+            </div>
+            <div qv-feedback="poids"></div>
+          </div>
+        </div>
+
+        <div class="text-end col-sm-9 offset-sm-3">
+          <button
+            class="btn btn-outline-primary justify-content-center"
+            qv-submit
+            (click)="saveBareme($event)"
+            [disabled]="onLoadingBareme"
+          >
+            Enregistrer
+            <span *ngIf="onLoadingBareme">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+      <fieldset>
+        <div class="row mb-2">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Libellé</th>
+                <th width="10%" class="text-center">Note</th>
+                <th width="5%" class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let baremeconduite of baremeconduites">
+                <td>{{ baremeconduite.name }}</td>
+                <td class="text-center">{{ baremeconduite.poids }}</td>
+                <td>
+                  <div class="btn-actions">
+                    <app-icon
+                      icon="pencil"
+                      classe="text-warning"
+                      (click)="showBareme(baremeconduite)"
+                    ></app-icon>
+                    <app-delete
+                      (canDelete)="deleteBaremeCategorie($event)"
+                      [activateId]="baremeconduite.id"
+                    ></app-delete>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</app-modal>

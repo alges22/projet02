@@ -1,0 +1,24 @@
+.chat {
+  min-height: 450px;
+
+  .card-body {
+    height: 350px;
+    overflow: auto;
+
+    .message-flex {
+
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      .message-item:first-child {
+        margin-top: auto;
+      }
+    }
+  }
+
+  .our-message,
+  .customer-message {
+    margin-top: auto;
+  }
+}

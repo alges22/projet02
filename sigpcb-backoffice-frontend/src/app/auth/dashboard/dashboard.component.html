@@ -1,0 +1,39 @@
+<div class="container my-4">
+  <div class="row" *ngIf="examen">
+    <div class="col-8">
+      <h6>
+        Agenda de l’examen du permis de conduire <br />
+        <span class="text-secondary">
+          Session du {{ examen.session_long }}</span
+        >
+      </h6>
+    </div>
+    <div class="col text-end">
+      <a routerLink="/agendas/session-examens" class="text-primary"
+        >Voir l’agenda de l’année <app-icon icon="arrow-right"></app-icon>
+      </a>
+    </div>
+
+    <div class="col-12">
+      <div class="row">
+        <div class="col-sm">
+          <div class="border border-primary border- rounded">
+            <div style="padding-top: 4.5em" class="px-2 pb-3 rounded-2 bg-body">
+              <div class="row">
+                <div class="col-md-10">
+                  <app-calendar-pogress
+                    [programation]="agenda.programation"
+                  ></app-calendar-pogress>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!examen">
+    <div class="alert alert-primary text-center">Aucune session courante</div>
+  </ng-container>
+</div>

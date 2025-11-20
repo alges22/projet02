@@ -1,0 +1,553 @@
+<div class="card-header text-primary d-flex justify-content-between">
+  <span
+    >{{ role_formulaire }}
+    <strong *ngIf="question">{{ question.name }}</strong></span
+  >
+  <button
+    type="button"
+    class="btn btn-danger"
+    routerLink="/parametres/examatique"
+  >
+    <app-icon icon="arrow-left-short" [size]="14"></app-icon> Retour
+  </button>
+</div>
+<div class="card-body" style="width: 80%; margin: auto">
+  <app-ng-window id="category-window">
+    <app-ng-window-header>
+      <button
+        class="btn window-btn"
+        [class.current]="pageIndex === 0"
+        (click)="selectedPage(0)"
+      >
+        Informations basiques
+      </button>
+      <button
+        class="btn window-btn"
+        [class.current]="pageIndex === 1"
+        (click)="selectedPage(1)"
+        [disabled]="!question.id"
+      >
+        Langues
+      </button>
+      <button
+        class="btn window-btn"
+        [class.current]="pageIndex === 2"
+        (click)="selectedPage(2)"
+        [disabled]="!question.id"
+      >
+        Réponses
+      </button>
+    </app-ng-window-header>
+
+    <app-ng-window-page *ngIf="pageIndex == 0" data-window-current="true">
+      <form qv-form="basic" quickv id="questions-form" class="fieldset">
+        <div class="row">
+          <div class="col-md">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-6 required">Libellé</div>
+                  <div class="col-6 text-end">
+                    <span info="Le libellé de la question">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input
+                  qv-rules="required|minlength:1|maxlength:161"
+                  qv-messages="Le libellé est requis | Le libellé est trop court | Le libellé est trop long"
+                  required
+                  type="text"
+                  name="name"
+                  placeholder="Taper le libellé"
+                  class="form-control"
+                  [(ngModel)]="question.name"
+                />
+              </div>
+              <div qv-feedback="name"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <label class="col-6 required" for="chapitre_id"
+                    >Chapitre</label
+                  >
+                  <div class="col-6 text-end">
+                    <span info="Sélectionner un chapitre">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="mb-3">
+                <select
+                  class="form-select"
+                  name="chapitre_id"
+                  qv-rules="min:1"
+                  qv-messages="Le chapitre est requis"
+                  [(ngModel)]="question.chapitre_id"
+                >
+                  <option value="" disabled selected>
+                    Sélectionner un chapitre
+                  </option>
+                  <option
+                    [value]="chapitre.id"
+                    *ngFor="let chapitre of chapitres"
+                  >
+                    {{ chapitre.name }}
+                  </option>
+                </select>
+              </div>
+              <div qv-feedback="chapitre_id"></div>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-6">Illustration</div>
+                  <div class="col-6 text-end">
+                    <span info="Le fichier image">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input
+                  type="file"
+                  accept="image/*,video/*"
+                  name="illustration"
+                  class="form-control"
+                  (change)="onFileSelected($event, 'illustration')"
+                />
+              </div>
+              <div qv-feedback="illustration"></div>
+              <!-- <div class="mt-3" *ngIf="question.illustration">
+                    <a
+                      href="{{ assetLink }}{{ question.illustration }}"
+                      target="_blank"
+                      ><app-icon icon="eye" [size]="14" title="Voir l'image"></app-icon></a
+                    >
+                  </div> -->
+
+              <!-- <div class="image-thumbnail">
+                    <img src="{{ assetLink }}{{ question.illustration }}" alt="Image" class="img-thumbnail">
+                    <a href="{{ assetLink }}{{ question.illustration }}" class="eye-icon">
+                      <app-icon icon="eye" [size]="14" title="Voir l'image"></app-icon>
+                    </a>
+                  </div> -->
+
+              <!-- <div class="image-thumbnail shadow-hover">
+                    <img src="{{ assetLink }}{{ question.illustration }}" alt="Image" class="img-thumbnail">
+                    <a href="{{ assetLink }}{{ question.illustration }}" class="eye-icon">
+                      <app-icon icon="eye" [size]="14" title="Voir l'image"></app-icon>
+                    </a>
+                  </div> -->
+
+              <div class="image-thumbnail mt-3" *ngIf="question.illustration">
+                <img
+                  *ngIf="question.illustration_type == 'image'"
+                  src="{{ assetLink }}{{ question.illustration }}"
+                  alt="Image"
+                  class="img-thumbnail"
+                />
+
+                <video
+                  *ngIf="question.illustration_type == 'video'"
+                  controls
+                  muted
+                  src="{{ assetLink }}{{ question.illustration }}"
+                  alt="Vidéo"
+                  class="img-thumbnail"
+                >
+                  Votre navigateur ne prend pas en charge la vidéo.
+                </video>
+                <div class="overlay">
+                  <!-- <a href="#" > -->
+                  <app-icon
+                    icon="eye"
+                    (click)="
+                      openImageModal(
+                        question.illustration,
+                        question.illustration_type
+                      )
+                    "
+                    class="eye-icon"
+                    [size]="14"
+                    title="Voir l'image"
+                  ></app-icon>
+                  <!-- </a> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="this.illustration || question.illustration">
+          <div class="col-md offset-6">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-6">Code illustration</div>
+                  <div class="col-6 text-end">
+                    <span info="Le code de l'illustration de la question">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input
+                  qv-rules="minlength:1|maxlength:80"
+                  qv-messages="Le code de l'illustration est trop court | Le code de l'illustration est trop long"
+                  type="text"
+                  name="code_illustration"
+                  placeholder="Taper le code de l'illustration"
+                  class="form-control"
+                  [(ngModel)]="question.code_illustration"
+                />
+              </div>
+              <div qv-feedback="code_illustration"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-6">Texte</div>
+                  <div class="col-6 text-end">
+                    <span info="Le texte">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <textarea
+                  name="texte"
+                  id="texte"
+                  rows="5"
+                  class="form-control"
+                  [(ngModel)]="question.texte"
+                ></textarea>
+              </div>
+              <div qv-feedback="texte"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-sm">
+            <p class="text-end">
+              <button
+                class="btn btn-primary fw-normal"
+                [disabled]="onLoading"
+                qv-submit
+                (click)="save($event)"
+              >
+                Enregistrer
+                <span *ngIf="onLoading">
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Loading...</span>
+                </span>
+              </button>
+              <input
+                id="reset"
+                type="reset"
+                value="Annuler"
+                style="display: none"
+              />
+            </p>
+          </div>
+        </div>
+      </form>
+    </app-ng-window-page>
+    <app-ng-window-page *ngIf="pageIndex == 1">
+      <div class="row">
+        <div class="col-12">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Langue</th>
+                <th width="10%" class="text-center">Audio</th>
+                <th width="15%" class="">Action</th>
+              </tr>
+            </thead>
+            <tbody class="text-center" *ngIf="languesQuestionForm.length == 0">
+              <tr>
+                <td colspan="12">Aucune donnée</td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr
+                *ngFor="let langue of languesQuestionForm"
+                class="align-middle"
+              >
+                <td>{{ langue.name }}</td>
+                <td class="text-center">
+                  <audio *ngIf="langue.audio" controls>
+                    <source
+                      src="{{ assetLink }}{{ langue.audio }}"
+                      type="audio/mp3"
+                    />
+                    Votre navigateur ne supporte pas l'élément audio.
+                  </audio>
+                </td>
+                <td>
+                  <app-icon
+                    icon="upload"
+                    title="Joindre un audio"
+                    classe="text-success"
+                    (click)="addAudio(langue.id, 'store')"
+                  ></app-icon>
+                  <!-- <div class="btn-actions" *ngIf="langue.idAudio">
+                        <app-icon icon="plus" classe="text-success" (click)="addAudio(langue.id, 'store')"></app-icon>
+                        <app-delete (canDelete)="deleteQuestionReponse($event)" [activateId]="langue.id"></app-delete>
+                      </div> -->
+                  <app-delete
+                    title="Supprimer l'audio"
+                    *ngIf="langue.idAudio"
+                    (canDelete)="deleteAudio($event)"
+                    [activateId]="langue.idAudio"
+                  ></app-delete>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </app-ng-window-page>
+    <app-ng-window-page *ngIf="pageIndex == 2">
+      <form class="fieldset" id="question-reponses-form" quickv>
+        <div class="row mb-2 mx-auto" style="width: 80%">
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <label class="col-6 required" for="id">Réponse</label>
+                  <div class="col-6 text-end">
+                    <span info="Sélectionner une réponse">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="mb-3">
+                <select
+                  class="form-select"
+                  id="reponse_id"
+                  name="reponse_id"
+                  [(ngModel)]="question_answer.reponse_id"
+                  qv-rules="min:1"
+                  qv-messages="La réponse est requise"
+                  (change)="onReponse()"
+                >
+                  <option value="" disabled selected>
+                    Sélectionner une réponse
+                  </option>
+                  <option [value]="reponse.id" *ngFor="let reponse of reponses">
+                    {{ reponse.name }}
+                  </option>
+                </select>
+              </div>
+              <div qv-feedback="reponse_id"></div>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="mb-3 text-center">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <label class="col-10" for="id">Vrai</label>
+                </div>
+              </label>
+              <div class="mb-3 text-center">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [checked]="question_answer.is_correct"
+                  (change)="onSelectQuestionReponse(question_answer)"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="text-end col-4">
+            <br />
+            <button
+              class="btn btn-outline-primary justify-content-center"
+              (click)="saveReponse($event)"
+              [disabled]="onLoadingReponse"
+              qv-submit
+            >
+              Enregistrer
+              <span *ngIf="onLoadingReponse">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Loading...</span>
+              </span>
+            </button>
+          </div>
+        </div>
+        <fieldset>
+          <div class="row">
+            <div class="col-12">
+              <hr />
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th width="10%" class="text-center">Vrai</th>
+                    <th width="15%" class="">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="text-center" *ngIf="question_answers.length == 0">
+                  <tr>
+                    <td colspan="12">Aucune donnée</td>
+                  </tr>
+                </tbody>
+                <tbody>
+                  <tr *ngFor="let answer of question_answers">
+                    <td>{{ answer.name }}</td>
+                    <td class="text-center">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [checked]="answer.is_correct"
+                        disabled
+                      />
+                    </td>
+                    <td>
+                      <div class="btn-actions">
+                        <app-icon
+                          icon="pencil"
+                          classe="text-warning"
+                          (click)="showReponse(answer)"
+                        ></app-icon>
+                        <app-delete
+                          (canDelete)="deleteQuestionReponse($event)"
+                          [activateId]="answer.id"
+                        ></app-delete>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </app-ng-window-page>
+  </app-ng-window>
+</div>
+<app-modal [action]="modalId" size="">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="audio_formulaire"></span>
+  </div>
+  <form action="" method="post" quickv id="audio-form">
+    <div class="row mb-2">
+      <div class="col-12">
+        <div class="mb-3">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Audio</div>
+              <div class="col-6 text-end">
+                <span info="Le fichier audio">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              type="file"
+              accept="audio/*"
+              name="audio"
+              class="form-control"
+              (change)="onAudioSelected($event)"
+              required
+            />
+          </div>
+          <div qv-feedback="audio"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-sm">
+        <p class="text-end">
+          <button
+            class="btn btn-primary fw-normal"
+            [disabled]="onLoadingAduio"
+            qv-submit
+            (click)="saveAudio($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoadingAduio">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+          <input
+            id="resetAudio"
+            type="reset"
+            value="Annuler"
+            style="display: none"
+          />
+        </p>
+      </div>
+    </div>
+  </form>
+</app-modal>
+
+<!-- Image Modal -->
+<div
+  class="modal fade"
+  id="imageModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="imageModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div
+        class="modal-body d-flex justify-content-center align-items-center text-center"
+      >
+        <img
+          *ngIf="illustrationType == 'image'"
+          src="{{ imageLink }}"
+          alt="Image"
+          class="img-fluid"
+        />
+        <video
+          muted
+          *ngIf="illustrationType == 'video'"
+          autoplay
+          controls
+          width="300"
+        >
+          <source src="{{ imageLink }}" type="video/mp4" muted />
+          Votre navigateur ne prend pas en charge la vidéo.
+        </video>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="container mt-4">
+  <!-- Système de Tab -->
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <a class="nav-link active" data-bs-toggle="tab" href="#laissez-passer">
+        Laisser Passer
+      </a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="laissez-passer" class="tab-pane fade show active">
+      <div class="col-sm-6 mb-5">
+        <!-- Moteur de Recherche -->
+        <div class="input-group mb-3">
+          <span class="input-group-text" role="button" (click)="getCandidat()">
+            <app-icon icon="search"></app-icon>
+          </span>
+          <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Taper le NPI du candidat..."
+            [(ngModel)]="form.npi"
+            (keydown.enter)="getCandidat()"
+          />
+        </div>
+
+        <!-- Informations du Candidat -->
+        <div class="card shadow-sm" *ngIf="candidat">
+          <div class="card-body pt-3">
+            <div class="d-flex align-items-center">
+              <div class="me-3">
+                <img
+                  [src]="info?.avatar || 'default-avatar.png'"
+                  alt="Avatar"
+                  width="80"
+                  class="border"
+                />
+              </div>
+              <div class="mt-2 d-flex">
+                <div class="me-2">
+                  <p class="mb-2"><strong>NPI</strong>: {{ info?.npi }}</p>
+                  <p class="mb-2">
+                    <strong>Nom & prénoms</strong>: {{ info?.nom }}
+                    {{ info?.prenoms }}
+                  </p>
+                  <p class="mb-2">
+                    <strong>Téléphone</strong>: {{ info?.telephone }}
+                  </p>
+                  <p class="mb-2"><strong>Sexe</strong>: {{ info?.sexe }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body border-bottom">
+            <strong>Annexe</strong>: {{ candidat.annexe.name }} |
+            <strong>Permis</strong>: {{ candidat.categorie_permis.name }} |
+            <strong>Auto-école</strong>: {{ candidat.auto_ecole.name }}
+          </div>
+
+          <div class="card-body">
+            <!-- Sélection de l'examen -->
+            <div class="mb-3">
+              <label for="session" class="form-label fw-bold"
+                >Sélectionner une session :</label
+              >
+              <select
+                class="form-select"
+                id="session"
+                [(ngModel)]="filters.sessionSelected"
+              >
+                <option selected disabled [value]="0">
+                  Choisir une session
+                </option>
+                <option
+                  *ngFor="let examen of filtredExamens"
+                  [value]="examen.id"
+                >
+                  {{ examen.session_long }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3" *ngIf="filters.sessionSelected">
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  (change)="accepted = !accepted"
+                  id="accepted"
+                  [checked]="accepted"
+                />
+                <label class="form-check-label text-danger" for="accepted">
+                  {{ generateMessage() }}
+                </label>
+              </div>
+            </div>
+
+            <div class="mt-3 text-end" *ngIf="auth">
+              <button
+                class="btn btn-danger"
+                [disabled]="!accepted"
+                (click)="validate()"
+              >
+                <app-icon icon="check-circle"></app-icon>
+                Valider
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="!candidat">
+          <div class="alert alert-primary" role="alert">
+            <strong>Aucun candidat trouvé</strong>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

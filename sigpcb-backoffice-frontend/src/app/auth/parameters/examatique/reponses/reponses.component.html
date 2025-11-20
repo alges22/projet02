@@ -1,0 +1,133 @@
+<div class="row align-items-center">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-5"></div>
+  <div class="col-sm-2 text-end">
+    <button
+      class="btn border btn-icons btn-primary"
+      (click)="openModal('store')"
+    >
+      <app-icon icon="plus"></app-icon>
+      Réponse
+    </button>
+  </div>
+</div>
+<table class="table mt-0">
+  <thead>
+    <tr>
+      <th scope="col">Lettre</th>
+      <th scope="col">Couleur</th>
+      <th scope="col" width="10%">Actions</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="reponses.length > 0">
+    <tr *ngFor="let reponse of reponses; let i = index">
+      <td>{{ reponse.name }}</td>
+      <td>
+        <div
+          [style.background-color]="reponse.couleur"
+          style="width: 50px; height: 25px"
+        ></div>
+      </td>
+      <td>
+        <div class="btn-actions">
+          <app-icon
+            (click)="show(reponse.id, 'edit')"
+            icon="pencil"
+            [size]="16"
+            classe="text-success"
+          ></app-icon>
+          <app-delete
+            (canDelete)="destroy($event)"
+            [activateId]="reponse.id"
+          ></app-delete>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  <tbody class="text-center" *ngIf="reponses.length == 0">
+    <tr>
+      <td colspan="12">Aucune donnée</td>
+    </tr>
+  </tbody>
+</table>
+<app-modal [action]="modalId">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+
+  <div *ngIf="action !== 'show'">
+    <form action="" method="post" quickv id="responses-form">
+      <div class="row mb-2">
+        <div class="col-sm">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6 required">Libellé</div>
+                <div class="col-6 text-end">
+                  <span info="Le libellé de la réponse">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required|minlength:1|maxlength:80"
+                qv-messages="Le libellé est requis | Le libellé est trop court | Le libellé est trop long"
+                required
+                type="text"
+                name="name"
+                placeholder="Taper le libellé"
+                class="form-control"
+                [(ngModel)]="reponse.name"
+              />
+            </div>
+            <div qv-feedback="name"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <div class="d-flex">
+            <label for="admin-status" class="me-2 required">Couleur</label>
+            <div class="form-check form-switch mb-0">
+              <input
+                type="color"
+                name="couleur"
+                class="mt-0"
+                [(ngModel)]="reponse.couleur"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="onLoading"
+            qv-submit
+            (click)="save($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>

@@ -1,0 +1,417 @@
+<div class="mx-1">
+  <app-ng-window id="category-window">
+    <app-ng-window-header>
+      <button
+        class="btn window-btn"
+        [class.current]="pageIndex === 0"
+        (click)="selectedPage(0)"
+      >
+        Examinateurs
+      </button>
+      <button
+        class="btn window-btn"
+        [class.current]="pageIndex === 1"
+        (click)="selectedPage(1)"
+      >
+        Annexe
+      </button>
+      <button
+        class="btn window-btn"
+        [class.current]="pageIndex === 2"
+        [disabled]="showJury"
+      >
+        Jurys
+      </button>
+    </app-ng-window-header>
+
+    <app-ng-window-page *ngIf="pageIndex == 0" data-window-current="true">
+
+      <div class="row p-2 justify-content-between align-items-center mb-3">
+        <div class="col-lg-5">
+          <div class="d-flex align-items-center justify-content-between">
+            <button class="btn border btn-icons btn-primary" (click)="importModal()">
+              <app-icon icon="download"></app-icon>
+              Importer
+            </button>
+          </div>
+        </div>
+        <div class="col-lg-3 text-end">
+          <button class="btn border btn-icons btn-primary" (click)="openExaminateurModal('store')">
+            <app-icon icon="plus"></app-icon>
+            Examinateur
+          </button>
+        </div>
+      </div>
+
+      <!-- <div class="row">
+        <div class="offset-10 col-2 text-end">
+          <button
+            class="btn border btn-icons btn-primary"
+            (click)="openExaminateurModal('store')"
+          >
+            <app-icon icon="plus"></app-icon>
+            Examinateur
+          </button>
+        </div>
+      </div> -->
+      <div class="row">
+        <div class="col-12">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th width="20%" class="">Annexe</th>
+                <th width="20%" class="text-center">Catégories gérées</th>
+                <th width="15%">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let examinateur of examinateurs">
+                <td>
+                  {{ examinateur.user.first_name }}
+                  {{ examinateur.user.last_name }}
+                </td>
+                <td class="">{{ examinateur.annexe.name }}</td>
+                <td class="text-center">
+                  {{
+                    fetchCategories(examinateur.examinateur_categorie_permis)
+                  }}
+                </td>
+                <td>
+                  <div class="btn-actions">
+                    <app-icon
+                      icon="pencil"
+                      classe="text-warning"
+                      (click)="openExaminateurModal('edit', examinateur)"
+                    ></app-icon>
+                    <app-delete
+                      (canDelete)="deleteExaminateur($event)"
+                      [activateId]="examinateur.id"
+                    ></app-delete>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="text-center" *ngIf="examinateurs.length == 0">
+              <tr>
+                <td colspan="12">Aucune donnée</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </app-ng-window-page>
+    <app-ng-window-page *ngIf="pageIndex == 1">
+      <div class="row">
+        <div class="col-12">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Annexe</th>
+                <th width="5%" class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let annexe of annexes">
+                <td>{{ annexe.name }}</td>
+                <td class="text-center">
+                  <app-icon
+                    icon="eye"
+                    (click)="assign(annexe)"
+                    [size]="16"
+                    classe="text-success"
+                    title="Voir ses jurys"
+                  ></app-icon>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="text-center" *ngIf="annexes.length == 0">
+              <tr>
+                <td colspan="12">Aucune donnée</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </app-ng-window-page>
+    <app-ng-window-page *ngIf="pageIndex == 2" data-window-current="true">
+      <div class="row">
+        <div class="offset-10 col-2 text-end">
+          <button
+            class="btn border btn-icons btn-primary"
+            (click)="openJuryModal('store')"
+          >
+            <app-icon icon="plus"></app-icon>
+            Jury
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th width="5%" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let jury of juries">
+                <td class="">{{ jury.name }}</td>
+                <td>
+                  <div class="btn-actions">
+                    <app-icon
+                      icon="pencil"
+                      classe="text-warning"
+                      (click)="openJuryModal('edit', jury)"
+                    ></app-icon>
+                    <app-delete
+                      (canDelete)="deleteJury($event)"
+                      [activateId]="jury.id"
+                    ></app-delete>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="text-center" *ngIf="juries.length == 0">
+              <tr>
+                <td colspan="12">Aucune donnée</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </app-ng-window-page>
+  </app-ng-window>
+</div>
+
+<app-modal [action]="modalExaminateur" size="">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+  <div>
+    <form action="" method="post" quickv id="salle-add-form">
+      <div class="row mb-2">
+        <div class="col-sm">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="user_id">Agent</label>
+                <div class="col-6 text-end">
+                  <span info="Sélectionner un utilisateur">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="user_id"
+                qv-rules="min:1"
+                qv-messages="L'utilisateur est requis"
+                [(ngModel)]="examinateur.user_id"
+              >
+                <option value="" disabled selected>
+                  Sélectionner un utilisateur
+                </option>
+                <option [value]="user.id" *ngFor="let user of users">
+                  {{ user.first_name }} {{ user.last_name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="user_id"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="annexe_anatt_id"
+                  >Annexe ANaTT</label
+                >
+                <div class="col-6 text-end">
+                  <span info="Sélectionner une annexe">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="annexe_anatt_id"
+                qv-rules="min:1"
+                qv-messages="L'annexe est requise"
+                [(ngModel)]="examinateur.annexe_anatt_id"
+              >
+                <option value="" disabled selected>
+                  Sélectionner une annexe
+                </option>
+                <option [value]="annexe.id" *ngFor="let annexe of annexes">
+                  {{ annexe.name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="annexe_anatt_id"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="categorie_id"
+                  >Catégories (s)</label
+                >
+                <div class="col-6 text-end">
+                  <span builbe info="Sélectionner une ou des catégories">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <ng-multiselect-dropdown
+                [placeholder]="'Sélectionner une ou des catégories'"
+                [data]="categories"
+                [settings]="settings"
+                [(ngModel)]="selectedItems"
+                name="categorie_id"
+              >
+              </ng-multiselect-dropdown>
+            </div>
+            <div data-qv-feedback="categorie_id"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="onLoading"
+            qv-submit
+            (click)="save($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>
+
+<app-modal [action]="modalJury">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire_jury"></span>
+  </div>
+
+  <div>
+    <form action="" method="post" quickv id="juries-form">
+      <div class="row mb-2">
+        <div class="col-sm">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6 required">Jury</div>
+                <div class="col-6 text-end">
+                  <span info="Le nom du jury">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required|minlength:1|maxlength:80"
+                qv-messages="Le nom est requis | Le nom est trop court | Le nom est trop long"
+                required
+                type="text"
+                name="name"
+                placeholder="Taper le nom"
+                class="form-control"
+                [(ngModel)]="jury.name"
+              />
+            </div>
+            <div qv-feedback="name"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="onLoading"
+            qv-submit
+            (click)="saveJury($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>
+
+<app-modal [action]="modalImportId" size="modal-md">
+  <div heading class="fw-semibold text-primary text-center">
+    Importer des examinateurs
+  </div>
+  <form action="" quickv id="langue-form">
+    <div class="mb-4">
+      <div class="alert alert-info">Télécharger <a href="assets/files/{{ importFileName }}" class="text-success">ici</a>
+        le modèle du fichier à importer. <a href="assets/files/{{ importFileName }}"
+          class="text-success">Télécharger</a></div>
+    </div>
+    <div class="mb-4">
+      <label for="" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-6 required">Fichier</div>
+          <div class="col-6 text-end">
+            <span info="Le fichier des examinateurs à importer">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input type="file" accept=".xls, .xlsx" name="illustration" class="form-control"
+          (change)="onFileSelected($event)" />
+      </div>
+      <div qv-feedback="name"></div>
+    </div>
+
+    <div class="mb-4">
+      <p>
+        <button class="btn btn-primary w-100" qv-submit (click)="import($event)" [disabled]="onLoadingImport">
+          Importer
+          <span *ngIf="onLoadingImport">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+        <input id="resetImportFile" type="reset" value="Annuler" style="display: none" />
+      </p>
+    </div>
+  </form>
+</app-modal>

@@ -1,0 +1,494 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      Votre espace de gestion des procédures liées au permis de conduire et
+      titres dérivés
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-md-10">
+    <h3 class="title mt-3">Pré-inscription à l'épreuve de conduite</h3>
+
+    <div>
+      <div
+        class="text-danger mb-3 fw-semibold text-small"
+        *ngIf="!is_external && currentPage !== 'completed'"
+      >
+        Vous pouvez changer votre centre de composition et votre auto-école si
+        vous le souhaitez.
+      </div>
+      <div class="card border">
+        <div
+          class="bg-light p-3 m-2 rounded"
+          *ngIf="currentPage !== 'completed'"
+        >
+          <div class="row">
+            <div class="col-6 col-md mb-3 mb-md-0">
+              <app-number-box [number]="1" [filled]="true">
+                Infos sur le permis
+              </app-number-box>
+            </div>
+            <div class="col-6 col-md mb-3 mb-md-0">
+              <app-number-box
+                [number]="2"
+                [filled]="currentPage == 'recapitulatif'"
+              >
+                Infos sur le permis
+              </app-number-box>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="currentPage == 'infos'"
+          ><!--Infos sur le permis-->
+          <form method="post" id="infos-sur-le-permis">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6>Catégorie de permis</h6>
+                  <p *ngIf="!is_external">{{ nom_permis }}</p>
+                  <div class="mb-3" *ngIf="is_external">
+                    <div class="input-styled">
+                      <select
+                        class="form-select"
+                        name="categorypermis"
+                        [(ngModel)]="categorypermis"
+                      >
+                        <option value="" selected>
+                          Cliquer pour choisir une catégorie de permis
+                        </option>
+                        <option
+                          *ngFor="let categorypermis of permisList"
+                          value="{{ categorypermis.id }}"
+                        >
+                          {{ categorypermis.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div qv-feedback="categorypermis"></div>
+                  </div>
+                </div>
+                <div class="col-md-6" *ngIf="is_external">
+                  <h6>Langue (composition code )</h6>
+                  <div class="mb-1">
+                    <div class="input-styled">
+                      <select
+                        class="form-select"
+                        name="langue"
+                        [(ngModel)]="langue"
+                        (change)="selectLangue(langue)"
+                      >
+                        <option value="" selected>
+                          {{ "Click to select a language" | translate }}
+                        </option>
+                        <option *ngFor="let lg of langues" value="{{ lg.id }}">
+                          {{ lg.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="text-feedback"></div>
+                  </div>
+                  <p class="form-text text-muted small mb-3">
+                    La langue dans laquelle vous aviez composé le code
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <h6>Centre de composition choisi</h6>
+                  <div class="mb-3">
+                    <div class="input-styled">
+                      <select
+                        class="form-select"
+                        name="annexe"
+                        [(ngModel)]="annexe"
+                        qv-rules="required"
+                        (change)="selectAnnexe(annexe)"
+                      >
+                        <option value="">Centre de composition choisi</option>
+                        <option
+                          *ngFor="let annexe of annexes"
+                          value="{{ annexe.id }}"
+                        >
+                          {{ annexe.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div qv-feedback="annexe"></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <h6>Auto-école choisie</h6>
+                  <div class="mb-3">
+                    <div class="input-styled">
+                      <select
+                        class="form-select"
+                        name="autoEcoleId"
+                        [(ngModel)]="autoEcoleId"
+                        qv-rules="required"
+                      >
+                        <option value="" selected>Auto-école choisie</option>
+                        <option
+                          *ngFor="let autoecole of autoEcoles"
+                          [value]="autoecole.id"
+                        >
+                          {{ autoecole.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div qv-feedback="autoEcoleId"></div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3" *ngIf="is_external">
+                  <h6 class="mb-3">Quel est votre groupin sanguin ?</h6>
+                  <div class="row">
+                    <div
+                      class="col-3 mb-2"
+                      *ngFor="let g of groups; let i = index"
+                    >
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          name="group"
+                          type="radio"
+                          [id]="'group-' + i"
+                          (click)="selectGroup(g)"
+                          [checked]="group === g"
+                        />
+                        <label class="form-check-label" [for]="'group-' + i">{{
+                          g
+                        }}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6" *ngIf="is_external">
+                  <h6 class="mb-3">Quelle est votre restriction médicale ?</h6>
+                  <div class="row">
+                    <div
+                      class="col-md mb-2"
+                      *ngFor="let r of restrictions; let i = index"
+                    >
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          name="restriction"
+                          type="checkbox"
+                          [id]="'restriction-' + i"
+                          (change)="selectRestriction(r)"
+                          [checked]="isChecked(r)"
+                          [disabled]="isNoneSelected() && r.id !== 0"
+                        />
+                        <label
+                          class="form-check-label"
+                          [for]="'restriction-' + i"
+                          >{{ r.name }}</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6" *ngIf="is_external">
+                  <h6>Joindre votre test de groupage (image)</h6>
+                  <app-input-file
+                    accept=".png,.jpg"
+                    (changeEvent)="onGroupFileChange($event)"
+                  ></app-input-file>
+                </div>
+                <div class="col-sm-6" *ngIf="is_external">
+                  <h6>Joindre votre fiche médicale (image)</h6>
+                  <app-input-file
+                    accept=".png,.jpg"
+                    (changeEvent)="onMedicalFileChange($event)"
+                  ></app-input-file>
+                </div>
+              </div>
+              <div class="col-md-6 mt-2">
+                <button
+                  class="btn btn-between btn-primary"
+                  [disabled]="!inforPermisPageIsValid() || isloadingSave"
+                  (click)="goto('recapitulatif', $event)"
+                >
+                  <span *ngIf="isloadingSave">
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="visually-hidden">Loading...</span>
+                  </span>
+                  > Suivant <app-icon icon="arrow-right"></app-icon>
+                </button>
+              </div>
+            </div></form
+        ></ng-container>
+      </div>
+    </div>
+
+    <div class="card-body" *ngIf="currentPage == 'completed'">
+      <strong
+        >Votre pré-inscription à l'épreuve de la conduite a bien été pris en
+        compte. Veuillez vous rapprocher de l'auto-école
+        <span class="text-primary">{{ autoEcole.name }} </span> au téléphone
+        <span class="text-primary">{{ autoEcole.phone }}</span> pour la suite de
+        votre parcours
+      </strong>
+      <div class="my-3">
+        <button class="btn btn-primary" routerLink="/services/suivre-dossier">
+          Revenir sur mon tableau de board
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-2" *ngIf="currentPage == 'recapitulatif' && user">
+      <div class="p-1 rounded-3 bg-light">
+        <div class="d-flex">
+          <app-avatar></app-avatar>
+          <div class="d-flex flex-column justify-content-between ms-2">
+            <h5
+              class="pt-2"
+              style="color: #313131; font-size: 22px; font-weight: 600"
+            >
+              {{ user.prenoms }} {{ user.nom }}
+            </h5>
+            <h6 class="pb-2" style="color: #575656; font-size: 16px">
+              NPI : {{ user.npi }}
+            </h6>
+          </div>
+        </div>
+      </div>
+      <div class="row h-100 mt-3">
+        <div class="col h-100">
+          <h4 class="mt-3">Informations personnelles</h4>
+          <div class="border rounded-3 p-2">
+            <div class="mb-3">
+              <div class="fw-semibold">Sexe</div>
+              <span class="text-uppercase">{{ user.sexe }}</span>
+            </div>
+
+            <div class="mb-3">
+              <div class="fw-semibold">Date de naissance</div>
+              <span class="text-uppercase">{{
+                user.date_de_naissance | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+            <div class="mb-3">
+              <div class="fw-semibold">Lieu de naissance</div>
+              <span class="text-uppercase">{{ user.lieu_de_naissance }}</span>
+            </div>
+
+            <div class="mb-2">
+              <div class="fw-semibold">Adresse</div>
+              <span class="text-uppercase">{{ user.adresse }}</span>
+            </div>
+            <div class="mb-3">
+              <div class="fw-semibold">Téléphone</div>
+              <span class="text-uppercase">{{ user.telephone }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col h-100">
+          <h4 class="mt-3">Informations sur le permis</h4>
+          <div class="border rounded-3 p-2">
+            <div class="mb-3">
+              <div class="fw-semibold">Catégorie de permis</div>
+              <span class="text-uppercase"> {{ permisName }} </span>
+            </div>
+
+            <div class="mb-3" *ngIf="is_external">
+              <div class="fw-semibold">Langue de permis</div>
+              <span class="text-uppercase">
+                {{ langueName }}
+              </span>
+            </div>
+            <div class="mb-3">
+              <div class="fw-semibold">Centre d’examen</div>
+              <span class="text-uppercase">
+                {{ annexedName }}
+              </span>
+            </div>
+
+            <div class="mb-3" *ngIf="autoEcole">
+              <div class="fw-semibold">Auto école</div>
+              <span class="text-uppercase">
+                {{ autoEcole.name }}
+              </span>
+            </div>
+          </div>
+
+          <p class="mb-3">
+            <button
+              class="btn btn-outline-primary w-100"
+              (click)="goto('infos', $event)"
+            >
+              Modifier les informations
+            </button>
+          </p>
+        </div>
+      </div>
+      <div class="row h-100 mt-3" *ngIf="is_external">
+        <div class="col h-100">
+          <h4 class="mt-3">Informations médicales</h4>
+          <div class="border rounded-3 p-2">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="mb-3">
+                  <div class="fw-semibold">Groupe sanguin</div>
+                  <span class="text-uppercase">
+                    {{ group }}
+                  </span>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="mb-3">
+                  <div class="fw-semibold">Restriction médicale</div>
+
+                  <span class="text-uppercase">
+                    {{ getSelectedRestrictionNames() }}
+                  </span>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <h6>Fiche Groupe sanguin</h6>
+                <div
+                  class="preview-pdf"
+                  data-bs-toggle="modal"
+                  data-bs-target="#grouppage"
+                  *ngIf="groupFileUrl"
+                >
+                  <div class="prev-eye col-md-9 col-xl-7">
+                    <div class="overlay"></div>
+                    <app-icon icon="eye"></app-icon>
+                    <img
+                      [src]="groupFileUrl"
+                      alt="Groupe sanguin"
+                      class="img-fluid"
+                    />
+                  </div>
+                </div>
+
+                <div
+                  class="modal fade"
+                  id="grouppage"
+                  tabindex="-1"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                  role="dialog"
+                  aria-labelledby="modalTitleId"
+                  aria-hidden="true"
+                >
+                  <div
+                    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+                    role="document"
+                  >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitleId">
+                          Groupe sanguin
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <img
+                          [src]="groupFileUrl"
+                          alt="Groupe sanguin"
+                          class="img-fluid"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <h6>Fiche médicale</h6>
+                <div
+                  class="preview-pdf"
+                  data-bs-toggle="modal"
+                  data-bs-target="#fiche-medical"
+                  *ngIf="medicalFileUrl"
+                >
+                  <div class="prev-eye col-md-9 col-xl-7">
+                    <div class="overlay"></div>
+                    <app-icon icon="eye"></app-icon>
+                    <img
+                      [src]="medicalFileUrl"
+                      alt="Fiche médical"
+                      class="img-fluid"
+                    />
+                  </div>
+                </div>
+
+                <div
+                  class="modal fade"
+                  id="fiche-medical"
+                  tabindex="-1"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                  role="dialog"
+                  aria-labelledby="modalTitleId"
+                  aria-hidden="true"
+                >
+                  <div
+                    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+                    role="document"
+                  >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="fiche-medical-title">
+                          Fiche médicale
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <img
+                          [src]="medicalFileUrl"
+                          alt="Fiche médical"
+                          class="img-fluid"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="my-3">
+            <button
+              class="btn btn-outline-primary w-100"
+              (click)="goto('infos', $event)"
+            >
+              Modifier les informations
+            </button>
+          </p>
+        </div>
+      </div>
+      <p class="my-3">
+        <button
+          class="btn btn-primary w-100"
+          (click)="save($event)"
+          [disabled]="!inforPermisPageIsValid() || isloadingSave"
+        >
+          <span *ngIf="isloadingSave">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+          Enregistrer et continuer
+        </button>
+      </p>
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

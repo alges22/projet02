@@ -1,0 +1,40 @@
+<div class="input-styled input-file" role="button" (click)="openFileInput()">
+  <div #inputBox class="form-control py-2" style="font-size: 12px">
+    <input
+      hidden
+      type="file"
+      [name]="name"
+      [accept]="accept"
+      [required]="required"
+      (change)="onChange($event)"
+    />
+    {{ placeholder }}
+  </div>
+</div>
+<div class="text-end mt-1" *ngIf="isSelected">
+  <!--  <app-icon icon="trash3" (click)="remove()" classe="text-danger"></app-icon>-->
+  <app-icon icon="eye" (click)="openModal()"></app-icon>
+</div>
+<div class="text-feedback"></div>
+<p class="form-text text-muted">
+  <small>Taille maximale autorisée : {{ 2 }}MB</small>
+</p>
+<div
+  class="modal fade"
+  [id]="inputId"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog bg-transparent modal-dialog-scrollable modal-dialog-centered modal-lg"
+    role="document"
+  >
+    <div class="modal-content rounded-0 p-0">
+      <div class="modal-body p-0">
+        <img [src]="selectedImage" alt="Aperçu de l'image" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>

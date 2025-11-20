@@ -1,0 +1,410 @@
+<div class="col-12">
+  <div>
+    <div class="row p-2 justify-content-between align-items-center">
+      <div class="col-lg-5">
+        <div class="d-flex align-items-center justify-content-between">
+          <button class="btn btn-refresh">
+            <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+            <span class="text-muted" style="font-size: 10px">Actualiser</span>
+          </button>
+          <app-search [url]="searchUrl" (results)="onSearches($event)">
+          </app-search>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="d-flex justify-content-end">
+          <button
+            class="btn border btn-icons btn-primary"
+            (click)="openModal('store')"
+          >
+            <app-icon icon="plus"></app-icon>
+            Administrateur
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table mt-0">
+        <thead>
+          <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Prénoms</th>
+            <th scope="col" class="d-none d-md-table-cell">Unité Admin .</th>
+            <th scope="col" class="d-none d-md-table-cell">Titre</th>
+            <th scope="col" class="d-none d-md-table-cell">Rôle</th>
+            <th scope="col" class="d-none d-md-table-cell">Statut</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="paginate_data">
+          <tr
+            *ngFor="
+                  let admin of admins
+                    | paginate : { itemsPerPage: 10, currentPage: pageNumber, totalItems: paginate_data.total, };
+                  let i = index
+                "
+          >
+            <td>{{ admin.last_name }}</td>
+            <td>{{ admin.first_name }}</td>
+            <td class="d-none d-md-table-cell">
+              {{ admin.unite_admin.name }}
+            </td>
+            <td class="d-none d-md-table-cell">
+              {{ admin.titre !== null ? admin.titre.name : "Aucun" }}
+            </td>
+            <td class="d-none d-md-table-cell">
+              {{
+                getOneRoleUser(admin)
+                  ? getOneRoleUser(admin).nom_complet
+                  : "Aucun"
+              }}
+            </td>
+            <td class="d-none d-md-table-cell">
+              <app-switch
+                [checked]="admin.status"
+                (statusChangeEvent)="toggleStatus($event)"
+                [activateId]="admin.id"
+              ></app-switch>
+            </td>
+            <td>
+              <div class="btn-actions">
+                <app-icon
+                  (click)="show(admin.id)"
+                  icon="eye"
+                  [size]="16"
+                  classe="text-success"
+                ></app-icon>
+                <app-icon
+                  (click)="editAdmin(admin.id)"
+                  icon="pencil"
+                  [size]="16"
+                  classe="text-success"
+                ></app-icon>
+                <app-delete
+                  (canDelete)="destroy($event)"
+                  [activateId]="admin.id"
+                ></app-delete>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div
+      *ngIf="admins.length < 1"
+      class="alert alert-light text-center"
+      role="alert"
+    >
+      {{ noUsers }}
+    </div>
+    <app-pagination
+      *ngIf="paginate_data"
+      [total]="paginate_data.total"
+      (pageChange)="paginate($event)"
+      [pageNumber]="pageNumber"
+      [perPage]="10"
+    ></app-pagination>
+  </div>
+</div>
+
+<app-modal [action]="modalId" size="modal-lg">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+
+  <div *ngIf="action !== 'show'">
+    <form action="" method="post" quickv id="admin-form">
+      <!--Email/ -->
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6 required">NPI</div>
+                <div class="col-6 text-end">
+                  <span info="Le npi de l'administrateur">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required"
+                qv-messages="Le npi est requis"
+                required
+                type="text"
+                name="npi"
+                placeholder="Taper le npi"
+                class="form-control"
+                [(ngModel)]="admin.npi"
+                [disabled]="!!admin.id && npiValid"
+              />
+            </div>
+            <div qv-feedback="npi"></div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-8 required">E-mail</div>
+                <div class="col-4 text-end">
+                  <span info="L'adresse e-mail de l'administrateur">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required|email"
+                qv-messages="L'adresse e-mail est requise | Adresse e-mail invalide"
+                required
+                type="email"
+                name="email"
+                placeholder="Taper l'adresse e-mail"
+                class="form-control"
+                [(ngModel)]="admin.email"
+              />
+            </div>
+            <div qv-feedback="email"></div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-10 required" for="unite_admin_id"
+                  >Unité administrative</label
+                >
+                <div class="col-2 text-end">
+                  <span info="Sélectionner une unité administrative">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="unite_admin_id"
+                qv-rules="min:1"
+                qv-messages="L'unité administrative est requise"
+                [(ngModel)]="admin.unite_admin_id"
+              >
+                <option value="0" selected>Sélectionner une unité</option>
+                <option [value]="uadmin.id" *ngFor="let uadmin of uadmins">
+                  {{ uadmin.name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="unite_admin_id"></div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="titre_id">Titre</label>
+                <div class="col-6 text-end">
+                  <span info="Le titre de l'utilisateur">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3" *ngIf="titres.length > 0">
+              <select
+                class="form-select"
+                name="titre_id"
+                qv-rules="required|min:1"
+                qv-messages="Le titre de l'administrateur est requis"
+                id="titre_id"
+                [(ngModel)]="admin.titre_id"
+              >
+                <option value="0" selected>Sélectionner</option>
+                <option [value]="titre.id" *ngFor="let titre of titres">
+                  {{ titre.name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="titre_id"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-sm">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <!-- <div class="col-6 required">Rôle</div> -->
+                <label class="col-6 required" for="role_id">Rôle</label>
+                <div class="col-6 text-end">
+                  <span info="Sélectionner un rôle">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3" *ngIf="roles.length > 0">
+              <select
+                class="form-select"
+                name="role_id"
+                qv-rules="required|min:1"
+                qv-messages="Le role de l'administrateur est requis"
+                id="role_id"
+                [(ngModel)]="admin.role_id"
+              >
+                <option value="0" selected>Sélectionner</option>
+                <option [value]="role.id" *ngFor="let role of roles">
+                  {{ role.nom_complet }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="role_id"></div>
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="d-flex">
+            <label for="admin-status" class="me-2"
+              >Statut (Actif / Inactif)</label
+            >
+            <div class="form-check form-switch mb-0">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="admin-status"
+                name="status"
+                checked
+                [(ngModel)]="admin.status"
+                value="1"
+              />
+            </div>
+          </div>
+
+          <ng-container *ngIf="!npiValid">
+            <button
+              class="btn btn-primary w-100 justify-content-center"
+              (click)="onNpi()"
+              [disabled]="isPostingAdmin"
+              type="button"
+            >
+              Continuer
+
+              <span *ngIf="isPostingAdmin">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Loading...</span>
+              </span>
+            </button>
+          </ng-container>
+        </div>
+      </div>
+      <ng-container *ngIf="npiInfo">
+        <div class="alert alert-primary" role="alert">
+          <strong>Attention !</strong>
+          <p>
+            Ëtes-vous sûr de vouloir ajouter
+            <b>{{ npiInfo.prenoms }} {{ npiInfo.nom }}</b> comme un
+            administrateur ?
+          </p>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!!npiInfo || !!admin.id">
+        <p class="col-4 col-md-3 mt-2">
+          <ng-container *ngIf="npiValid">
+            <button
+              class="btn btn-primary w-100 justify-content-center"
+              (click)="save($event)"
+              [disabled]="isPostingAdmin"
+              type="button"
+            >
+              Enregistrer
+
+              <span *ngIf="isPostingAdmin">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Loading...</span>
+              </span>
+            </button>
+          </ng-container>
+        </p>
+      </ng-container>
+    </form>
+  </div>
+  <div *ngIf="action == 'show'">
+    <div class="col-sm-6 mb-3">
+      <div class="fw-semibold">NPI</div>
+      <span class="text-muted small">{{ admin.npi }}</span>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <div class="fw-semibold">Nom</div>
+        <span class="text-muted small">{{ admin.last_name }}</span>
+      </div>
+      <div class="col-sm-5">
+        <div class="fw-semibold">Prénoms</div>
+        <span class="text-muted small">{{ admin.first_name }}</span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <div class="fw-semibold">E-mail</div>
+        <span class="text-muted small">{{ admin.email }}</span>
+      </div>
+      <div class="col-sm-6">
+        <div class="fw-semibold">Téléphone</div>
+        <span class="text-muted small">{{ admin.phone }}</span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <div class="fw-semibold">Titre</div>
+        <span class="text-muted small">{{
+          admin.titre ? admin.titre.name : "Aucun"
+        }}</span>
+      </div>
+      <div class="col-sm-6">
+        <div class="fw-semibold">Unité administrative</div>
+        <span class="text-muted small">{{
+          admin.unite_admin ? admin.unite_admin.name : "Aucun"
+        }}</span>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <div class="fw-semibold">Rôle</div>
+        <span class="text-muted small">{{
+          getOneRoleUser(admin) ? getOneRoleUser(admin).nom_complet : "Aucun"
+        }}</span>
+      </div>
+      <div class="col-sm-6">
+        <strong class="fw-semibold">Statut</strong> :
+        <span
+          [ngClass]="admin.status ? 'text-success' : 'text-danger'"
+          [innerText]="admin.status ? 'actif' : 'inactif'"
+        ></span>
+      </div>
+    </div>
+
+    <!-- <p>
+        <strong class="fw-semibold">Statut</strong> :
+        <span
+          [ngClass]="admin.status ? 'text-success' : 'text-danger'"
+          [innerText]="admin.status ? 'actif' : 'inactif'"
+        ></span>
+      </p> -->
+  </div>
+</app-modal>

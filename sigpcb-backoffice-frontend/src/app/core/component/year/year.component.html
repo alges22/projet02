@@ -1,0 +1,11 @@
+<select
+  class="form-select"
+  (change)="onSelect()"
+  name="year"
+  [(ngModel)]="year"
+>
+  <option [value]="null" selected>Sélectionner ...</option>
+  <option *ngFor="let y of years">
+    {{ y }}
+  </option>
+</select>

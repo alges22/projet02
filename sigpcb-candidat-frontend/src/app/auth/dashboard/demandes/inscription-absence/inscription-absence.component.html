@@ -1,0 +1,222 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      Votre espace de gestion des procédures liées au permis de conduire
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-md-10">
+    <h3 class="title mt-3">Justification d'absence à l'examen</h3>
+
+    <div class="card border" *ngIf="currentPage !== 'completed'">
+      <div class="bg-light p-3 m-2 rounded">
+        <div class="row">
+          <div class="col-6 col-md">
+            <app-number-box [number]="1" [filled]="true">
+              Informations
+            </app-number-box>
+          </div>
+          <div class="col-6 col-md">
+            <app-number-box
+              [number]="2"
+              [filled]="currentPage === 'recapitulatif'"
+            >
+              Récapitulatif
+            </app-number-box>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page des informations -->
+      <div class="card-body" *ngIf="currentPage === 'infos'">
+        <div class="row">
+          <div class="col-md-12 mb-4">
+            <h6>Sélectionner l'examen concerné</h6>
+            <div class="input-styled">
+              <select class="form-select" name="examen" [(ngModel)]="examenId">
+                <option value="">Choisir l'examen</option>
+                <option *ngFor="let exam of examens" [value]="exam.id">
+                  Session {{ exam.mois }} {{ exam.annee }} - {{ exam.type }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <h6>Pièce justificative de l'absence (image)</h6>
+            <app-input-file
+              accept=".png,.jpg"
+              (changeEvent)="onPieceJustificativeChange($event)"
+            ></app-input-file>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <h6>Fiche médicale (image)</h6>
+            <app-input-file
+              accept=".png,.jpg"
+              (changeEvent)="onFicheMedicaleChange($event)"
+            ></app-input-file>
+          </div>
+        </div>
+
+        <div class="col-md-6 mt-4">
+          <button
+            class="btn btn-between btn-primary"
+            [disabled]="!formIsValid()"
+            (click)="gotoPage('recapitulatif')"
+          >
+            Suivant <app-icon icon="arrow-right"></app-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Page récapitulative -->
+      <div
+        class="card-body p-2"
+        *ngIf="currentPage === 'recapitulatif' && user"
+      >
+        <div class="p-1 rounded-3 bg-light">
+          <div class="d-flex">
+            <app-avatar></app-avatar>
+            <div class="d-flex flex-column justify-content-between ms-2">
+              <h5
+                class="pt-2"
+                style="color: #313131; font-size: 22px; font-weight: 600"
+              >
+                {{ user.prenoms }} {{ user.nom }}
+              </h5>
+              <h6 class="pb-2" style="color: #575656; font-size: 16px">
+                NPI : {{ user.npi }}
+              </h6>
+            </div>
+          </div>
+        </div>
+
+        <div class="row h-100 mt-3">
+          <div class="col h-100">
+            <h4 class="mt-3">Informations sur l'examen</h4>
+            <div class="border rounded-3 p-2">
+              <div class="mb-3">
+                <div class="fw-semibold">Session d'examen</div>
+                <span class="text-uppercase">
+                  {{ examenSelected?.mois }} {{ examenSelected?.annee }} -
+                  {{ examenSelected?.type }}
+                </span>
+              </div>
+            </div>
+
+            <h4 class="mt-4">Documents fournis</h4>
+            <div class="row">
+              <div class="col-sm-6">
+                <h6>Pièce justificative</h6>
+                <div class="preview-pdf" *ngIf="pieceJustificativeUrl">
+                  <div class="prev-eye col-md-9 col-xl-7">
+                    <div
+                      class="overlay"
+                      (click)="openImageModal(pieceJustificativeUrl)"
+                    ></div>
+                    <app-icon
+                      icon="eye"
+                      (click)="openImageModal(pieceJustificativeUrl)"
+                    ></app-icon>
+                    <img
+                      [src]="pieceJustificativeUrl"
+                      alt="Pièce justificative"
+                      class="img-fluid"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <h6>Fiche médicale</h6>
+                <div class="preview-pdf" *ngIf="ficheMedicaleUrl">
+                  <div class="prev-eye col-md-9 col-xl-7">
+                    <div
+                      class="overlay"
+                      (click)="openImageModal(ficheMedicaleUrl)"
+                    ></div>
+                    <app-icon
+                      icon="eye"
+                      (click)="openImageModal(ficheMedicaleUrl)"
+                    ></app-icon>
+                    <img
+                      [src]="ficheMedicaleUrl"
+                      alt="Fiche médicale"
+                      class="img-fluid"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col">
+            <button class="btn btn-outline-primary" (click)="gotoPage('infos')">
+              Modifier les informations
+            </button>
+          </div>
+          <div class="col">
+            <button
+              class="btn btn-primary w-100"
+              (click)="save()"
+              [disabled]="isloadingSave"
+            >
+              <span *ngIf="isloadingSave">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                ></span>
+                <span class="visually-hidden">Chargement...</span>
+              </span>
+              Enregistrer et continuer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page de confirmation -->
+    <div class="card-body" *ngIf="currentPage === 'completed'">
+      <div class="alert alert-success">
+        <strong>
+          Votre justification d'absence a bien été enregistrée. Vous pouvez
+          maintenant procéder à une nouvelle inscription à l'examen.
+        </strong>
+      </div>
+      <div class="mt-3">
+        <button class="btn btn-primary" routerLink="/services/suivre-dossier">
+          Revenir au tableau de bord
+        </button>
+        <button
+          class="btn btn-primary ms-2"
+          routerLink="/dashboard/inscription-au-permis"
+        >
+          S'inscrire à l'examen
+        </button>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="openImageModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalTitleId"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog bg-transparent modal-dialog-scrollable modal-dialog-centered modal-lg"
+        role="document"
+      >
+        <div class="modal-content rounded-0 p-0">
+          <div class="modal-body p-0">
+            <img [src]="imageSrc" alt="Aperçu de l'image" class="img-fluid" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

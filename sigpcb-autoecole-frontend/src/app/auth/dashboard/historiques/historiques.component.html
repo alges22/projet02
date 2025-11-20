@@ -1,0 +1,47 @@
+<app-blue-aside *ngIf="auth" [auth]="auth">
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 my-3">
+      Votre espace de gestion d’établissement <br />
+      de conduite automobile et annexes
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-md-11">
+    <h3 class="title mb-4">Notifications</h3>
+
+    <ng-container *ngIf="ready && historiques.length">
+      <ng-container *ngFor="let historiq of historiques; let i = index"
+        ><div class="bg-white border rounded mb-2">
+          <div>
+            <app-agrement-historiq
+              [pos]="i"
+              *ngIf="historiq.service == 'agrement'"
+              [event_at]="historiq.event_at"
+              [historiques]="historiq.historiques"
+            />
+            <app-licence-historiq
+              [historiques]="historiq.historiques"
+              [pos]="i"
+              *ngIf="historiq.service == 'licence'"
+              [event_at]="historiq.event_at"
+            />
+
+            <app-information-historiq
+              [historiques]="historiq.historiques"
+              [pos]="i"
+              *ngIf="historiq.service == 'information'"
+              [event_at]="historiq.event_at"
+            />
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="ready && !historiques.length">
+      <div class="alert alert-primary text-center" role="alert">
+        <strong>Aucune nouvelle notification</strong>
+      </div>
+    </ng-container>
+  </app-blue-aside-right>
+</app-blue-aside>

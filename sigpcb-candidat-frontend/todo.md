@@ -1,0 +1,1 @@
+Rendre l'alert globale

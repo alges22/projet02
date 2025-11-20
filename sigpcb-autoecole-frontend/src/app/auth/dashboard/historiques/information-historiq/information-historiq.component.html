@@ -1,0 +1,96 @@
+<div
+  class="card-header p-2 rounded bg-gray d-flex justify-content-between align-items-center rounded-top rounded-0"
+>
+  <div>
+    <h6 class="text-primary fw-bold mb-0">Mes informations</h6>
+    <small class="text-muted x-small" [innerHTML]="event_at"> </small>
+  </div>
+  <!----Le bouton centré au milieu--->
+  <div>
+    <ng-container *ngIf="centerButton">
+      <ng-container *ngIf="centerButton.type == 'link'">
+        <a
+          type="button"
+          [href]="centerButton.href"
+          class="btn btn-outline-primary"
+          >{{ centerButton.text }}
+        </a>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <!----Fin  bouton centré au milieu--->
+  <div class="d-flex justify-content-between align-items-center" role="button">
+    <!----Le badge  --->
+    <ng-container *ngIf="lastAction">
+      <span [class]="'badge p-2 bg-' + lastAction.theme">
+        {{ lastAction.label }}
+      </span>
+    </ng-container>
+    <!----Le badge--->
+    <span class="p-1" (click)="toggle()">
+      <app-icon
+        icon="chevron-right"
+        *ngIf="!active"
+        classe="fw-bolder ms-3"
+      ></app-icon>
+      <app-icon
+        icon="chevron-down"
+        *ngIf="active"
+        classe="fw-bolder ms-3"
+      ></app-icon>
+    </span>
+  </div>
+</div>
+<div
+  class="m-3 small text-small"
+  [class.d-block]="active"
+  [class.d-none]="!active"
+>
+  <div class="card-body" *ngFor="let item of historiques">
+    <div class="form-check">
+      <ng-container *ngIf="item.meta">
+        <ng-container *ngIf="item.title">
+          <input class="form-check-input" type="radio" checked />
+          <label
+            class="form-check-label text-primary fw-semibold"
+            [innerHTML]="item.title"
+          >
+          </label>
+          <br />
+        </ng-container>
+      </ng-container>
+    </div>
+    <!-- paiement frais a anatt -->
+
+    <!-- convocation-code-telechargement -->
+    <div class="bg-light p-3 rounded col-sm-11 ms-auto mb-3">
+      <div [innerHTML]="item.message"></div>
+      <div class="mt-2">
+        <ng-container *ngIf="item.meta">
+          <div
+            class="mb-2"
+            *ngIf="
+              item.action == 'information-update-rejected' ||
+              item.action == 'information-update-validate'
+            "
+          >
+            <ng-container *ngIf="item.action == 'information-update-rejected'">
+              <a
+                *ngIf="!!item.meta.demandeRejet"
+                type="button"
+                [routerLink]="[
+                  '/dashboard/my-informations/',
+                  item.meta.demandeRejet.id
+                ]"
+                class="btn btn-primary"
+                >Corriger
+              </a>
+            </ng-container>
+          </div>
+        </ng-container>
+        <small class="text-muted small" [innerHTML]="item.event_at"> </small>
+      </div>
+    </div>
+  </div>
+</div>

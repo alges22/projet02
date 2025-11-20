@@ -1,0 +1,151 @@
+<div class="row align-items-center justify-content-between">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="col-sm-3 text-end">
+    <button
+      class="btn border btn-icons btn-primary"
+      (click)="openModal('store')"
+    >
+      <app-icon icon="plus" [size]="18"></app-icon>
+      Agrégateur
+    </button>
+  </div>
+</div>
+<app-md-loader [show]="agregateurs.length < 1"></app-md-loader>
+<table class="table mt-0 table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Nom</th>
+      <th scope="col">Statut</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="agregateurs.length > 0">
+    <tr *ngFor="let agregateur of agregateurs">
+      <td>
+        <img width="65" [src]="getPhoto(agregateur)" class="me-3" />
+        {{ agregateur.name }}
+      </td>
+      <td>
+        <app-switch
+          [checked]="agregateur.status"
+          (statusChangeEvent)="confirmSwitch($event)"
+          [activateId]="agregateur.id"
+        ></app-switch>
+      </td>
+      <td>
+        <div class="btn-actions">
+          <app-icon
+            icon="pencil"
+            (click)="edit(agregateur.id)"
+            [size]="16"
+            classe="text-success"
+          ></app-icon>
+          <app-delete
+            (canDelete)="destroy($event)"
+            [activateId]="agregateur.id"
+          ></app-delete>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="text-center" *ngIf="agregateurs.length < 1">Aucun agrégateur</div>
+<app-modal [action]="modalId" size="modal-sm">
+  <div heading class="fw-semibold text-primary text-center">
+    {{ agregateur_formulaire }}
+  </div>
+  <form action="" quickv id="agregateur-form" enctype="multipart/form-data">
+    <div class="mb-4">
+      <label for="" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-6 required">Nom</div>
+          <div class="col-6 text-end">
+            <span info="Le nom de l'agrégateur">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input
+          qv-rules="required|startWithLetter"
+          qv-messages="Le nom est requis"
+          required
+          type="text"
+          name="name"
+          class="form-control"
+          [(ngModel)]="agregateur.name"
+        />
+      </div>
+      <div qv-feedback="name"></div>
+    </div>
+
+    <div class="mb-4">
+      <label for="" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-8 required">Logo</div>
+          <div class="col-4 text-end">
+            <span info="Vous pouvez ajouter le logo de l'agrégateur">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input
+          type="file"
+          qv-rules="file|maxFileSize:1MB"
+          qv-events="change"
+          name="name"
+          (change)="onFileChange($event)"
+          class="form-control"
+        />
+      </div>
+    </div>
+
+    <div class="d-flex mb-4">
+      <label for="agregateur-status" class="me-2"
+        >Statut (Actif / Inactif)</label
+      >
+      <div class="form-check form-switch mb-0">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="agregateur-status"
+          name="status"
+          checked
+          [(ngModel)]="agregateur.status"
+          value="1"
+        />
+      </div>
+    </div>
+    <p>
+      <button
+        class="btn btn-primary w-100"
+        qv-submit
+        (click)="save($event)"
+        [disabled]="onLoading"
+      >
+        Enregistrer
+        <span *ngIf="onLoading">
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </button>
+    </p>
+  </form>
+</app-modal>

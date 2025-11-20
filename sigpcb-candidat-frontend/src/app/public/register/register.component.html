@@ -1,0 +1,244 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      {{"Your space for managing driving license and related procedures" | translate}}
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-lg-9">
+    <!--Login-->
+    <div
+      class="d-flex flex-column justify-content-between my-4"
+      *ngIf="page === 'register'"
+    >
+      <h3 class="title mb-4">{{'Authentification' | translate}}</h3>
+      <div class="text-primary mb-3">
+        <h6 style="font-size: 18px">Saisissez votre numéro NPI</h6>
+        <p class="text-primary" style="font-size: 16px">
+          {{"View on your CIP or your biometric card" | translate}}
+        </p>
+      </div>
+      <app-single-inputs
+        [count]="10"
+        (isValid)="onInputValid($event)"
+      ></app-single-inputs>
+      <!-- <div class="my-3">
+        <re-captcha (resolved)="onCaptchaResolved($event)"></re-captcha>
+      </div> -->
+      <div class="mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="1"
+            id="i-accepted"
+            (change)="iAccepted($event)"
+          />
+          <label class="form-check-label" for="i-accepted">
+            {{"I have read and understood the" | translate}}
+            <a href="">{{"terms and conditions of use" | translate}}</a>
+          </label>
+        </div>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="btn btn-lg btn-primary w-100"
+          [disabled]="!canValidate() || isloading"
+          (click)="checkNPI($event)"
+        >
+        <span *ngIf="isloading">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span class="visually-hidden">Loading...</span>
+        </span>
+          {{"Sign Up" | translate}}
+        </button>
+      </div>
+    </div>
+    <!--Double authentification-->
+    <div
+      class="d-flex flex-column justify-content-between my-5"
+      *ngIf="page === 'check-npi'"
+    >
+      <h3 class="title mb-4">{{"Authentification" | translate}}</h3>
+      <h6 style="font-size: 18px; line-height: 25px" class="mb-3">
+        {{codeMessage}}
+      </h6>
+      <div class="form-check mb-3">
+        <input
+          class="form-check-input"
+          name="hasPhone"
+          type="radio"
+          value="1"
+          id="has-phone"
+          [(ngModel)]="hasPhone"
+        />
+        <label class="form-check-label" for="has-phone">
+          {{"Yes, this is my current phone number" | translate}}
+        </label>
+      </div>
+      <div class="form-check mb-3">
+        <input
+          class="form-check-input"
+          type="radio"
+          value="0"
+          name="hasPhone"
+          [(ngModel)]="hasPhone"
+          id="lost-phone"
+        />
+        <label class="form-check-label" for="lost-phone">
+          {{"I no longer have access to this phone number" | translate}}
+        </label>
+        <p class="form-text text-danger" *ngIf="hasPhone == 0">
+          {{"Please contact ANIP to update your information in order to proceed with your registration process" | translate}}
+        </p>
+      </div>
+
+      <div class="form-check mb-3">
+        <input
+          class="form-check-input"
+          type="radio"
+          value="-1"
+          name="hasPhone"
+          id="unkown-phone"
+          [(ngModel)]="hasPhone"
+        />
+        <label class="form-check-label" for="unkown-phone">
+          {{"I don't recognize this phone number" | translate}}
+        </label>
+        <p class="form-text text-danger" *ngIf="hasPhone == -1">
+          {{"Click here to re-enter your NPI correctly" | translate}}
+        </p>
+      </div>
+
+      <div class="my-3" *ngIf="hasPhone == 1">
+        <button class="btn btn-primary btn-lg" (click)="sendCode($event)" [disabled]="isloading">
+          {{"Receive the code" | translate}}
+        </button>
+        <br />
+        <span *ngIf="isloading">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </div>
+    </div>
+    <!--Otp code-->
+    <div
+      class="d-flex flex-column justify-content-between my-5 px-5"
+      *ngIf="page === 'otp'"
+    >
+      <h3 class="title mb-4">{{"Authentification" | translate}}</h3>
+      <h6 style="font-size: 18px; line-height: 25px" class="mb-3 text-primary">
+        {{"Enter code" | translate}}
+      </h6>
+      <app-single-inputs
+        [count]="6"
+        (isValid)="otpCodes($event)"
+        height="35px"
+      ></app-single-inputs>
+
+      <p class="my-3">
+        <button
+          class="btn btn-primary btn-lg w-100"
+          [disabled]="!isValidOtpCode"
+          (click)="connect($event)"
+        >
+        <span *ngIf="isloading">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span class="visually-hidden">Loading...</span>
+        </span>
+          {{"Continue" | translate}}
+        </button>
+      </p>
+      <p>
+        {{"Did you not receive the code after one minute?" | translate}} <br />
+        <a href="" class="fw-semibold" (click)="resendCode($event)">{{"Resend the code" | translate}}</a>
+      </p>
+    </div>
+    <!--Confirmation-->
+    <div
+      class="d-flex flex-column justify-content-between my-4"
+      *ngIf="page === 'confirmation'"
+    >
+      <h3 class="title mb-4">{{"Authentification" | translate}}</h3>
+
+      <div class="p-1 rounded-3 bg-light">
+        <div class="d-flex">
+          <app-avatar></app-avatar>
+          <div class="d-flex flex-column justify-content-between ms-2">
+            <h5
+              class="pt-2"
+              style="color: #313131; font-size: 22px; font-weight: 600"
+            >
+              Claude Fassinou
+            </h5>
+            <h6 class="pb-2" style="color: #575656; font-size: 16px">
+              NPI : 2088182938
+            </h6>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border my-3">
+        <div class="card-body p-2">
+          <div class="row mb-2">
+            <div class="col">
+              <div class="fw-semibold">{{"Last name" | translate}}</div>
+              <span class="text-uppercase">SOSSA</span>
+            </div>
+            <div class="col">
+              <div class="fw-semibold">{{"First names" | translate}}</div>
+              <span class="text-uppercase">Dayo Koffi</span>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <div class="col">
+              <div class="fw-semibold">{{"Date of Birth" | translate}}</div>
+              <span class="text-uppercase">03 Mai 1998</span>
+            </div>
+            <div class="col">
+              <div class="fw-semibold">{{"Place of birth" | translate}}</div>
+              <span class="text-uppercase">Savalou</span>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <div class="col">
+              <div class="fw-semibold">{{"Sex" | translate}}</div>
+              <span class="text-uppercase">M</span>
+            </div>
+            <div class="col">
+              <div class="fw-semibold">{{"Address" | translate}}</div>
+              <span class="text-uppercase">Savalou, M/GBEYOU</span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col">
+              <div class="fw-semibold">{{"Phone" | translate}}</div>
+              <span class="text-uppercase">97 96 95 94</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size: 12px" class="text-center">
+        {{"The information will be used on your driver's license" | translate}}
+        {{"Do you confirm that they are correct?" | translate}}
+      </p>
+      <div class="mt-3">
+        <button
+          type="button"
+          class="btn btn-primary me-3"
+          routerLink="/dashboard"
+        >
+          {{"Accept and Continue" | translate}}
+        </button>
+        <button type="button" class="btn btn-outline-primary" routerLink="/">
+          {{"Reject and modify at the ANIP" | translate}}
+        </button>
+      </div>
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

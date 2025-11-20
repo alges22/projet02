@@ -1,0 +1,12 @@
+<div class="d-flex">
+  <select class="form-select" [(ngModel)]="hour" (change)="emit()">
+    <option *ngFor="let i of hours">
+      {{ i | padding : 2 }}
+    </option>
+  </select>
+  <select class="form-select ms-2" [(ngModel)]="min" (change)="emit()">
+    <option *ngFor="let i of minutes">
+      {{ i | padding : 2 }}
+    </option>
+  </select>
+</div>

@@ -1,0 +1,30 @@
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 2;
+  font-size: small;
+}
+
+main {
+  height: 100%;
+}
+
+.whatsapp {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+  font-size: small;
+
+  button {
+    background-color: #036303;
+    border: 1px solid #5d6b5d;
+    box-shadow: 0px 1px 20px #5d6b5d;
+    margin: 20px;
+    width: 60px;
+    height: 60px;
+  }
+}

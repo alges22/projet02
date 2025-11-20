@@ -1,0 +1,252 @@
+<div class="row p-2 justify-content-between align-items-center mb-3">
+  <div class="col-lg-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <button class="btn btn-refresh" (click)="get()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 10px">Actualiser</span>
+      </button>
+      <div class="input-group ms-1">
+        <span class="input-group-text" role="button" (click)="get()">
+          <app-icon icon="search"></app-icon>
+        </span>
+        <input type="text" name="search" class="form-control" placeholder="Taper un NPI ..."
+          [(ngModel)]="filters.search" />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr class="bg-table-primary">
+        <th scope="col">Date de soumission</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">N° du Permis</th>
+        <th scope="col">Demandeur</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="onLoadExaminateur">
+      <tr>
+        <td colspan="12" class="py-3 text-center">
+          <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+            Chargement en cours
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <tbody *ngFor="
+        let item of examinateurs | paginate : paginateArgs();
+        let i = index
+      ">
+      <tr>
+        <td scope="row">
+          <small class="text-muted">{{ item.created_at | hdate : true }}</small>
+        </td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.num_permis }}</td>
+        <td>
+          {{ item?.demandeur_info.nom }} {{ item?.demandeur_info.prenoms }}
+        </td>
+
+        <td>
+          <button class="btn" (click)="showDossier(i)" [class.btn-primary]="dossierIndex !== i"
+            [class.btn-outline-primary]="dossierIndex === i">
+            <span *ngIf="dossierIndex !== i"> Examiner</span>
+            <span *ngIf="dossierIndex === i"> Fermer</span>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="dossierIndex === i">
+        <td colspan="12">
+          <app-recrutement-examinateur-fiche [data]="item" page="rejected" (validate)="onValidate($event, i)" [categories]="categories"
+            [uadmins]="uadmins" [titres]="titres" [roles]="roles" />
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="!onLoadExaminateur && !examinateurs.length">
+      <tr>
+        <td colspan="12" class="py-3 text-center">Aucune nouvelle demande</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="p-3" *ngIf="paginate_data">
+    <app-pagination *ngIf="paginate_data.total > 10" [total]="paginate_data.total" (pageChange)="paginate($event)"
+      [pageNumber]="pageNumber"></app-pagination>
+  </div>
+</div>
+
+<div class="modal fade" id="decision-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+  role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary fw-semibold" id="modalTitleId" [innerHTML]="decisionData.title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- <div class="mb-3">
+          <label for="" class="form-label">Consignes</label>
+          <textarea name="consigne" class="form-control" cols="30" rows="10" placeholder="Ecrivez votre message"
+            [(ngModel)]="decisionData.consigne"></textarea>
+        </div> -->
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-6 required">Nom</div>
+                  <div class="col-6 text-end">
+                    <span info="Le nom de l'administrateur">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input qv-rules="required|startWithLetter|minlength:2|maxlength:80"
+                  qv-messages="{2,3} Le nombre de caracteres autorisés est entre 2 et 80" required type="text"
+                  name="last_name" qv-name="nom" placeholder="Taper le nom" class="form-control"
+                  [(ngModel)]="data.last_name" />
+              </div>
+              <div qv-feedback="last_name"></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-6 required">Prénoms</div>
+                  <div class="col-6 text-end">
+                    <span info="Le ou les prénoms de l'administrateur">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input qv-rules="required|startWithLetter|minlength:2|maxlength:80"
+                  qv-messages="{2,3} Le nombre de caracteres autorisés est entre 2 et 80" required type="text"
+                  name="first_name" qv-name="prénoms" placeholder="Taper le ou les prénom (s)" class="form-control"
+                  [(ngModel)]="data.first_name" />
+              </div>
+              <div qv-feedback="first_name"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-sm">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <label class="col-10 required" for="unite_admin_id">Unité administrative</label>
+                  <div class="col-2 text-end">
+                    <span info="Sélectionner une unité administrative">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="mb-3">
+                <select class="form-select" name="unite_admin_id" qv-rules="min:1"
+                  qv-messages="L'unité administrative est requise" [(ngModel)]="data.unite_admin_id">
+                  <option value="0" selected>Sélectionner une unité</option>
+                  <option [value]="uadmin.id" *ngFor="let uadmin of uadmins">
+                    {{ uadmin.name }}
+                  </option>
+                </select>
+              </div>
+              <div qv-feedback="unite_admin_id"></div>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-8 required">Téléphone</div>
+                  <div class="col-4 text-end">
+                    <span info="Le numéro de téléphone">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input qv-rules="required|regex:^[0-9]{8}$"
+                  qv-messages="Le numéro de téléphone est requis|Le :field est invalide" required type="tel"
+                  name="phone" qv-name="numéro de téléphone" placeholder="Taper le numéro de téléphone"
+                  class="form-control" [(ngModel)]="data.phone" />
+              </div>
+              <div qv-feedback="phone"></div>
+            </div>
+          </div>
+        </div>
+        <!--Phone-->
+        <div class="row mb-2">
+          <div class="col-sm">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <label class="col-6 required" for="titre_id">Titre</label>
+                  <div class="col-6 text-end">
+                    <span info="Le titre de l'utilisateur">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="mb-3">
+                <select class="form-select" name="titre_id" qv-rules="required|min:1"
+                  qv-messages="Le titre de l'administrateur est requis" id="titre_id" [(ngModel)]="data.titre_id">
+                  <option value="0" selected>Sélectionner</option>
+                  <option [value]="titre.id" *ngFor="let titre of titres">
+                    {{ titre.name }}
+                  </option>
+                </select>
+              </div>
+              <div qv-feedback="titre_id"></div>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="mb-3">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <!-- <div class="col-6 required">Rôle</div> -->
+                  <label class="col-6 required" for="role_id">Rôle</label>
+                  <div class="col-6 text-end">
+                    <span info="Sélectionner un rôle">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="mb-3">
+                <select class="form-select" name="role_id" qv-rules="required|min:1"
+                  qv-messages="Le role de l'administrateur est requis" id="role_id" [(ngModel)]="data.role_id">
+                  <option value="0" selected>Sélectionner</option>
+                  <option [value]="role.id" *ngFor="let role of roles">
+                    {{ role.nom_complet }}
+                  </option>
+                </select>
+              </div>
+              <div qv-feedback="role_id"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Fermer
+        </button>
+        <button class="btn btn-primary" (click)="validate()">
+          Valider
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

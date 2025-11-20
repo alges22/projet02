@@ -1,0 +1,50 @@
+<div class="row align-items-center justify-content-between">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon
+          icon="arrow-clockwise"
+          [size]="18"
+          classe="text-dark"
+        ></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="col-sm-3 text-end">
+    <button class="btn border btn-icons btn-primary" (click)="addRole()">
+      <app-icon icon="plus" [size]="18"></app-icon>
+      Rôle
+    </button>
+  </div>
+</div>
+<table class="table mt-0 table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Nom</th>
+      <th width="10%" scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="roles.length > 0">
+    <tr *ngFor="let role of roles">
+      <td>
+        {{ role.nom_complet }}
+      </td>
+      <td>
+        <div class="btn-actions">
+          <app-icon
+            icon="pencil"
+            (click)="editRole(role.id)"
+            [size]="16"
+            classe="text-success"
+          ></app-icon>
+          <app-delete
+            (canDelete)="destroy($event)"
+            [activateId]="role.id"
+          ></app-delete>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

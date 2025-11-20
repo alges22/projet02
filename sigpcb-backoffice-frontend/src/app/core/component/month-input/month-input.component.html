@@ -1,0 +1,9 @@
+<select
+  class="form-select"
+  (change)="onSelected()"
+  [(ngModel)]="selected"
+  [disabled]="disabled"
+>
+  <option [value]="null">{{ placeholder }}</option>
+  <option *ngFor="let month of months">{{ month }}</option>
+</select>

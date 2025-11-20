@@ -1,0 +1,255 @@
+[
+    {
+        "name": "all",
+        "guard_name": "web",
+        "onglet": "Administrateur Principal",
+        "nom_complet": "Toutes les permissions",
+        "description": "Acceder a toute la plateforme"
+    },
+    {
+        "name": "parametrage-base",
+        "guard_name": "web",
+        "onglet": "Paramétrage de base",
+        "nom_complet": "Accéder au paramétrage de base",
+        "description": "Accéder au paramétrage de base"
+    },
+    {
+        "name": "gestion-acces",
+        "guard_name": "web",
+        "onglet": "Gestion d'accès",
+        "nom_complet": "Accéder a la gestion des accès",
+        "description": "Accéder a la gestion des accès"
+    },
+    {
+        "name": "signatures",
+        "guard_name": "web",
+        "onglet": "Signature",
+        "nom_complet": "Accéder à l'espace signature",
+        "description": "Accéder a l'espace signature"
+    },
+
+    {
+        "name": "gestion-qcm",
+        "guard_name": "web",
+        "onglet": "Gestion QCM",
+        "nom_complet": "Accéder à l'espace de gestion des qcm. Gestion des barèmes, des chapitres, des barèmes.",
+        "description": "Accéder à l'espace de gestion des qcm. Gestion des barèmes, des chapitres, des barèmes."
+    },
+    {
+        "name": "inspections",
+        "guard_name": "web",
+        "onglet": "Inspections",
+        "nom_complet": "Accéder à l'espace inspections",
+        "description": "Accéder à l'espace inspections"
+    },
+    {
+        "name": "validation-dossiers",
+        "guard_name": "web",
+        "onglet": "Validation des dossiers",
+        "nom_complet": "Accéder au validation des dossiers",
+        "description": "Accéder au validation des dossiers"
+    },
+    {
+        "name": "programmation",
+        "guard_name": "web",
+        "onglet": "Programmation",
+        "nom_complet": "Accéder a l'espace de gestion de la programmation",
+        "description": "Accéder a l'espace de gestion de la programmation"
+    },
+    {
+        "name": "gestion-licences",
+        "guard_name": "web",
+        "onglet": "Gestion des licences",
+        "nom_complet": "Accéder à l'onglet de gestion des licences",
+        "description": "Accéder à l'onglet de gestion des licences"
+    },
+    {
+        "name": "authenticite-du-permis",
+        "guard_name": "web",
+        "onglet": "Authenticité du permis",
+        "nom_complet": "Accéder à l'onglet Authenticité du permis",
+        "description": "Accéder à l'onglet Authenticité du permis"
+    },
+    {
+        "name": "remplacement-ou-duplicata-du-permis",
+        "guard_name": "web",
+        "onglet": "Remplacement ou duplicata du permis",
+        "nom_complet": "Accéder à l'onglet Remplacement ou duplicata du permis",
+        "description": "Accéder à l'onglet Remplacement ou duplicata du permis"
+    },
+    {
+        "name": "permis-international",
+        "guard_name": "web",
+        "onglet": "Permis international",
+        "nom_complet": "Accéder à l'onglet Permis international",
+        "description": "Accéder à l'onglet Permis international"
+    },
+    {
+        "name": "echange-de-permis",
+        "guard_name": "web",
+        "onglet": "Échange de permis",
+        "nom_complet": "Accéder à l'onglet Échange de permis",
+        "description": "Accéder à l'onglet Échange de permis"
+    },
+    {
+        "name": "prorogation-de-permis",
+        "guard_name": "web",
+        "onglet": "Prorogation de permis",
+        "nom_complet": "Accéder à l'onglet Prorogation de permis",
+        "description": "Accéder à l'onglet Prorogation de permis"
+    },
+    {
+        "name": "statistique",
+        "guard_name": "web",
+        "onglet": "Statistiques",
+        "nom_complet": "Accéder aux statistiques",
+        "description": "Accéder aux statistiques"
+    },
+    {
+        "name": "faq",
+        "guard_name": "web",
+        "onglet": "Gestion de la FAQ",
+        "nom_complet": "Accéder à la gestion de la FAQ",
+        "description": "Accéder à la gestion de la FAQ"
+    },
+    {
+        "name": "recrutement-examinateur",
+        "guard_name": "web",
+        "onglet": "Recrutement des examinateurs",
+        "nom_complet": "Accéder à la gestion du recrutement des examinateurs",
+        "description": "Accéder à la gestion du recrutement des examinateurs"
+    },
+    {
+        "name": "recrutement-moniteur",
+        "guard_name": "web",
+        "onglet": "Recrutement des moniteurs",
+        "nom_complet": "Accéder à la gestion du recrutement des moniteurs",
+        "description": "Accéder à la gestion du recrutement des moniteurs"
+    },
+    {
+        "name": "gestion-entreprise-recrutement",
+        "guard_name": "web",
+        "onglet": "Gestion des entreprises",
+        "nom_complet": "Accéder à la gestion des entreprises",
+        "description": "Accéder à la gestion des entreprises"
+    },
+    {
+        "name": "gestion-composition-recrutement",
+        "guard_name": "web",
+        "onglet": "Gestion des compositions",
+        "nom_complet": "Accéder à la gestion des compositions",
+        "description": "Accéder à la gestion des compositions"
+    },
+    {
+        "name": "resultat-examen-recrutement",
+        "guard_name": "web",
+        "onglet": "Résultats (Composition recrutement)",
+        "nom_complet": "Accéder aux résultats des compositions recrutement",
+        "description": "Accéder aux résultats des compositions recrutement"
+    },
+    {
+        "name": "support-client",
+        "guard_name": "web",
+        "onglet": "Support client",
+        "nom_complet": "Accéder au support client",
+        "description": "Accéder au support client"
+    },
+    {
+        "name": "agenda",
+        "guard_name": "web",
+        "onglet": "Gestion de l'agenda",
+        "nom_complet": "Gérer l'agenda",
+        "description": "Autorise à ajouter, modifier, consulter et supprimer des événements dans l'agenda pour une organisation efficace"
+    },
+    {
+        "name": "gestion-annexes",
+        "guard_name": "web",
+        "onglet": "Unités territoriales",
+        "nom_complet": "Gérer les annexes",
+        "description": "Autorisé à ajouter, modifier, consulter et supprimer des annexes. Gérer les départements, les communes, les salles, l’unité territoriale."
+    },
+    {
+        "name": "gestion-categories-permis",
+        "guard_name": "web",
+        "onglet": "Gestion des catégories de permis",
+        "nom_complet": "Gérer les catégories de permis",
+        "description": "Autorise à ajouter, modifier, consulter et supprimer les catégories de permis pour une gestion claire et structurée"
+    },
+    {
+        "name": "gestion-langues",
+        "guard_name": "web",
+        "onglet": "Gestion des langues",
+        "nom_complet": "Gérer les langues",
+        "description": "Permet d'ajouter, modifier, consulter et supprimer des langues pour une meilleure personnalisation et accessibilité"
+    },
+    {
+        "name": "gestion-restrictions",
+        "guard_name": "web",
+        "onglet": "Gestion des restrictions",
+        "nom_complet": "Gérer les restrictions",
+        "description": "Autorise à ajouter, modifier, consulter et supprimer des restrictions pour assurer une gestion fine des autorisations"
+    },
+    {
+        "name": "gestion-reporting",
+        "guard_name": "web",
+        "onglet": "Gestion des reporting",
+        "nom_complet": "Gérer les reporting",
+        "description": "Accéder au reporting des paiements"
+    },
+    {
+        "name": "resultat-examen",
+        "guard_name": "web",
+        "onglet": "Résultats des examens",
+        "nom_complet": "Gérer les resultats",
+        "description": "Voir les résultats des examens, les filtrer, imprimer et télécharger."
+    },
+    {
+        "name": "gestion-auto-ecole",
+        "guard_name": "web",
+        "onglet": "Gestion auto-écoles",
+        "nom_complet": "Gérer les auto-écoles",
+        "description": "Accéder à l'onglet de gestion auto-école"
+    },
+    {
+        "name": "gestion-agrement",
+        "guard_name": "web",
+        "onglet": "Gestion agréments",
+        "nom_complet": "Gestion agréments",
+        "description": "Accéder à l'onglet de gestion des agréments"
+    },
+    {
+        "name": "configuration-base",
+        "guard_name": "web",
+        "onglet": "Configuration de base",
+        "nom_complet": "Configuration de base",
+        "description": "Modifier ou supprimer les configurations générales de base"
+    },
+    {
+        "name": "gestion-titres",
+        "guard_name": "web",
+        "onglet": "Gestion des titres (profiles)",
+        "nom_complet": "Gestion des titres (profiles)",
+        "description": "Permet d’ajouter, modifier ou supprimer un titre."
+    },
+    {
+        "name": "gestion-unites-administratives",
+        "guard_name": "web",
+        "onglet": "Gestion des unités administratives",
+        "nom_complet": "Gestion des unités administratives",
+        "description": "Permet d’ajouter, de modifier et de supprimer des unités administratives"
+    },
+    {
+        "name": "gestion-menu-candidats",
+        "guard_name": "web",
+        "onglet": "Accès au menu candidats",
+        "nom_complet": "Accès au menu candidats",
+        "description": "Voir les candidats, les parcours et les actions des candidats."
+    },
+    {
+        "name": "gestion-menu-transmission",
+        "guard_name": "web",
+        "onglet": "Accès au menu transmission",
+        "nom_complet": "Accès au menu transmission",
+        "description": "Permet de voir les résultats des examens, les recalés, les absences, et les données de transmissions. Télécharger les informations de permis."
+    }
+]

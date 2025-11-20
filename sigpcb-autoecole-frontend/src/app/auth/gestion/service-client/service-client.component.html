@@ -1,0 +1,176 @@
+<div class="p-2">
+  <div class="row">
+    <div class="col-md-5">
+      <h6>
+        Soumettez vos préoccupations particulières au service client de l’ANaTT
+        en créant des tickets de discussion
+      </h6>
+      <p class="mt-4 small">
+        Avant de laisser un message ici, parcourez d’abord la page des
+        <strong><a href="">Questions fréquentes</a></strong> pour voir si la
+        réponse à votre préoccupation n’y est pas encore.
+      </p>
+
+      <p class="mt-3">
+        <button
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#create-ticket"
+        >
+          <app-icon icon="plus"></app-icon> Créer un ticket de discussion
+        </button>
+      </p>
+      <hr />
+      <h6 class="mb-2">Tous vos tickets</h6>
+      <div class="bg-light p-3">
+        <strong>Ticket numéro 0001</strong>
+        <p>Date de création : 12 Juin 2023</p>
+      </div>
+    </div>
+    <div class="col h-100">
+      <div class="chat card border border-secondary border-2">
+        <div class="card-header bg-secondary text-white">Service client</div>
+        <div class="card-body small">
+          <div class="message-flex">
+            <div class="our-message message-item row mb-2">
+              <div class="col-sm-9">
+                <div class="bg-light p-2 rounded-1">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi
+                  animi beatae sunt amet debitis, nam magni mollitia eos
+                  nesciunt deleniti dolor, obcaecati consectetur nisi eveniet
+                  nihil architecto. Commodi, sequi qui.
+                </div>
+              </div>
+            </div>
+            <div class="our-message message-item row mb-2">
+              <div class="col-sm-9">
+                <div class="bg-light p-2 rounded-1">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi
+                  animi beatae sunt amet debitis, nam magni mollitia eos
+                  nesciunt deleniti dolor, obcaecati consectetur nisi eveniet
+                  nihil architecto. Commodi, sequi qui.
+                </div>
+              </div>
+            </div>
+            <div class="row custumer-message message-item mb-2">
+              <div class="col-sm-9 ms-auto">
+                <div class="border p-2 rounded-1">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem
+                  ipsum dolor sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <div class="row custumer-message message-item mb-2">
+              <div class="col-sm-9 ms-auto">
+                <div class="border p-2 rounded-1">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem
+                  ipsum dolor sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <div class="our-message row message-item mb-2">
+              <div class="col-sm-9">
+                <div class="bg-light p-2 rounded-1">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi
+                  animi beatae sunt amet debitis, nam magni mollitia eos
+                  nesciunt deleniti dolor, obcaecati consectetur nisi eveniet
+                  nihil architecto. Commodi, sequi qui.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer border-0 bg-transparent">
+          <div class="d-flex">
+            <input
+              type="text"
+              name=""
+              class="form-control rounded-1"
+              placeholder="Ecrire un message ..."
+            />
+            <button class="btn btn-secondary rounded-1 ms-1">Envoyer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="create-ticket"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">
+          Qu’est-ce qui vous amène ?
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="situation-rejet-dossier"
+            name="situation"
+          />
+          <label class="form-check-label" for="situation-rejet-dossier">
+            Situation avec un dossier rejeté
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            name="situation"
+            type="radio"
+            id="situation-absence"
+          />
+          <label class="form-check-label" for="situation-absence">
+            Situation avec un cas d’absence d’un candidat
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            name="situation"
+            type="radio"
+            id="situation-permis"
+          />
+          <label class="form-check-label" for="situation-permis">
+            Situation avec un cas de prorogation de permis
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            name="situation"
+            type="radio"
+            id="situation-another"
+          />
+          <label class="form-check-label" for="situation-another">
+            Autre situation
+          </label>
+        </div>
+      </div>
+      <div class="p-3">
+        <button class="btn btn-primary">Commencer</button>
+      </div>
+    </div>
+  </div>
+</div>

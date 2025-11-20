@@ -1,0 +1,9 @@
+p {
+  font-size: 12px;
+}
+
+.nav-link.active {
+  border-color: #006f6f;
+  background-color: #E6F1F169;
+  transition: all 1.2s;
+}

@@ -1,0 +1,198 @@
+<app-blue-aside [auth]="auth">
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 my-3">
+      Votre espace de gestion d’établissement <br />
+      de conduite automobile et annexes
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-md-11">
+    <h3 class="title my-4">Affiliation des candidats</h3>
+    <ng-container *ngIf="!aes.length">
+      <div class="text-center">Aucune école active trouvée</div>
+    </ng-container>
+    <ng-container *ngIf="aes.length && form.auto_ecole_id">
+      <div class="border p-3 rounded">
+        <div class="row align-items-center">
+          <div class="col-sm-4">
+            <div class="mb-3">
+              <label for="auto_ecole_id" class="form-label">Auto-école</label>
+              <select
+                class="form-select"
+                [(ngModel)]="form.auto_ecole_id"
+                name="auto_ecole_id"
+                id="auto_ecole_id"
+                (change)="onAeChanges($event.target)"
+              >
+                <option [value]="ae.id" *ngFor="let ae of aes">
+                  {{ ae.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="mb-3">
+              <label for="npi" class="form-label">Npi du Candidat</label>
+              <input
+                type="text"
+                class="form-control"
+                name="npi"
+                id="npi"
+                placeholder="Saisissez le NPI du candidat"
+                [(ngModel)]="form.npi"
+              />
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="mt-2">
+              <button
+                class="btn btn-primary"
+                (click)="beforeAdd()"
+                [disabled]="!isValid()"
+              >
+                Affilier
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénoms</th>
+                <th scope="col">NPI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class=""
+                *ngFor="
+                  let item of candidats | paginate : paginateArgs();
+                  let i = index
+                "
+              >
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.candidat_info.nom }}</td>
+                <td>{{ item.candidat_info.prenoms }}</td>
+                <td>{{ item.candidat_info.npi }}</td>
+              </tr>
+              <tr *ngIf="!candidats.length">
+                <td colspan="12">
+                  <div class="text-center">Aucun candidat</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <app-pagination
+          *ngIf="paginateData.total > 10"
+          [total]="paginateData.total"
+          (pageChange)="paginate($event)"
+          [pageNumber]="filters.page"
+          [perPage]="10"
+        ></app-pagination>
+      </div>
+    </ng-container>
+
+    <div
+      class="modal fade"
+      id="affiliation-modal"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      role="dialog"
+      aria-labelledby="modalTitleId"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitleId">Attention!</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <ng-container *ngIf="candidatToAdd && autoEcole">
+              <p>
+                Êtes-vous sûr de vouloir affilier le candidat
+                <b>{{ candidatToAdd.nom }} {{ candidatToAdd.prenoms }}</b> à
+                votre auto-école : <b>{{ autoEcole.name }}</b> ?
+              </p>
+            </ng-container>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Non
+            </button>
+            <button type="button" class="btn btn-primary" (click)="post()">
+              Oui
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="modalId"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      role="dialog"
+      aria-labelledby="modalTitleId"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitleId">Attention!</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <ng-container *ngIf="candidatToDelete">
+              <p>
+                Êtes-vous sûr de vouloir résilier le candidat
+                <b>{{ candidatToDelete.nom }} {{ candidatToDelete.prenoms }}</b
+                >?
+              </p>
+            </ng-container>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Non
+            </button>
+            <button type="button" class="btn btn-primary">Oui</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

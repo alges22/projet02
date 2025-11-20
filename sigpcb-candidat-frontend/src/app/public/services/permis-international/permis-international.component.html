@@ -1,0 +1,321 @@
+<div class="col-md-11 mx-auto">
+  <h3 class="title">Demande de permis international</h3>
+  <div class="card border" *ngIf="currentPage !== 'completed'">
+    <div class="bg-light p-3 m-2 rounded">
+      <div class="row">
+        <div
+          class="col-6 col-md mb-3 mb-md-0"
+          *ngFor="let p of pages; let i = index"
+        >
+          <app-number-box [number]="i + 1" [filled]="p.active">
+            {{ p.name }}
+          </app-number-box>
+        </div>
+      </div>
+    </div>
+    <!--Infos sur la demande-->
+    <form method="post" id="infos-demande">
+      <div class="card-body" *ngIf="currentPage === 'infos-demande'">
+        <div class="row">
+          <div class="col-md-6">
+            <h6>Adresse email</h6>
+            <div class="mb-3">
+              <div class="input-styled">
+                <input
+                  class="form-select"
+                  name="email"
+                  type="text"
+                  qv-rules="required"
+                  [(ngModel)]="email"
+                  qv-messages="Ce champ est obligatoire"
+                />
+              </div>
+              <div qv-feedback="email"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6>Catégories de votre permis étranger</h6>
+            <div class="row">
+              <div
+                class="col mb-2"
+                *ngFor="let category of categoriespermis; let i = index"
+              >
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    name="restriction"
+                    type="checkbox"
+                    [id]="'restriction-' + i"
+                    (change)="selectCategorie(category)"
+                    [checked]="isChecked(category)"
+                  />
+                  <label class="form-check-label" [for]="'restriction-' + i">{{
+                    category.name
+                  }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6>Numéro du permis de conduire</h6>
+            <div class="mb-3">
+              <div class="input-styled">
+                <input
+                  class="form-select"
+                  name="num_permis"
+                  type="text"
+                  qv-rules="required"
+                  [(ngModel)]="num_permis"
+                  qv-messages="Ce champ est obligatoire"
+                />
+              </div>
+              <div qv-feedback="num_permis"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6 [innerHTML]="piecepermis.label"></h6>
+            <!-- <div class="mb-3">
+              <app-input-file accept=".png,.jpg" (changeEvent)="onFilePermisChange($event)"></app-input-file>
+            </div> -->
+
+            <ng-container *ngIf="!permis_file">
+              <app-input-file
+                accept=".png,.jpg"
+                (changeEvent)="onFilePermisChange($event)"
+              ></app-input-file>
+            </ng-container>
+            <ng-container *ngIf="permis_file">
+              <app-input-file
+                accept=".png,.jpg"
+                (changeEvent)="onFilePermisChange($event)"
+                [selectedImage]="asset(permis_file)"
+                placeholder="Modifier l'image existante"
+              ></app-input-file>
+            </ng-container>
+          </div>
+
+          <div class="col-md-6 mt-3">
+            <button
+              class="btn btn-between btn-primary"
+              (click)="gotoPage('recapitulatif', $event)"
+              [disabled]="!infosDemandeIsValid()"
+            >
+              Suivant <app-icon icon="arrow-right"></app-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- recapitulatif -->
+    <div class="card-body p-2" *ngIf="currentPage == 'recapitulatif'">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="border rounded-3 p-2">
+            <div class="mb-3 row">
+              <div class="fw-semibold">Adresse email</div>
+              <div class="col-md-6">
+                <span class="">{{ email }}</span>
+              </div>
+              <div class="col-md-6 text-end">
+                <button
+                  type="button"
+                  class="btn btn-light"
+                  (click)="gotoPage('infos-demande', $event)"
+                >
+                  Modifier
+                </button>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <div class="fw-semibold">Catégories de permis</div>
+              <div class="col-md-6">
+                <span class="">{{ getCategoriesNames() }}</span>
+              </div>
+              <div class="col-md-6 text-end">
+                <button
+                  type="button"
+                  class="btn btn-light"
+                  (click)="gotoPage('infos-demande', $event)"
+                >
+                  Modifier
+                </button>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <div class="fw-semibold">Numéro du permis de conduire</div>
+              <div class="col-md-6">
+                <span class="text-uppercase">{{ num_permis }}</span>
+              </div>
+              <div class="col-md-6 text-end">
+                <button
+                  type="button"
+                  class="btn btn-light"
+                  (click)="gotoPage('infos-demande', $event)"
+                >
+                  Modifier
+                </button>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <div class="fw-semibold">Copie du permis de conduire</div>
+              <div class="col-md-6">
+                <div *ngIf="piecepermis.src">
+                  <div class="preview-pdf">
+                    <div class="prev-eye col-md-9 col-xl-7">
+                      <div
+                        class="overlay"
+                        (click)="openImageModal(piecepermis.src)"
+                      ></div>
+                      <app-icon
+                        icon="eye"
+                        (click)="openImageModal(piecepermis.src)"
+                      ></app-icon>
+                      <img
+                        [src]="piecepermis.src"
+                        alt="Aperçu de l'image"
+                        class="img-fluid"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 text-end">
+                <button
+                  type="button"
+                  class="btn btn-light"
+                  (click)="gotoPage('infos-demande', $event)"
+                >
+                  Modifier
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mt-2">
+          <button class="btn btn-between btn-primary" (click)="save()">
+            <ng-container *ngIf="!rejetId">
+              Payer et soumettre <app-icon icon="arrow-right"></app-icon>
+            </ng-container>
+
+            <ng-container *ngIf="rejetId">
+              Soumettre <app-icon icon="arrow-right"></app-icon>
+            </ng-container>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- paiement -->
+    <div class="card-body p-2" *ngIf="currentPage == 'paiement'">
+      <ng-container *ngIf="!rejetId">
+        <div class="row h-100">
+          <div class="col h-100">
+            <h4 class="mt-3">Paiement effectué avec succès</h4>
+            <div class="border rounded-3 p-2">
+              <div class="row">
+                <div class="col">
+                  <div class="mb-3">
+                    <div class="fw-semibold">NPI</div>
+                    <span class="text-uppercase">
+                      {{ candidat?.npi }}
+                    </span>
+                  </div>
+                  <div class="mb-3">
+                    <div class="fw-semibold">Nom</div>
+                    <span class="text-uppercase">
+                      {{ candidat?.nom }}
+                    </span>
+                  </div>
+                  <div class="mb-3">
+                    <div class="fw-semibold">Prénoms</div>
+                    <span class="text-uppercase">
+                      {{ candidat?.prenoms }}
+                    </span>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="mb-3">
+                    <div class="fw-semibold">Montant payé</div>
+                    <span class="text-uppercase">
+                      {{ montant_payer }}
+                    </span>
+                  </div>
+
+                  <div class="mb-3">
+                    <div class="fw-semibold">Numéro de paiement</div>
+                    <span class="text-uppercase">
+                      {{ phone_payment }}
+                    </span>
+                  </div>
+                  <div class="mb-3">
+                    <div class="fw-semibold">Date de paiement</div>
+                    <span class="text-uppercase">
+                      {{ date_payment | date : "dd MMMM yyyy" : "" : "fr" }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="my-3">
+              <a
+                type="button"
+                href="{{ download_url }}"
+                class="btn btn-outline-primary w-100"
+                target="_blank"
+                >Télécharger la facture</a
+              >
+            </p>
+
+            <p
+              class="my-3"
+              *ngIf="messageDownloadPermis"
+              [innerHTML]="messageDownloadPermis"
+            ></p>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="rejetId">
+        <div class="alert alert-primary text-center" role="alert">
+          <h6>
+            Votre correction a été soumise avec succès <br />
+            et en attente de validation par l'ANaTT.
+          </h6>
+          <p class="mt-3">
+            <a href="/services/suivre-dossier" class="btn btn-primary">
+              Suivre ma demande
+            </a>
+          </p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<ng-container *ngIf="payment">
+  <app-fedapay-box
+    [transaction]="payment"
+    (onCompleted)="getTransaction($event)"
+  />
+</ng-container>
+<div
+  class="modal fade"
+  id="openImageModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog bg-transparent modal-dialog-scrollable modal-dialog-centered modal-lg"
+    role="document"
+  >
+    <div class="modal-content rounded-0 p-0">
+      <div class="modal-body p-0">
+        <img [src]="imageSrc" alt="Aperçu de l'image" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>

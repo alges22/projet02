@@ -1,0 +1,34 @@
+<div class="switch-form">
+  <div class="form-check form-switch">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      role="switch"
+      [checked]="checked"
+      (change)="switch(activateId, $event)"
+    />
+  </div>
+  <div class="switch-alert rounded" *ngIf="show">
+    <div class="d-flex justify-content-between my-1">
+      <span class="fw-semibold" style="font-size: 12px">Attention</span>
+      <app-icon
+        icon="x"
+        [size]="14"
+        classe="text-danger"
+        (click)="cancel()"
+      ></app-icon>
+    </div>
+    <div class="d-flex">
+      <button class="btn btn-sm btn-danger" title="Annuler" (click)="cancel()">
+        <app-icon icon="x"></app-icon>
+      </button>
+      <button
+        class="btn btn-sm btn-success ms-1"
+        title="Continuer"
+        (click)="confirmSwitch()"
+      >
+        <app-icon icon="check-circle"></app-icon>
+      </button>
+    </div>
+  </div>
+</div>

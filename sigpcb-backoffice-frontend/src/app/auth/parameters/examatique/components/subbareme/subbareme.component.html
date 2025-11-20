@@ -1,0 +1,105 @@
+<ng-container *ngIf="!onLoad">
+  <div class="mb-1">
+    <button class="btn btn-primary btn-sm" (click)="openModal()">
+      Nouveau sous barmème
+    </button>
+  </div>
+  <ng-container *ngIf="subbaremes.length">
+    <ul class="list-group my-3">
+      <li
+        class="list-group-item bg-transparent rounded-0"
+        *ngFor="let sub of subbaremes; let i = index"
+      >
+        <div class="row">
+          <div class="col-8">
+            {{ i + 1 }}. {{ sub.name }} <br />
+            <span class="text-danger">{{
+              sub.eliminatoire ? "Eliminatoire" : ""
+            }}</span>
+          </div>
+          <div class="col-4">
+            <button class="btn border-0" (click)="openModal(sub)">
+              <app-icon icon="pencil" classe="text-primary"></app-icon>
+            </button>
+            <button class="btn border-0">
+              <app-delete (canDelete)="delete($event)" [activateId]="sub.id">
+              </app-delete>
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </ng-container>
+
+  <ng-container *ngIf="!subbaremes.length">
+    <div class="alert alert-light">Aucun sous barème</div>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="onLoad"> Chargement en cours .. </ng-container>
+<div
+  class="modal fade"
+  [id]="'subbareme-modal-' + baremeId"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">
+          Editition d'un sous-barème
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="closeModal()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="name" class="form-label">Nom</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              [(ngModel)]="form.name"
+              name="name"
+              required
+            />
+          </div>
+
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [id]="'eliminatoire' + baremeId"
+              [checked]="form.eliminatoire"
+              (change)="onEliminatoireChange($event.target)"
+            />
+            <label class="form-check-label" [for]="'eliminatoire' + baremeId">
+              Ce barème est éliminatoire
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          (click)="form.id ? update() : post()"
+          class="btn btn-primary"
+        >
+          {{ form.id ? "Mettre à jour" : "Enregistrer" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,104 @@
+<div class="row p-2 justify-content-between align-items-center mb-3">
+  <div class="col-lg-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <button class="btn btn-refresh" (click)="get()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 10px">Actualiser</span>
+      </button>
+      <div class="input-group ms-1">
+        <span class="input-group-text" role="button" (click)="get()">
+          <app-icon icon="search"></app-icon>
+        </span>
+        <input type="text" name="search" class="form-control" placeholder="Taper un IFU ..."
+          [(ngModel)]="filters.search" />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr class="bg-table-primary">
+        <th scope="col">Date début</th>
+        <th scope="col">Date fin</th>
+        <th scope="col">Nom de l'auto-école</th>
+        <th scope="col">IFU</th>
+        <th scope="col">Promoteur</th>
+        <th scope="col">Emplacement</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="onLoadAutoEcole">
+      <tr>
+        <td colspan="12" class="py-3 text-center">
+          <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+            Chargement en cours
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <tbody *ngFor="let item of autoecoles | paginate : paginateArgs(); let i = index">
+      <tr>
+        <td scope="row">
+          <small class="text-muted">{{ item.date_debut | hdate : true }}</small>
+        </td>
+        <td scope="row">
+          <small class="text-muted">{{ item.date_fin | hdate : true }}</small>
+        </td>
+        <td>{{ item.autoecole?.name }}</td>
+        <td>{{ item.autoecole?.num_ifu }}</td>
+        <td>{{ item.autoecole?.promoteur_info?.nom }} {{ item.autoecole?.promoteur_info?.prenoms }}</td>
+        <td>
+          {{ item.autoecole?.adresse }}
+        </td>
+        <td class="d-none d-md-table-cell">
+          <div class="switch-form">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" [checked]="item.autoecole?.status"
+                (change)="switch(item.autoecole?.id, $event)" />
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="!onLoadAutoEcole && !autoecoles.length">
+      <tr>
+        <td colspan="12" class="py-3 text-center">Aucune auto-école trouvée</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="p-3" *ngIf="paginate_data">
+    <app-pagination *ngIf="paginate_data.total > 10" [total]="paginate_data.total" (pageChange)="paginate($event)"
+      [pageNumber]="pageNumber"></app-pagination>
+  </div>
+</div>
+
+<div class="modal fade" id="motif-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+  aria-labelledby="modalTitleId" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary fw-semibold" id="modalTitleId">Motif</h5>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="" class="form-label">Motif</label>
+          <textarea name="consigne" class="form-control" cols="30" rows="10" placeholder="Ecrivez votre message"
+            [(ngModel)]="motif"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">
+          Fermer
+        </button>
+        <button type="button" class="btn btn-primary" (click)="desactive()">
+          Envoyer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

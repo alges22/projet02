@@ -1,0 +1,102 @@
+<app-blue-aside *ngIf="ready && auth" [auth]="auth">
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 my-3">
+      Votre espace de gestion d’établissement <br />
+      de conduite automobile et annexes
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-md-11">
+    <div class="row align-items-center">
+      <div class="col-6 col-sm-4">
+        <div class="border p-1 rounded-3 d-flex">
+          <app-avatar [promoteur]="auth"></app-avatar>
+          <div class="d-flex flex-column justify-content-between ms-2">
+            <h5
+              class="pt-2"
+              style="color: #313131; font-size: 22px; font-weight: 600"
+            >
+              {{ auth.prenoms }} {{ auth.nom }}
+            </h5>
+            <h6 class="pb-2" style="color: #575656; font-size: 16px">
+              NPI : {{ auth.npi }}
+            </h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4">
+        <div class="alert alert-warning mb-0" role="alert">
+          Vous êtes en mode
+          <strong>
+            {{ auth.type == "moniteur" ? "Moniteur" : "Promoteur" }}</strong
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="border p-2 rounded-3 my-3 small" *ngIf="currentAe">
+      <p>
+        Auto-école: <b>{{ currentAe.name }}</b>
+      </p>
+      <p>
+        Code Licence: <b>{{ currentAe.codeLicence }}</b>
+      </p>
+      <p>
+        Code Agrément: <b>{{ currentAe.codeAgrement }}</b>
+      </p>
+      <p *ngIf="currentAe.annexe">
+        Annexe: <b>{{ currentAe.annexe.name }}</b>
+      </p>
+      <p *ngIf="currentAe.endLicence != 'Non disponible'">
+        Fin de licence:
+        <b>{{ currentAe.endLicence | date : "dd MMM y" : "fr" }}</b>
+        <br />
+        <span
+          class="p-1 rounded d-inline-block"
+          [ngClass]="'text-' + licenceTextColor"
+          *ngIf="expireLicence != null"
+        >
+          Licence
+          <ng-container *ngIf="expireLicence >= 1">
+            expire dans <br />
+            <b>({{ expireLicence }} jour{{ expireLicence > 1 ? "s" : "" }} )</b>
+          </ng-container>
+          <ng-container *ngIf="expireLicence < 1">
+            <ng-container *ngIf="expireLicence == 0">
+              expire aujourd'hui
+            </ng-container>
+            <ng-container *ngIf="expireLicence != 0"> expirée </ng-container>
+          </ng-container>
+        </span>
+      </p>
+    </div>
+    <h3 class="title my-4" *ngIf="auth.type != 'moniteur'">
+      Quel service souhaitez-vous solliciter ?
+    </h3>
+    <div class="row justify-content-center prestations">
+      <ng-container *ngFor="let ps of prestations">
+        <div class="col-md-4 mb-5">
+          <app-service-card [prestation]="ps">
+            <div class="d-none d-md-block">
+              <a
+                [routerLink]="ps.href"
+                class="btn btn-outline-primary rounded-0 d-block"
+              >
+                {{ ps.actionText }}
+              </a>
+            </div>
+            <div
+              class="d-md-none d-flex w-100 align-items-center justify-content-center"
+            >
+              <a class="btn btn-primary rounded-0" [routerLink]="ps.href">
+                <app-icon icon="arrow-right" classe="fw-bolder"></app-icon>
+              </a>
+            </div>
+          </app-service-card>
+        </div>
+      </ng-container>
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

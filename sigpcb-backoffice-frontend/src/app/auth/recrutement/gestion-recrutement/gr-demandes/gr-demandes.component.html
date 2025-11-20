@@ -1,0 +1,309 @@
+<div class="row p-2 justify-content-between align-items-center mb-3">
+  <div class="col-lg-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <button class="btn btn-refresh" (click)="get()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 10px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr class="bg-table-primary">
+        <th scope="col">Date de soumission</th>
+        <th scope="col">Entreprise</th>
+        <th scope="col">Date compo</th>
+        <th scope="col">Permis</th>
+        <th scope="col">Annexe</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="onLoadSession">
+      <tr>
+        <td colspan="12" class="py-3 text-center">
+          <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+            Chargement en cours
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <tbody
+      *ngFor="let item of sessions | paginate : paginateArgs(); let i = index"
+    >
+      <tr>
+        <td scope="row">
+          <small class="text-muted">{{ item.created_at | hdate : true }}</small>
+        </td>
+        <td>{{ item.entreprise?.name | uppercase }}</td>
+        <td>{{ item.date_compo | date : "d MMMM yyyy" : "fr" | uppercase }}</td>
+        <td>{{ item.categorie_permis.name }}</td>
+        <td>
+          {{ item.annexe.name }}
+        </td>
+
+        <td>
+          <button
+            class="btn"
+            (click)="showSession(item, i)"
+            [class.btn-primary]="demandeIndex !== i"
+            [class.btn-outline-primary]="demandeIndex === i"
+          >
+            <span *ngIf="demandeIndex !== i"> Examiner</span>
+            <span *ngIf="demandeIndex === i"> Fermer</span>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="demandeIndex === i">
+        <td colspan="12">
+          <ng-container *ngIf="selectedSession">
+            <div class="bg-modal p-3 rounded mb-3">
+              <div class="my-3">
+                <p>
+                  <span class="fw-semibold">Session : </span>
+                  {{
+                    selectedSession.date_compo
+                      | date : "d MMMM yyyy" : "fr"
+                      | uppercase
+                  }}
+                </p>
+                <p>
+                  <span class="fw-semibold">Permis : </span>
+                  {{ selectedSession.categorie_permis.name }}
+                </p>
+                <p>
+                  <span class="fw-semibold">Annexe : </span>
+                  {{ selectedSession.annexe.name }}
+                </p>
+              </div>
+              <div class="table-responsive border border-primary">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Nom & prénoms</th>
+                      <th scope="col">NPI</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let item of candidats; let y = index">
+                      <tr>
+                        <td>
+                          <ng-container *ngIf="item.candidat_info">
+                            {{ item.candidat_info.nom }}
+                            {{ item.candidat_info.prenoms }}
+                          </ng-container>
+                        </td>
+                        <td>{{ item.npi }}</td>
+                        <td>
+                          <p class="text-end">
+                            <button
+                              class="btn"
+                              (click)="openCandidat(y)"
+                              [class.btn-primary]="candidatIndex !== y"
+                              [class.btn-outline-primary]="candidatIndex == y"
+                            >
+                              <span *ngIf="candidatIndex != y"> Voir</span>
+                              <span *ngIf="candidatIndex == y"> Fermer</span>
+                            </button>
+                          </p>
+                        </td>
+                      </tr>
+                      <tr *ngIf="candidatIndex == y">
+                        <td colspan="12">
+                          <div class="bg-modal p-3 py-4 rounded shadow-sm">
+                            <div class="row">
+                              <ng-container *ngIf="item.candidat_info">
+                                <div class="col-12 mb-2">
+                                  <p>
+                                    <span class="fw-semibold">Nom:</span>
+                                    {{ item.candidat_info.nom }}
+                                  </p>
+                                </div>
+                                <div class="col-12 mb-2">
+                                  <p>
+                                    <span class="fw-semibold">Prénoms:</span>
+                                    {{ item.candidat_info.prenoms }}
+                                  </p>
+                                </div>
+                                <div class="col-12 mb-2">
+                                  <p>
+                                    <span class="fw-semibold">Sexe:</span>
+                                    {{ item.candidat_info.sexe }}
+                                  </p>
+                                </div>
+                              </ng-container>
+                              <div class="col-12 mb-2">
+                                <p>
+                                  <span class="fw-semibold"
+                                    >Numéro de permis:
+                                  </span>
+
+                                  {{ item.num_permis }}
+                                </p>
+                              </div>
+                              <div class="col-12 mb-2">
+                                <p>
+                                  <span class="fw-semibold">NPI:</span>
+                                  {{ item.npi }}
+                                </p>
+                              </div>
+                              <div class="col-6 col-sm-5 col-md-3">
+                                <div
+                                  class="prev-eye col-md-9 col-xl-7"
+                                  (click)="assets(item.permis_file, true)"
+                                >
+                                  <div class="overlay"></div>
+                                  <app-icon icon="eye"></app-icon>
+                                  <img
+                                    [src]="assets(item.permis_file)"
+                                    alt="Aperçu de l'image"
+                                    class="img-fluid"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mt-3">
+                <button class="btn btn-primary" (click)="onValidate(item)">
+                  Valider et passer au suivant
+                </button>
+                <button
+                  class="btn btn-danger ms-2"
+                  (click)="openRejectModal(item)"
+                >
+                  Rejeter le dossier
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="!onLoadSession && !sessions.length">
+      <tr>
+        <td colspan="12" class="py-3 text-center">Aucune nouvelle demande</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="p-3" *ngIf="sessionPaginateData">
+    <app-pagination
+      *ngIf="sessionPaginateData.total > 10"
+      [total]="sessionPaginateData.total"
+      (pageChange)="paginate($event)"
+      [pageNumber]="pageNumber"
+    ></app-pagination>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="reject-modal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="reject-modal-title"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reject-modal-title">
+          <ng-container *ngIf="sessionToRejet">
+            Rejet de la session du:
+            {{
+              sessionToRejet.date_compo
+                | date : "d MMMM yyyy" : "fr"
+                | uppercase
+            }}
+          </ng-container>
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="" class="form-label">Motif de rejet</label>
+          <select
+            class="form-select"
+            name="rejet"
+            [(ngModel)]="rejectData.motif"
+          >
+            <option [value]="undefined">Sélectionner un motif</option>
+            <option>Date de composition</option>
+            <option>Candidature erronée</option>
+          </select>
+          <ng-container *ngIf="rejectMessage">
+            <div class="text-danger">{{ rejectMessage }}</div>
+          </ng-container>
+        </div>
+        <div class="mb-3">
+          <label for="" class="form-label">Consignes</label>
+          <textarea
+            name="consigne"
+            class="form-control"
+            cols="30"
+            rows="10"
+            placeholder="Indiquez tous les détails du rejet"
+            [(ngModel)]="rejectData.consigne"
+          ></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onRejected()">
+          Rejeter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="img-previews"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ng-container *ngIf="previewUrl">
+          <img [src]="previewUrl" class="img-fluid" />
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

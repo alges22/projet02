@@ -1,0 +1,69 @@
+<div class="m-2">
+  <div class="row p-2 justify-content-between align-items-center mb-3">
+    <div class="col-lg-5">
+      <div class="d-flex align-items-center justify-content-between">
+        <button class="btn btn-refresh" (click)="get()">
+          <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+          <span class="text-muted" style="font-size: 10px">Actualiser</span>
+        </button>
+        <div class="input-group ms-1">
+          <span class="input-group-text" role="button" (click)="get()">
+            <app-icon icon="search"></app-icon>
+          </span>
+          <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Taper un NPI ..."
+            [(ngModel)]="filters.search"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Inscription</th>
+          <th scope="col">Nom & prénoms</th>
+          <th scope="col">NPI</th>
+          <th scope="col">Téléphone</th>
+          <th scope="col">Adresse</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class=""
+          style="vertical-align: middle"
+          *ngFor="
+            let item of candidats | paginate : paginateArgs();
+            let i = index
+          "
+        >
+          <td>{{ item.created_at | hdate : true }}</td>
+          <td>{{ item.candidat_info.nom }} {{ item.candidat_info.prenoms }}</td>
+          <td>{{ item.npi }}</td>
+          <td>{{ item.candidat_info.telephone }}</td>
+          <td>{{ item.candidat_info.adresse }}</td>
+          <td>
+            <button
+              class="btn border-0 text-primary"
+              [routerLink]="'/candidats/histories/' + item.npi"
+            >
+              <app-icon icon="eye"></app-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<app-pagination
+  *ngIf="paginate_data.total > 10"
+  [total]="paginate_data.total"
+  (pageChange)="paginate($event)"
+  [pageNumber]="filters.page"
+></app-pagination>

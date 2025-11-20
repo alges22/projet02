@@ -1,0 +1,84 @@
+<div id="sidebar" class="px-3" #sidebar>
+  <div class="row align-items-center py-4">
+    <div class="col-9">
+      <a
+        href="/"
+        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+      >
+        <img src="assets/images/logo.png" class="img-fluid" alt="logo" />
+      </a>
+    </div>
+    <div class="col-3">
+      <button
+        class="btn btn-outline-primary fw-bolder border-2 rounded-3"
+        (click)="toggleSidebar()"
+      >
+        <app-icon icon="x" [size]="30" classe="fw-bolder"></app-icon>
+      </button>
+    </div>
+  </div>
+  <div class="col-11 mx-auto">
+    <div class="py-2">
+      <a
+        href="/connexion"
+        class="btn btn-primary text-white w-100"
+        *ngIf="!userConnected()"
+      >
+        Se connecter
+      </a>
+    </div>
+    <ul class="nav flex-column mb-auto py-3">
+      <li>
+        <a href="/" class="nav-link d-flex align-items-center">
+          <app-icon icon="house" [size]="22" classe="text-primary"></app-icon>
+          <span class="ms-2">Aller l'accueil</span>
+        </a>
+      </li>
+      <li>
+        <a href="/dashboard" class="nav-link d-flex align-items-center">
+          <app-icon
+            icon="columns-gap"
+            [size]="22"
+            classe="text-primary"
+          ></app-icon>
+          <span class="ms-2">Mon tableau de bord</span>
+        </a>
+      </li>
+      <li>
+        <a
+          href="/services/suivre-dossier"
+          class="nav-link d-flex align-items-center"
+        >
+          <app-icon icon="files" [size]="22" classe="text-primary"></app-icon>
+          <span class="ms-2">Mes démarches</span>
+        </a>
+      </li>
+      <li>
+        <a
+          href="/dashboard/edit-dossier"
+          class="nav-link d-flex align-items-center"
+        >
+          <app-icon icon="pen" [size]="22" classe="text-primary"></app-icon>
+          <span class="ms-2">Modifier mon dossier</span>
+        </a>
+      </li>
+      <li>
+        <a href="/faq" class="nav-link d-flex align-items-center">
+          <app-icon
+            icon="question-circle"
+            [size]="22"
+            classe="text-primary"
+          ></app-icon>
+          <span class="ms-2">FAQs</span>
+        </a>
+      </li>
+    </ul>
+    <a
+      class="btn btn-outline-primary w-100"
+      href="/logout"
+      *ngIf="userConnected()"
+    >
+      Déconnexion
+    </a>
+  </div>
+</div>

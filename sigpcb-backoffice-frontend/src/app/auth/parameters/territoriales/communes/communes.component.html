@@ -1,0 +1,144 @@
+<div class="row align-items-center">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <app-search [url]="searchUrl" (results)="onSearches($event)"> </app-search>
+  </div>
+</div>
+<table class="table mt-0">
+  <thead>
+    <tr>
+      <th scope="col">Département</th>
+      <th scope="col">Nom</th>
+      <th scope="col" width="10%" class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="communes.length > 0">
+    <tr
+      *ngFor="
+        let commune of communes
+          | paginate
+            : {
+                itemsPerPage: 10,
+                currentPage: pageNumber,
+                totalItems: paginate_data.total
+              };
+        let i = index
+      "
+    >
+      <td>{{ commune.departement?.name }}</td>
+      <td>{{ commune.name }}</td>
+      <td class="text-center">
+        <app-icon
+          (click)="showCommune(commune.id, 'edit')"
+          icon="pencil"
+          [size]="16"
+          classe="text-success"
+        ></app-icon>
+      </td>
+    </tr>
+  </tbody>
+  <tbody class="text-center" *ngIf="communes.length < 1">
+    <tr>
+      <td colspan="12">{{ noResults }}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="card-body">
+  <app-pagination
+    *ngIf="paginate_data"
+    [total]="paginate_data.total"
+    (pageChange)="paginate($event)"
+    [pageNumber]="pageNumber"
+  ></app-pagination>
+</div>
+<app-modal [action]="modalId">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+
+  <div *ngIf="action !== 'show'">
+    <form action="" method="post" quickv id="communes-form">
+      <div class="row mb-2">
+        <div class="col-12">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6 required">Nom</div>
+                <div class="col-6 text-end">
+                  <span info="Le nom de la commune">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required|minlength:2|maxlength:80"
+                qv-messages="Le nom est requis | Le nom est trop court | Le nom est trop long"
+                required
+                type="text"
+                name="name"
+                placeholder="Taper le nom"
+                class="form-control"
+                [(ngModel)]="commune.name"
+              />
+            </div>
+            <div qv-feedback="name"></div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="departement_id"
+                  >Département</label
+                >
+                <div class="col-6 text-end">
+                  <span info="Sélectionner un département">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="departement_id"
+                qv-rules="min:1"
+                qv-messages="Le département est requis"
+                [(ngModel)]="commune.departement_id"
+              >
+                <option value="0" selected>Sélectionner un département</option>
+                <option
+                  [value]="departement.id"
+                  *ngFor="let departement of departements"
+                >
+                  {{ departement.name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="departement_id"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            (click)="save($event)"
+          >
+            Enregistrer
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>

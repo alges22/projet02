@@ -1,0 +1,39 @@
+<div class="m-2">
+  <h5 class="mb-2">Formation des candidats préinscrits</h5>
+  <tab>
+    <tab-header>
+      <button
+        class="btn btn-tab"
+        [class.active]="page === 'en-attente'"
+        (click)="selectPage('en-attente')"
+      >
+        <span class="btn-tab-text-"> En attente </span>
+        <span class="btn-tab-count ms-2">
+          {{ counts["ds_init_c"] | padding }}
+        </span>
+      </button>
+      <button
+        class="btn btn-tab"
+        [class.active]="page === 'achevees'"
+        (click)="selectPage('achevees')"
+      >
+        <span class="btn-tab-text-">
+          Achevés ( <span class="small text-muted">non présentés</span> )
+        </span>
+        <span class="btn-tab-count ms-2">
+          {{ counts["mt_init_c"] | padding }}
+        </span>
+      </button>
+    </tab-header>
+    <tab-body>
+      <app-dossier-init
+        [paginate]="paginate"
+        *ngIf="page === 'en-attente'"
+      ></app-dossier-init>
+      <app-acheve-non-presentes
+        [paginate]="paginate"
+        *ngIf="page === 'achevees'"
+      ></app-acheve-non-presentes>
+    </tab-body>
+  </tab>
+</div>

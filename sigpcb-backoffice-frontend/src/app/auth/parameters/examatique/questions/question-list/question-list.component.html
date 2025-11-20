@@ -1,0 +1,84 @@
+<div class="row align-items-center">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <app-search [url]="searchUrl" (results)="onSearches($event)"> </app-search>
+  </div>
+  <div class="col-sm-2 text-end">
+    <button class="btn border btn-icons btn-primary" (click)="add()">
+      <app-icon icon="plus"></app-icon>
+      Question
+    </button>
+  </div>
+</div>
+<table class="table mt-0">
+  <thead>
+    <tr>
+      <th scope="col">Question</th>
+      <th scope="col" width="15%" class="text-center">Langues</th>
+      <th scope="col" width="5%" class="text-center">Réponses</th>
+      <th>Status</th>
+      <th scope="col" width="15%">Actions</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="questions.length > 0">
+    <tr
+      *ngFor="
+        let question of questions
+          | paginate
+            : {
+                itemsPerPage: 10,
+                currentPage: pageNumber,
+                totalItems: paginate_data.total
+              };
+        let i = index
+      "
+    >
+      <td>{{ question.name }}</td>
+      <td class="text-center">
+        {{ findQuestionLangueInLangues(question) }}
+      </td>
+      <td class="text-center">{{ question.reponses.length }}</td>
+      <td>
+        <app-switch
+          (statusChangeEvent)="statusChange($event)"
+          [checked]="question.status == 'active'"
+          [activateId]="question.id"
+        />
+      </td>
+      <td>
+        <div class="btn-actions">
+          <app-icon
+            (click)="edit(question.id)"
+            icon="pencil"
+            [size]="16"
+            classe="text-success"
+          ></app-icon>
+          <app-delete
+            (canDelete)="destroy($event)"
+            [activateId]="question.id"
+          ></app-delete>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  <tbody class="text-center" *ngIf="questions.length == 0">
+    <tr>
+      <td colspan="12">{{ noResults }}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="card-body">
+  <app-pagination
+    *ngIf="paginate_data"
+    [total]="paginate_data.total"
+    (pageChange)="paginate($event)"
+    [pageNumber]="pageNumber"
+  ></app-pagination>
+</div>

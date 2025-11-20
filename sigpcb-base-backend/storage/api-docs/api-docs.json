@@ -1,0 +1,4060 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Base",
+        "description": "Gestion des API de base",
+        "contact": {
+            "name": "Support client",
+            "email": "contact@exemple.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/anatt-base/agregateurs": {
+            "get": {
+                "tags": [
+                    "Agregateurs"
+                ],
+                "summary": "Récupérer la liste des agregateurs",
+                "description": "Récupère une liste de tous les agregateurs enregistrés dans la base de données",
+                "operationId": "getAllAgregateurs",
+                "responses": {
+                    "200": {
+                        "description": "La liste des agregateurs récupéré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de l'agregateur",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom de l'agregateur",
+                                                "type": "string"
+                                            },
+                                            "photo": {
+                                                "description": "Une image de l'agregateur",
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "description": "Statut de l'agregateur (optionnel)",
+                                                "type": "boolean"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Agregateurs"
+                ],
+                "summary": "Crée un nouveau agregateur de conduite",
+                "description": "Crée un nouveau agregateur de conduite enregistré dans la base de données",
+                "operationId": "createAgregateurs",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de l'agregateur",
+                                        "type": "string"
+                                    },
+                                    "photo": {
+                                        "description": "Une image de l'agregateur",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "Statut de l'agregateur (optionnel)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau agregateur de conduite créé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/agregateurs/{id}": {
+            "get": {
+                "tags": [
+                    "Agregateurs"
+                ],
+                "summary": "Récupère un agregateur par ID",
+                "description": "Récupère un agregateur enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getAgregateursById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'agregateur à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Agregateur récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "Agregateur non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Agregateurs"
+                ],
+                "summary": "Met à jour un agregateur existant",
+                "description": "Met à jour un agregateur existant dans la base de données",
+                "operationId": "updateAgregateurs",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'agregateur à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de l'agregateur",
+                                        "type": "string"
+                                    },
+                                    "photo": {
+                                        "description": "Une image de l'agregateur",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "Statut de l'agregateur (optionnel)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Agregateur mis à jour avec succès"
+                    },
+                    "404": {
+                        "description": "Agregateur non trouvé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Agregateurs"
+                ],
+                "summary": "Supprime un agregateur",
+                "description": "Supprime un agregateur de la base de données",
+                "operationId": "deleteAgregateurs",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'agregateur à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Agregateur supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "Agregateur non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-admin/agregateurs/status": {
+            "post": {
+                "tags": [
+                    "Agregateurs"
+                ],
+                "summary": "Désactivation ou activation d'un agregateur",
+                "description": "Désactivation ou activation d'un agregateur",
+                "operationId": "createAgregateursStatus",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "agregateur_id": {
+                                        "description": "id de l'agregateur",
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "description": "le statut a modifier",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mise à jour éffectué avec succès"
+                    },
+                    "404": {
+                        "description": "l'agregateur n'a pas été trouvé"
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/api/anatt-base/arrondissements": {
+            "get": {
+                "tags": [
+                    "Arrondissements"
+                ],
+                "summary": "Obtient la liste des arrondissements",
+                "description": "Obtient la liste des arrondissements enregistrés dans la base de données",
+                "operationId": "getArrondissements",
+                "responses": {
+                    "200": {
+                        "description": "Liste des arrondissements",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de l'arrondissement",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "description": "Nom de l'arrondissement",
+                                                "type": "string",
+                                                "example": "1er arrondissement"
+                                            },
+                                            "commune_id": {
+                                                "description": "ID de la commune à laquelle appartient l'arrondissement",
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Arrondissements"
+                ],
+                "summary": "Crée un nouvel arrondissement",
+                "description": "Crée un nouvel arrondissement enregistré dans la base de données",
+                "operationId": "createArrondissement",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de l'arrondissement",
+                                        "type": "string",
+                                        "example": "1er arrondissement"
+                                    },
+                                    "commune_id": {
+                                        "description": "ID de la commune à laquelle appartient l'arrondissement",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvel arrondissement créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouvel arrondissement créé",
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "name": {
+                                            "description": "Nom du nouvel arrondissement créé",
+                                            "type": "string",
+                                            "example": "2ème arrondissement"
+                                        },
+                                        "commune_id": {
+                                            "description": "ID de la commune à laquelle appartient le nouvel arrondissement créé",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/arrondissements/{id}": {
+            "get": {
+                "tags": [
+                    "Arrondissements"
+                ],
+                "summary": "Affiche les détails d'un arrondissement",
+                "description": "Affiche les détails d'un arrondissement enregistré dans la base de données",
+                "operationId": "getArrondissementById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'arrondissement à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de l'arrondissement récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID de l'arrondissement",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "description": "Nom de l'arrondissement",
+                                            "type": "string",
+                                            "example": "Arrondissement 1"
+                                        },
+                                        "commune_id": {
+                                            "description": "ID de la commune à laquelle appartient l'arrondissement",
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Arrondissement non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Arrondissements"
+                ],
+                "summary": "Mettre à jour un arrondissement",
+                "description": "Met à jour un arrondissement enregistré dans la base de données",
+                "operationId": "updateArrondissement",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'arrondissement",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de l'arrondissement",
+                                        "type": "string",
+                                        "example": "Villejuif"
+                                    },
+                                    "commune_id": {
+                                        "description": "ID de la commune associée à l'arrondissement",
+                                        "type": "integer",
+                                        "example": 12
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Arrondissement mis à jour",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID de l'arrondissement mis à jour",
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "name": {
+                                            "description": "Nom de l'arrondissement mis à jour",
+                                            "type": "string",
+                                            "example": "Villejuif"
+                                        },
+                                        "commune_id": {
+                                            "description": "ID de la commune associée à l'arrondissement mis à jour",
+                                            "type": "integer",
+                                            "example": 12
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Arrondissement non trouvé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Arrondissements"
+                ],
+                "summary": "Supprime un arrondissement existant",
+                "description": "Supprime l'arrondissement spécifié de la base de données",
+                "operationId": "deleteArrondissement",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'arrondissement à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Arrondissement supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "Arrondissement non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/bareme-conduites": {
+            "get": {
+                "tags": [
+                    "BaremeConduites"
+                ],
+                "summary": "Récupérer la liste des bareme-conduites",
+                "description": "Récupère une liste de tous les bareme-conduites enregistrés dans la base de données",
+                "operationId": "getAllBaremeConduites",
+                "responses": {
+                    "200": {
+                        "description": "La liste des bareme-conduites récupéré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID du bareme",
+                                                "type": "integer"
+                                            },
+                                            "categorie_permis_id": {
+                                                "description": "ID de la catégorie",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom du bareme",
+                                                "type": "string"
+                                            },
+                                            "poids": {
+                                                "description": "Poids du bareme",
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "BaremeConduites"
+                ],
+                "summary": "Crée un nouveau bareme de conduite",
+                "description": "Crée un nouveau bareme de conduite enregistré dans la base de données",
+                "operationId": "createBaremeConduites",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "categorie_permis_id": {
+                                        "description": "ID de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "baremes": {
+                                        "description": "Tableau contenant les informations",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "name": {
+                                                    "description": "Nom du barème de conduite",
+                                                    "type": "string"
+                                                },
+                                                "poids": {
+                                                    "description": "Poids du barème de conduite",
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau bareme de conduite créé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/bareme-conduite": {
+            "post": {
+                "tags": [
+                    "BaremeConduites"
+                ],
+                "summary": "Crée un nouveau bareme de conduite",
+                "description": "Crée un nouveau bareme de conduite enregistré dans la base de données",
+                "operationId": "aab3a342341ac66c94e5de558d8baa28",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "categorie_permis_id": {
+                                        "description": "ID de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "Nom du barème de conduite",
+                                        "type": "string"
+                                    },
+                                    "poids": {
+                                        "description": "Poids du barème de conduite",
+                                        "type": "number",
+                                        "format": "float"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau bareme de conduite créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "description": "Message de succès",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Message d'erreur de validation",
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "description": "Erreurs de validation détaillées",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur du serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Message d'erreur",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/bareme-conduites/{id}": {
+            "get": {
+                "tags": [
+                    "BaremeConduites"
+                ],
+                "summary": "Récupère un bareme de conduite par ID",
+                "description": "Récupère un bareme de conduite enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getBaremeConduitesById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du bareme à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Bareme de conduite récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "Bareme de conduite non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "BaremeConduites"
+                ],
+                "summary": "Met à jour un bareme de conduite existant",
+                "description": "Met à jour un bareme de conduite existant dans la base de données",
+                "operationId": "updateBaremeConduites",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du bareme à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "categorie_permis_id": {
+                                        "description": "ID de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "Nom du bareme",
+                                        "type": "string"
+                                    },
+                                    "poids": {
+                                        "description": "Poids du bareme",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Bareme de Conduite mis à jour avec succès"
+                    },
+                    "404": {
+                        "description": "Bareme de Conduite non trouvé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "BaremeConduites"
+                ],
+                "summary": "Supprime un bareme de conduite",
+                "description": "Supprime un bareme de conduite de la base de données",
+                "operationId": "deleteBaremeConduites",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du bareme à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Bareme de Conduite supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "Bareme de Conduite non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/bareme-conduites/categorie-permis/{categorie_permis_id}": {
+            "get": {
+                "tags": [
+                    "BaremeConduites"
+                ],
+                "summary": "Récupérer les barèmes de conduite par identifiant de catégorie de permis",
+                "description": "Récupère les barèmes de conduite correspondant à l'identifiant de la catégorie de permis spécifiée.",
+                "operationId": "c25c0b56d61b2f968b88abedf293d6af",
+                "parameters": [
+                    {
+                        "name": "categorie_permis_id",
+                        "in": "path",
+                        "description": "Identifiant de la catégorie de permis",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Bareme de conduite récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "Bareme de conduite non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/cat-permis-tranches": {
+            "get": {
+                "tags": [
+                    "CatPermisTrancheAges"
+                ],
+                "summary": "Récupérer la liste des Catégories Permis Tranche Age",
+                "description": "Récupère une liste de toutes les Catégories Permis Tranche Age enregistrées dans la base de données",
+                "operationId": "getAllCatPermisTrancheAges",
+                "responses": {
+                    "200": {
+                        "description": "La liste des Catégories Permis Tranche Age récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la Catégorie Permis Tranche Age",
+                                                "type": "integer"
+                                            },
+                                            "categorie_permis_id": {
+                                                "description": "ID de la catégorie permis à laquelle appartient la nouvelle Catégorie Permis Tranche Age créée",
+                                                "type": "integer"
+                                            },
+                                            "tranche_age_id": {
+                                                "description": "ID de tranche d'age à laquelle appartient la nouvelle Catégorie Permis Tranche Age créée",
+                                                "type": "integer"
+                                            },
+                                            "validite": {
+                                                "description": "Validité de la Catégorie Permis Tranche Age (optionnel)",
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CatPermisTrancheAges"
+                ],
+                "summary": "Crée une nouvelle Catégorie Permis Tranche Age",
+                "description": "Crée une nouvelle Catégorie Permis Tranche Age enregistrée dans la base de données",
+                "operationId": "createCatPermisTrancheAge",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "categorie_permis_id": {
+                                        "description": "ID de la catégorie permis à laquelle appartient la nouvelle Catégorie Permis Tranche Age créée",
+                                        "type": "integer"
+                                    },
+                                    "tranche_age_validites": {
+                                        "description": "Tableau contenant les informations sur les tranches d'ages et leurs validités à créer",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "tranche_age_id": {
+                                                    "description": "Id de la tranche d'age",
+                                                    "type": "integer"
+                                                },
+                                                "validite": {
+                                                    "description": "Validité de la Catégorie Permis Tranche Age",
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvelle Catégorie Permis Tranche Age créée"
+                    },
+                    "422": {
+                        "description": "Erreur de validation des données d'entrée"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/cat-permis-tranches/{id}": {
+            "get": {
+                "tags": [
+                    "CatPermisTrancheAges"
+                ],
+                "summary": "Récupère une Catégorie Permis Tranche Age par ID",
+                "description": "Récupère une Catégorie Permis Tranche Age enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getCatPermisTrancheAgeById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la Catégorie Permis Tranche Age à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie Permis Tranche Age récupérée avec succès"
+                    },
+                    "404": {
+                        "description": "Catégorie Permis Tranche Age non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CatPermisTrancheAges"
+                ],
+                "summary": "Met à jour une Catégorie Permis Tranche Age existante",
+                "description": "Met à jour une Catégorie Permis Tranche Age existante dans la base de données",
+                "operationId": "updateCatPermisTrancheAge",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la Catégorie Permis Tranche Age à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "categorie_permis_id": {
+                                        "description": "ID de la catégorie permis à laquelle appartient la nouvelle Catégorie Permis Tranche Age créée",
+                                        "type": "integer"
+                                    },
+                                    "tranche_age_id": {
+                                        "description": "ID de tranche d'age à laquelle appartient la nouvelle Catégorie Permis Tranche Age créée",
+                                        "type": "integer"
+                                    },
+                                    "validite": {
+                                        "description": "Validité de la Catégorie Permis Tranche Age (optionnel)",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Catégorie Permis Tranche Age mise à jour avec succès"
+                    },
+                    "404": {
+                        "description": "Catégorie Permis Tranche Age non trouvée"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CatPermisTrancheAges"
+                ],
+                "summary": "Supprime une Catégorie Permis Tranche Age",
+                "description": "Supprime une Catégorie Permis Tranche Age de la base de données",
+                "operationId": "deleteCatPermisTrancheAge",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la Catégorie Permis Tranche Age à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie Permis Tranche Age supprimée avec succès"
+                    },
+                    "404": {
+                        "description": "Catégorie Permis Tranche Age non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/categorie-permis": {
+            "get": {
+                "tags": [
+                    "CategoriePermis"
+                ],
+                "summary": "Récupérer la liste des categorie-permis",
+                "description": "Récupère une liste de tous les categorie-permis enregistrées dans la base de données",
+                "operationId": "getAllCategoriePermis",
+                "responses": {
+                    "200": {
+                        "description": "La liste des categorie-permis récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la catégorie",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom de la catégorie",
+                                                "type": "string"
+                                            },
+                                            "description": {
+                                                "description": "Description de la catégorie",
+                                                "type": "string"
+                                            },
+                                            "permis_prealable": {
+                                                "description": "Le permis préalable de la catégorie",
+                                                "type": "string"
+                                            },
+                                            "permis_prealable_dure": {
+                                                "description": "La duré du permis préalable de la catégorie",
+                                                "type": "string"
+                                            },
+                                            "is_extension": {
+                                                "description": "Si cette catégorie peut etre extensible ou pas",
+                                                "type": "boolean"
+                                            },
+                                            "status": {
+                                                "description": "Statut de la catégorie (optionnel)",
+                                                "type": "boolean"
+                                            },
+                                            "validite": {
+                                                "description": "Validité de la catégorie",
+                                                "type": "integer"
+                                            },
+                                            "age_min": {
+                                                "description": "Age minimale de la catégorie",
+                                                "type": "integer"
+                                            },
+                                            "is_valid_age": {
+                                                "description": "L'age est un age valide de la catégorie (optionnel)",
+                                                "type": "boolean"
+                                            },
+                                            "montant_militaire": {
+                                                "description": "Montant de la catégorie pour les militaires",
+                                                "type": "integer"
+                                            },
+                                            "montant_etranger": {
+                                                "description": "Montant de la catégorie pour les étrangers",
+                                                "type": "integer"
+                                            },
+                                            "montant": {
+                                                "description": "Montant de la catégorie",
+                                                "type": "integer"
+                                            },
+                                            "note_min": {
+                                                "description": "Note minimale de la catégorie",
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CategoriePermis"
+                ],
+                "summary": "Crée une nouvelle catégorie de permis",
+                "description": "Crée une nouvelle catégorie de permis enregistrée dans la base de données",
+                "operationId": "createCategoriePermis",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de la catégorie",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Description de la catégorie",
+                                        "type": "string"
+                                    },
+                                    "permis_prealable": {
+                                        "description": "Le permis préalable de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "permis_prealable_dure": {
+                                        "description": "La duré du permis préalable de la catégorie",
+                                        "type": "string"
+                                    },
+                                    "is_extension": {
+                                        "description": "Si cette catégorie peut etre extensible ou pas",
+                                        "type": "boolean"
+                                    },
+                                    "status": {
+                                        "description": "Statut de la catégorie (optionnel)",
+                                        "type": "boolean"
+                                    },
+                                    "age_min": {
+                                        "description": "Age minimale de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "is_valid_age": {
+                                        "description": "L'age est un age valide de la catégorie (optionnel)",
+                                        "type": "boolean"
+                                    },
+                                    "montant": {
+                                        "description": "Montant de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "note_min": {
+                                        "description": "Note minimale de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "montant_militaire": {
+                                        "description": "Montant de la catégorie pour les militaires",
+                                        "type": "integer"
+                                    },
+                                    "montant_etranger": {
+                                        "description": "Montant de la catégorie pour les étrangers",
+                                        "type": "integer"
+                                    },
+                                    "tranche_age_groupe": {
+                                        "description": "Tableau contenant les informations sur les tranches ages",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "age_min": {
+                                                    "description": "L'age minimum",
+                                                    "type": "string"
+                                                },
+                                                "age_max": {
+                                                    "description": "L'age maximum",
+                                                    "type": "string"
+                                                },
+                                                "validite": {
+                                                    "description": "La validité du permis",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvelle catégorie de permis créée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/categorie-permis/extensions": {
+            "get": {
+                "tags": [
+                    "CategoriePermis"
+                ],
+                "summary": "Récupérer la liste des categorie-permis représentant des extensions",
+                "description": "Récupère une liste de tous les categorie-permis représentant des extensions enregistrées dans la base de données",
+                "operationId": "getAllCategoriePermisExtension",
+                "responses": {
+                    "200": {
+                        "description": "La liste des categorie-permis représentant des extensions récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la catégorie",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom de la catégorie",
+                                                "type": "string"
+                                            },
+                                            "description": {
+                                                "description": "Description de la catégorie",
+                                                "type": "string"
+                                            },
+                                            "permis_prealable": {
+                                                "description": "Le permis préalable de la catégorie",
+                                                "type": "string"
+                                            },
+                                            "permis_prealable_dure": {
+                                                "description": "La duré du permis préalable de la catégorie",
+                                                "type": "string"
+                                            },
+                                            "is_extension": {
+                                                "description": "Si cette catégorie peut etre extensible ou pas",
+                                                "type": "boolean"
+                                            },
+                                            "status": {
+                                                "description": "Statut de la catégorie (optionnel)",
+                                                "type": "boolean"
+                                            },
+                                            "validite": {
+                                                "description": "Validité de la catégorie",
+                                                "type": "integer"
+                                            },
+                                            "age_min": {
+                                                "description": "Age minimale de la catégorie",
+                                                "type": "integer"
+                                            },
+                                            "is_valid_age": {
+                                                "description": "L'age est un age valide de la catégorie (optionnel)",
+                                                "type": "boolean"
+                                            },
+                                            "montant_militaire": {
+                                                "description": "Montant de la catégorie pour les militaires",
+                                                "type": "integer"
+                                            },
+                                            "montant_etranger": {
+                                                "description": "Montant de la catégorie pour les étrangers",
+                                                "type": "integer"
+                                            },
+                                            "montant": {
+                                                "description": "Montant de la catégorie",
+                                                "type": "integer"
+                                            },
+                                            "note_min": {
+                                                "description": "Note minimale de la catégorie",
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/categorie-permis/{id}": {
+            "get": {
+                "tags": [
+                    "CategoriePermis"
+                ],
+                "summary": "Récupère une catégorie de permis par ID",
+                "description": "Récupère une catégorie de permis enregistrée dans la base de données en spécifiant son ID",
+                "operationId": "getCategoriePermisById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categorie de permis récupérée avec succès"
+                    },
+                    "404": {
+                        "description": "Categorie de permis non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CategoriePermis"
+                ],
+                "summary": "Met à jour une catégorie de permis existante",
+                "description": "Met à jour une catégorie de permis existante dans la base de données",
+                "operationId": "updateCategoriePermis",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de la catégorie",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Description de la catégorie",
+                                        "type": "string"
+                                    },
+                                    "is_extension": {
+                                        "description": "Si cette catégorie peut etre extensible ou pas",
+                                        "type": "boolean"
+                                    },
+                                    "status": {
+                                        "description": "Statut de la catégorie (optionnel)",
+                                        "type": "boolean"
+                                    },
+                                    "age_min": {
+                                        "description": "Age minimale de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "is_valid_age": {
+                                        "description": "L'age est un age valide de la catégorie (optionnel)",
+                                        "type": "boolean"
+                                    },
+                                    "permis_prealable": {
+                                        "description": "Le permis préalable de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "permis_prealable_dure": {
+                                        "description": "La duré du permis préalable de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "montant": {
+                                        "description": "Montant de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "note_min": {
+                                        "description": "Note minimale de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "montant_militaire": {
+                                        "description": "Montant de la catégorie pour les militaires",
+                                        "type": "integer"
+                                    },
+                                    "montant_etranger": {
+                                        "description": "Montant de la catégorie pour les étrangers",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Catégorie de permis mise à jour avec succès"
+                    },
+                    "404": {
+                        "description": "Catégorie de permis non trouvée"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CategoriePermis"
+                ],
+                "summary": "Supprime une catégorie de permis",
+                "description": "Supprime une catégorie de permis de la base de données",
+                "operationId": "deleteCategoriePermis",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie de permis supprimée avec succès"
+                    },
+                    "404": {
+                        "description": "Catégorie de permis non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/categorie-permis/extension": {
+            "post": {
+                "tags": [
+                    "CategoriePermis"
+                ],
+                "summary": "Crée une nouvelle extension",
+                "description": "Crée une nouvelle extension enregistrée dans la base de données",
+                "operationId": "createCategoriePermisExtensible",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "categorie_permis_id": {
+                                        "description": "L'id de la catégorie principale",
+                                        "type": "integer"
+                                    },
+                                    "categorie_permis_extensible_id": {
+                                        "description": "L'id de la categorie de permis a utilisé comme extension",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvelle extension créée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/categorie-permis/extension/{id}": {
+            "delete": {
+                "tags": [
+                    "CategoriePermis"
+                ],
+                "summary": "Supprime une extension d'une catégorie de permis",
+                "description": "Supprime une extension d'une catégorie de permis de la base de données",
+                "operationId": "deleteCategoriePermisExtensible",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'extension de la catégorie à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Extension supprimée avec succès"
+                    },
+                    "404": {
+                        "description": "Extension non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/centre-examens": {
+            "get": {
+                "tags": [
+                    "CentreExamens"
+                ],
+                "summary": "Récupérer la liste des centres d'examen",
+                "description": "Récupère une liste de tous les centres d'examen enregistrés dans la base de données",
+                "operationId": "getAllCentreExamens",
+                "responses": {
+                    "200": {
+                        "description": "La liste des centres d'examen récupéré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID du centre",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "description": "Nom du centre",
+                                                "type": "string"
+                                            },
+                                            "commune_id": {
+                                                "description": "ID de la commune à laquelle appartient le nouveau centre créé",
+                                                "type": "integer"
+                                            },
+                                            "status": {
+                                                "description": "Statut du centre (optionnel)",
+                                                "type": "boolean"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CentreExamens"
+                ],
+                "summary": "Crée un nouveau centre d'examen",
+                "description": "Crée un nouveau centre d'examen enregistré dans la base de données",
+                "operationId": "createCentreExamen",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom du centre d'examen",
+                                        "type": "string"
+                                    },
+                                    "commune_id": {
+                                        "description": "ID de la commune à laquelle appartient le nouveau centre créé",
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "description": "Statut du centre (optionnel)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau centre d'examen créé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/centre-examens/{id}": {
+            "get": {
+                "tags": [
+                    "CentreExamens"
+                ],
+                "summary": "Récupère un centre par ID",
+                "description": "Récupère un centre enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getCentreExamenById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du centre à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Centre d'examen récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "Centre d'examen non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CentreExamens"
+                ],
+                "summary": "Met à jour un centre existant",
+                "description": "Met à jour un centre existant dans la base de données",
+                "operationId": "updateCentreExamen",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du centre à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom du centre d'examen",
+                                        "type": "string"
+                                    },
+                                    "commune_id": {
+                                        "description": "ID de la commune à laquelle appartient le nouveau centre créé",
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "description": "Statut du centre (optionnel)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Centre d'examen mis à jour avec succès"
+                    },
+                    "404": {
+                        "description": "Centre d'examen non trouvé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CentreExamens"
+                ],
+                "summary": "Supprime un centre",
+                "description": "Supprime un centre de la base de données",
+                "operationId": "deleteCentreExamen",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du centre à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Centre d'examen supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "Centre d'examen non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/chapitres": {
+            "get": {
+                "tags": [
+                    "Chapitres"
+                ],
+                "summary": "Récupérer la liste des chapitres",
+                "description": "Récupère une liste de tous les chapitres enregistrés dans la base de données",
+                "operationId": "getAllChapitres",
+                "responses": {
+                    "200": {
+                        "description": "La liste des chapitres récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "description": {
+                                            "description": "Une description du chapitre",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID du chapitre",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom du chapitre",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Chapitres"
+                ],
+                "summary": "Créer un nouveau chapitre",
+                "operationId": "0066dd7c3a444e5f5c35467289a2690f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom du chapitre",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Une description du chapitre",
+                                        "type": "string"
+                                    },
+                                    "categorie_permis_ids": {
+                                        "description": "IDs des catégories de permis associées au chapitre",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Réponse de succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Mauvaise requête",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "name": [
+                                                    "Le champ name est requis."
+                                                ],
+                                                "categorie_permis_ids": [
+                                                    "Le champ categorie_permis_ids est requis."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Échec lors de la création"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/chapitres/{id}": {
+            "get": {
+                "tags": [
+                    "Chapitres"
+                ],
+                "summary": "Récupère un chapitre par ID",
+                "description": "Récupère un chapitre enregistrée dans la base de données en spécifiant son ID",
+                "operationId": "f884d49848c7de996cdb881ab5208909",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du chapitre à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Chapitre récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "Chapitre non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Chapitres"
+                ],
+                "summary": "Mettre à jour un chapitre",
+                "operationId": "e7b6df40b617d96c0045959428b4288a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du chapitre à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom du chapitre",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Une description du chapitre",
+                                        "type": "string"
+                                    },
+                                    "categorie_permis_ids": {
+                                        "description": "IDs des catégories de permis associées au chapitre",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Réponse de succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": {
+                                                "id": 1,
+                                                "name": "Chapitre 1",
+                                                "categorie_permis_ids": [
+                                                    1,
+                                                    2,
+                                                    3
+                                                ],
+                                                "created_at": "2023-04-18T12:34:56Z",
+                                                "updated_at": "2023-04-18T12:34:56Z"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Mauvaise requête",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "name": [
+                                                    "Le champ name est requis.",
+                                                    "Le champ name doit être unique."
+                                                ],
+                                                "categorie_permis_ids": [
+                                                    "Le champ categorie_permis_ids est requis.",
+                                                    "Le champ categorie_permis_ids doit être un tableau.",
+                                                    "Le champ categorie_permis_ids doit contenir au moins 1 élément."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Échec lors de la mise à jour"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Chapitres"
+                ],
+                "summary": "Supprime un chapitre",
+                "description": "Supprime un chapitre de la base de données",
+                "operationId": "3f81d2d540a34893739446dcf584acb9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du chapitre à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Chapitre supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "Chapitre non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/chapitres/get-many": {
+            "get": {
+                "tags": [
+                    "Chapitres"
+                ],
+                "summary": "Récupérer plusieurs chapitres par ID",
+                "description": "Récupère plusieurs chapitres enregistrés dans la base de données en spécifiant leurs IDs",
+                "operationId": "8a1c1b20422959d5eb1c30a544c6739f",
+                "parameters": [
+                    {
+                        "name": "ids",
+                        "in": "query",
+                        "description": "IDs des chapitres à récupérer (séparés par des virgules)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Chapitres récupérés avec succès"
+                    },
+                    "404": {
+                        "description": "Chapitre non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/communes": {
+            "get": {
+                "tags": [
+                    "Communes"
+                ],
+                "summary": "Obtient la liste de toutes les communes",
+                "description": "Obtient la liste de toutes les communes enregistrées dans la base de données",
+                "operationId": "getCommunes",
+                "responses": {
+                    "200": {
+                        "description": "Liste des communes récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la commune",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "description": "Nom de la commune",
+                                                "type": "string",
+                                                "example": "Paris"
+                                            },
+                                            "departement_id": {
+                                                "description": "ID du département de la commune",
+                                                "type": "integer",
+                                                "example": 75
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Communes"
+                ],
+                "summary": "Crée une nouvelle commune",
+                "description": "Crée une nouvelle commune enregistrée dans la base de données",
+                "operationId": "createCommune",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de la commune",
+                                        "type": "string",
+                                        "example": "Lyon"
+                                    },
+                                    "departement_id": {
+                                        "description": "ID du département auquel appartient la commune",
+                                        "type": "integer",
+                                        "example": 69
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvelle commune créée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID de la nouvelle commune créée",
+                                            "type": "integer",
+                                            "example": 123
+                                        },
+                                        "name": {
+                                            "description": "Nom de la nouvelle commune créée",
+                                            "type": "string",
+                                            "example": "Lyon"
+                                        },
+                                        "departement_id": {
+                                            "description": "ID du département auquel appartient la nouvelle commune créée",
+                                            "type": "integer",
+                                            "example": 69
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/communes/{id}": {
+            "get": {
+                "tags": [
+                    "Communes"
+                ],
+                "summary": "Récupère une commune par son ID",
+                "description": "Récupère les informations d'une commune enregistrée dans la base de données par son ID",
+                "operationId": "getCommuneById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la commune à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informations de la commune",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID de la commune",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "description": "Nom de la commune",
+                                            "type": "string",
+                                            "example": "Paris"
+                                        },
+                                        "departement_id": {
+                                            "description": "ID du département de la commune",
+                                            "type": "integer",
+                                            "example": 75
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Commune non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Communes"
+                ],
+                "summary": "Modifie une commune existante",
+                "description": "Modifie une commune existante enregistrée dans la base de données",
+                "operationId": "updateCommune",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la commune à modifier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de la commune",
+                                        "type": "string",
+                                        "example": "Lyon"
+                                    },
+                                    "departement_id": {
+                                        "description": "ID du département auquel appartient la commune",
+                                        "type": "integer",
+                                        "example": 69
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Commune modifiée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID de la commune modifiée",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "description": "Nom de la commune modifiée",
+                                            "type": "string",
+                                            "example": "Lyon"
+                                        },
+                                        "departement_id": {
+                                            "description": "ID du département auquel appartient la commune modifiée",
+                                            "type": "integer",
+                                            "example": 69
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Commune non trouvée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Message d'erreur",
+                                            "type": "string",
+                                            "example": "La commune spécifiée n'a pas été trouvée."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Communes"
+                ],
+                "summary": "Supprime une commune",
+                "description": "Supprime une commune enregistrée dans la base de données",
+                "operationId": "deleteCommune",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la commune à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Commune supprimée avec succès"
+                    },
+                    "404": {
+                        "description": "Commune non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/counts": {
+            "get": {
+                "tags": [
+                    "Compteurs"
+                ],
+                "summary": "Récupère les compteurs",
+                "operationId": "a906bc4e4bb8b924daa089d505e11724",
+                "parameters": [
+                    {
+                        "name": "counts",
+                        "in": "query",
+                        "description": "Liste des compteurs à récupérer, séparés par des virgules",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Compteurs récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "users_count": {
+                                            "type": "integer",
+                                            "example": 69
+                                        },
+                                        "roles_count": {
+                                            "type": "integer",
+                                            "example": 42
+                                        },
+                                        "titres": {
+                                            "type": "integer",
+                                            "example": 27
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requête invalide",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Les paramètres 'counts' sont obligatoires"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur s'est produite lors de la récupération des compteurs"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/departements": {
+            "get": {
+                "tags": [
+                    "Départements"
+                ],
+                "summary": "Récupère tous les départements",
+                "description": "Récupère une liste de tous les départements enregistrés dans la base de données",
+                "operationId": "getAllDepartments",
+                "responses": {
+                    "200": {
+                        "description": "Liste de tous les départements",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID du département",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "description": "Nom du département",
+                                                "type": "string",
+                                                "example": "Ain"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Départements"
+                ],
+                "summary": "Crée un nouveau département",
+                "description": "Crée un nouveau département enregistré dans la base de données",
+                "operationId": "createDepartment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom du département",
+                                        "type": "string",
+                                        "example": "Ain"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau département créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouveau département créé",
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "name": {
+                                            "description": "Nom du nouveau département créé",
+                                            "type": "string",
+                                            "example": "Aisne"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/departements/{id}": {
+            "get": {
+                "tags": [
+                    "Départements"
+                ],
+                "summary": "Récupère un département par ID",
+                "description": "Récupère un département enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getDepartmentById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du département à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Département récupéré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du département",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "description": "Nom du département",
+                                            "type": "string",
+                                            "example": "Ain"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Département non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Départements"
+                ],
+                "summary": "Met à jour un département existant",
+                "description": "Met à jour un département existant dans la base de données",
+                "operationId": "updateDepartment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du département à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom du département",
+                                        "type": "string",
+                                        "example": "Ain"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Département mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du département mis à jour",
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "name": {
+                                            "description": "Nom du département mis à jour",
+                                            "type": "string",
+                                            "example": "Aisne"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Département non trouvé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Départements"
+                ],
+                "summary": "Supprime un département",
+                "description": "Supprime un département de la base de données",
+                "operationId": "deleteDepartment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du département à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Département supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "Département non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/examens": {
+            "get": {
+                "tags": [
+                    "Examens"
+                ],
+                "summary": "Récupère la liste des examens",
+                "description": "Récupère la liste de tous les examens enregistrés dans la base de données",
+                "operationId": "getExamsList",
+                "responses": {
+                    "200": {
+                        "description": "Liste des examens récupérée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de l'examen",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "date_code": {
+                                                "description": "Date de code de l'examen",
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2023-05-01"
+                                            },
+                                            "date_conduite": {
+                                                "description": "Date de conduite de l'examen",
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2023-05-15"
+                                            },
+                                            "date_ouverture": {
+                                                "description": "Date d'ouverture des inscriptions à l'examen",
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2023-03-01"
+                                            },
+                                            "date_cloture": {
+                                                "description": "Date de clôture des inscriptions à l'examen",
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2023-03-31"
+                                            },
+                                            "mois": {
+                                                "description": "Mois de l'examen",
+                                                "type": "integer",
+                                                "example": 5
+                                            },
+                                            "numero": {
+                                                "description": "Numéro de l'examen",
+                                                "type": "integer",
+                                                "example": 1,
+                                                "nullable": true
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Examens"
+                ],
+                "summary": "Crée un nouvel examen",
+                "description": "Crée un nouvel examen enregistré dans la base de données",
+                "operationId": "createExam",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "date_code": {
+                                        "description": "Date de l'examen (code)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-04-10"
+                                    },
+                                    "date_conduite": {
+                                        "description": "Date de l'examen (conduite)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-04-12"
+                                    },
+                                    "date_ouverture": {
+                                        "description": "Date d'ouverture des inscriptions",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-03-30"
+                                    },
+                                    "date_cloture": {
+                                        "description": "Date de clôture des inscriptions",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-04-04"
+                                    },
+                                    "mois": {
+                                        "description": "Mois de l'examen (format 'YYYY-MM')",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-04"
+                                    },
+                                    "numero": {
+                                        "description": "Numéro de l'examen (facultatif)",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvel examen créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouvel examen créé",
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "date_code": {
+                                            "description": "Date de l'examen (code)",
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2023-04-10"
+                                        },
+                                        "date_conduite": {
+                                            "description": "Date de l'examen (conduite)",
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2023-04-12"
+                                        },
+                                        "date_ouverture": {
+                                            "description": "Date d'ouverture des inscriptions",
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2023-03-30"
+                                        },
+                                        "date_cloture": {
+                                            "description": "Date de clôture des inscriptions",
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2023-04-04"
+                                        },
+                                        "mois": {
+                                            "description": "Mois de l'examen (format 'YYYY-MM')",
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2023-04"
+                                        },
+                                        "numero": {
+                                            "description": "Numéro de l'examen (facultatif)",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/examens/{id}": {
+            "get": {
+                "tags": [
+                    "Examens"
+                ],
+                "summary": "Récupère un examen par ID",
+                "description": "Récupère les informations d'un examen à partir de son ID",
+                "operationId": "getExamById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'examen à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Examen récupéré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID de l'examen",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "date_code": {
+                                            "description": "Date du code de l'examen",
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2022-04-12 14:00:00"
+                                        },
+                                        "date_conduite": {
+                                            "description": "Date de conduite de l'examen",
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2022-04-15 10:00:00"
+                                        },
+                                        "date_ouverture": {
+                                            "description": "Date d'ouverture de l'examen",
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2022-04-01 00:00:00"
+                                        },
+                                        "date_cloture": {
+                                            "description": "Date de clôture de l'examen",
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2022-04-30 23:59:59"
+                                        },
+                                        "mois": {
+                                            "description": "Mois de l'examen",
+                                            "type": "integer",
+                                            "example": 4
+                                        },
+                                        "numero": {
+                                            "description": "Numéro de l'examen",
+                                            "type": "integer",
+                                            "example": 1234
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Examen non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Examens"
+                ],
+                "summary": "Met à jour un examen existant",
+                "description": "Met à jour un examen existant enregistré dans la base de données",
+                "operationId": "updateExam",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'examen à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "date_code": {
+                                        "description": "Date de l'examen (code)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-04-10"
+                                    },
+                                    "date_conduite": {
+                                        "description": "Date de l'examen (conduite)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-04-12"
+                                    },
+                                    "date_ouverture": {
+                                        "description": "Date d'ouverture des inscriptions",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-03-30"
+                                    },
+                                    "date_cloture": {
+                                        "description": "Date de clôture des inscriptions",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-04-04"
+                                    },
+                                    "mois": {
+                                        "description": "Mois de l'examen (format 'YYYY-MM')",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-04"
+                                    },
+                                    "numero": {
+                                        "description": "Numéro de l'examen (facultatif)",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvel examen créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouvel examen créé",
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "date_code": {
+                                            "description": "Date de l'examen (code)",
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2023-04-10"
+                                        },
+                                        "date_conduite": {
+                                            "description": "Date de l'examen (conduite)",
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2023-04-12"
+                                        },
+                                        "date_ouverture": {
+                                            "description": "Date d'ouverture des inscriptions",
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2023-03-30"
+                                        },
+                                        "date_cloture": {
+                                            "description": "Date de clôture des inscriptions",
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2023-04-04"
+                                        },
+                                        "mois": {
+                                            "description": "Mois de l'examen (format 'YYYY-MM')",
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2023-04"
+                                        },
+                                        "numero": {
+                                            "description": "Numéro de l'examen (facultatif)",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Examen non trouvé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Examens"
+                ],
+                "summary": "Supprime un examen existant",
+                "description": "Supprime un examen existant de la base de données",
+                "operationId": "deleteExam",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'examen à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Examen supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "Examen non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/langues": {
+            "get": {
+                "tags": [
+                    "Langues"
+                ],
+                "summary": "Récupérer la liste des langues",
+                "description": "Récupère une liste de tous les langues enregistrées dans la base de données",
+                "operationId": "getAllLangues",
+                "responses": {
+                    "200": {
+                        "description": "La liste des langues récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la langue",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "description": "Nom de la langue",
+                                                "type": "string",
+                                                "example": "Ain"
+                                            },
+                                            "status": {
+                                                "description": "Statut de la langue (optionnel)",
+                                                "type": "boolean"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Langues"
+                ],
+                "summary": "Crée une nouvelle langue",
+                "description": "Crée une nouvelle langue enregistrée dans la base de données",
+                "operationId": "createLangue",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de la langue (obligatoire)",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "Statut de la langue (optionnel)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvelle langue créée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/langues/{id}": {
+            "get": {
+                "tags": [
+                    "Langues"
+                ],
+                "summary": "Récupère une langue par ID",
+                "description": "Récupère une langue enregistrée dans la base de données en spécifiant son ID",
+                "operationId": "getLangueById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la langue à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Langue récupérée avec succès"
+                    },
+                    "404": {
+                        "description": "Langue non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Langues"
+                ],
+                "summary": "Met à jour une langue existante",
+                "description": "Met à jour une langue existante dans la base de données",
+                "operationId": "updateLangue",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la langue à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de la langue",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "Statut de la langue (optionnel)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Langue mise à jour avec succès"
+                    },
+                    "404": {
+                        "description": "Langue non trouvée"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Langues"
+                ],
+                "summary": "Supprime une langue",
+                "description": "Supprime une langue de la base de données",
+                "operationId": "deleteLangue",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la langue à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Langue supprimée avec succès"
+                    },
+                    "404": {
+                        "description": "Langue non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-admin/langues/status": {
+            "post": {
+                "tags": [
+                    "Langues"
+                ],
+                "summary": "Désactivation ou activation d'une langue",
+                "description": "Désactivation ou activation d'une langue",
+                "operationId": "createLangueStatus",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "langue_id": {
+                                        "description": "id de la langue",
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "description": "le statut a modifier",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mise à jour éffectué avec succès"
+                    },
+                    "404": {
+                        "description": "la langue n'a pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/parametres": {
+            "get": {
+                "tags": [
+                    "Parametres"
+                ],
+                "summary": "Récupérer la liste des parametres",
+                "description": "Récupère une liste de tous les parametres enregistrés dans la base de données",
+                "operationId": "getAllParametres",
+                "responses": {
+                    "200": {
+                        "description": "La liste des parametres récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID du parametre",
+                                                "type": "integer"
+                                            },
+                                            "delai_conduite": {
+                                                "description": "delai pour la conduite",
+                                                "type": "string"
+                                            },
+                                            "delai_ajounment_desertion": {
+                                                "description": "delai pour les ajournement ou desertion",
+                                                "type": "string"
+                                            },
+                                            "delai_correction_situation_ae": {
+                                                "description": "delai pour la correction de la situation des auto ecoles",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Parametres"
+                ],
+                "summary": "Créer un nouveau parametre",
+                "description": "Crée un nouveau parametre dans la base de données",
+                "operationId": "createParametre",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "delai_conduite": {
+                                        "description": "delai pour la conduite",
+                                        "type": "string"
+                                    },
+                                    "delai_ajounment_desertion": {
+                                        "description": "delai pour les ajournement ou desertion",
+                                        "type": "string"
+                                    },
+                                    "delai_correction_situation_ae": {
+                                        "description": "delai pour la correction de la situation des auto ecoles",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Le parametre a été créé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du parametre",
+                                            "type": "integer"
+                                        },
+                                        "delai_conduite": {
+                                            "description": "delai pour la conduite",
+                                            "type": "string"
+                                        },
+                                        "delai_ajounment_desertion": {
+                                            "description": "delai pour les ajournement ou desertion",
+                                            "type": "string"
+                                        },
+                                        "delai_correction_situation_ae": {
+                                            "description": "delai pour la correction de la situation des auto ecoles",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Les données fournies sont invalides",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Erreur générée",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/parametres/{id}": {
+            "get": {
+                "tags": [
+                    "Parametres"
+                ],
+                "summary": "Récupère un parametre par ID",
+                "description": "Récupère un parametre enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getParametreById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du parametre à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Parametre récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "Parametre non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Parametres"
+                ],
+                "summary": "Mettre à jour un parametre",
+                "description": "Met à jour un parametre dans la base de données",
+                "operationId": "updateParametre",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du parametre",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "delai_conduite": {
+                                        "description": "delai pour la conduite",
+                                        "type": "string"
+                                    },
+                                    "delai_ajounment_desertion": {
+                                        "description": "delai pour les ajournement ou desertion",
+                                        "type": "string"
+                                    },
+                                    "delai_correction_situation_ae": {
+                                        "description": "delai pour la correction de la situation des auto ecoles",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Le parametre a été mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Message de succès",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Le parametre n'a pas été trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Message d'erreur",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation des données d'entrée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Message d'erreur",
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "description": "Erreurs de validation",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Parametres"
+                ],
+                "summary": "Supprime un parametre",
+                "description": "Supprime un parametre de la base de données",
+                "operationId": "deleteParametre",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du parametre à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Parametre supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "Parametre non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/salle-compos": {
+            "get": {
+                "tags": [
+                    "SalleCompos"
+                ],
+                "summary": "Récupérer la liste des salles de composition",
+                "description": "Récupère une liste de tous les salles de composition enregistrées dans la base de données",
+                "operationId": "getAllSalleCompos",
+                "responses": {
+                    "200": {
+                        "description": "La liste des salles de composition récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la salle de composition",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom de la salle de composition",
+                                                "type": "string"
+                                            },
+                                            "annexe_anatt_id": {
+                                                "description": "ID de l'annexe anatt auquel appartient la nouvelle salle créée",
+                                                "type": "integer"
+                                            },
+                                            "contenance": {
+                                                "description": "Contenance de la salle de composition",
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "SalleCompos"
+                ],
+                "summary": "Crée une nouvelle salle de composition",
+                "description": "Crée une nouvelle salle de composition enregistrée dans la base de données",
+                "operationId": "createSalleCompo",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de la salle de composition",
+                                        "type": "string"
+                                    },
+                                    "annexe_anatt_id": {
+                                        "description": "ID de l'annexe anatt auquel appartient la nouvelle salle créée",
+                                        "type": "integer"
+                                    },
+                                    "contenance": {
+                                        "description": "Contenance de la salle de composition",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvelle salle de composition créée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/salle-compo/multiple": {
+            "post": {
+                "tags": [
+                    "SalleCompos"
+                ],
+                "summary": "Crée plusieurs salles de composition",
+                "description": "Crée plusieurs salles de composition enregistrées dans la base de données pour une annexe ANATT donnée",
+                "operationId": "createMultipleSalleCompo",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "annexe_anatt_id": {
+                                        "description": "ID de l'annexe ANATT à laquelle appartiennent les nouvelles salles créées",
+                                        "type": "integer"
+                                    },
+                                    "salle_comp_groupes": {
+                                        "description": "Tableau contenant les informations sur les salles de composition à créer",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "name": {
+                                                    "description": "Nom de la salle de composition",
+                                                    "type": "string"
+                                                },
+                                                "contenance": {
+                                                    "description": "Contenance de la salle de composition",
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvelles salles de composition créées"
+                    },
+                    "422": {
+                        "description": "Erreur de validation des données d'entrée"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/salle-compos/{id}": {
+            "get": {
+                "tags": [
+                    "SalleCompos"
+                ],
+                "summary": "Récupère une salle de composition par ID",
+                "description": "Récupère une salle de composition enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getSalleCompoById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la salle de composition à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Salle de composition récupérée avec succès"
+                    },
+                    "404": {
+                        "description": "Salle de composition non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "SalleCompos"
+                ],
+                "summary": "Met à jour une salle de composition existante",
+                "description": "Met à jour une salle de composition existante dans la base de données",
+                "operationId": "updateSalleCompo",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la salle de composition à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de la salle de composition",
+                                        "type": "string"
+                                    },
+                                    "annexe_anatt_id": {
+                                        "description": "ID de l'annexe antt auquel appartient la nouvelle salle créée",
+                                        "type": "integer"
+                                    },
+                                    "contenance": {
+                                        "description": "Contenance de la salle de composition",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Salle de composition mise à jour avec succès"
+                    },
+                    "404": {
+                        "description": "Salle de composition non trouvée"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "SalleCompos"
+                ],
+                "summary": "Supprime une salle de composition",
+                "description": "Supprime une salle de composition de la base de données",
+                "operationId": "deleteSalleCompo",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la salle de composition à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Salle de composition supprimée avec succès"
+                    },
+                    "404": {
+                        "description": "Salle de composition non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/annexeanatt-salle-compos/{annexe_anatt_id}": {
+            "get": {
+                "tags": [
+                    "SalleCompos"
+                ],
+                "summary": "Récupère les salles d'une annexe anatt",
+                "description": "Récupère les salles d'une annexe anatt enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getAnnexeAnattSalleCompoById",
+                "parameters": [
+                    {
+                        "name": "annexe_anatt_id",
+                        "in": "path",
+                        "description": "ID de l'annexe anatt dont on veut récuperer la salle",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Salle de composition récupérée avec succès"
+                    },
+                    "404": {
+                        "description": "Salle de composition non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/tranche-ages": {
+            "get": {
+                "tags": [
+                    "TrancheAges"
+                ],
+                "summary": "Récupérer la liste des tranche-ages",
+                "description": "Récupère une liste de tous les tranche-ages enregistrées dans la base de données",
+                "operationId": "getAllTrancheAges",
+                "responses": {
+                    "200": {
+                        "description": "La liste des tranche-ages récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la tranche d'age",
+                                                "type": "integer"
+                                            },
+                                            "categorie_permis_id": {
+                                                "description": "ID de la catégorie de permis",
+                                                "type": "integer"
+                                            },
+                                            "validite": {
+                                                "description": "La validité du permis",
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "description": "Statut de la tranche d'age (optionnel)",
+                                                "type": "boolean"
+                                            },
+                                            "age_min": {
+                                                "description": "Age minimal de la tranche d'age",
+                                                "type": "integer"
+                                            },
+                                            "age_max": {
+                                                "description": "Age maximal de la tranche d'age",
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "TrancheAges"
+                ],
+                "summary": "Crée une nouvelle tranche d'age",
+                "description": "Crée une nouvelle tranche d'age enregistrée dans la base de données",
+                "operationId": "createTrancheAges",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "categorie_permis_id": {
+                                        "description": "ID de la catégorie de permis",
+                                        "type": "integer"
+                                    },
+                                    "validite": {
+                                        "description": "La validité du permis",
+                                        "type": "string"
+                                    },
+                                    "age_min": {
+                                        "description": "Age minimal de la tranche d'age",
+                                        "type": "integer"
+                                    },
+                                    "age_max": {
+                                        "description": "Age maximal de la tranche d'age",
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "description": "Statut de la tranche d'age (optionnel)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvelle tranche d'age créée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-base/tranche-ages/{id}": {
+            "get": {
+                "tags": [
+                    "TrancheAges"
+                ],
+                "summary": "Récupère une tranche d'age par ID",
+                "description": "Récupère une tranche d'age enregistrée dans la base de données en spécifiant son ID",
+                "operationId": "getTrancheAgesById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tranche d'age à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "tranche d'age récupérée avec succès"
+                    },
+                    "404": {
+                        "description": "tranche d'age non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "TrancheAges"
+                ],
+                "summary": "Met à jour une catégorie de permis existante",
+                "description": "Met à jour une catégorie de permis existante dans la base de données",
+                "operationId": "updateTrancheAges",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "age_min": {
+                                        "description": "L'age minimum pour obtenir ce permis",
+                                        "type": "string"
+                                    },
+                                    "categorie_permis_id": {
+                                        "description": "L'id de la catégorie de permis concerné",
+                                        "type": "integer"
+                                    },
+                                    "validite": {
+                                        "description": "La validité en fonction de  l'age",
+                                        "type": "string"
+                                    },
+                                    "age_max": {
+                                        "description": "L'age maxi pour obtenir ce permis",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tranche age mise à jour avec succès"
+                    },
+                    "404": {
+                        "description": "Tranche age non trouvée"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "TrancheAges"
+                ],
+                "summary": "Supprime une tranche d'age",
+                "description": "Supprime une tranche d'age de la base de données",
+                "operationId": "deleteTrancheAges",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tranche d'age à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "tranche d'age supprimée avec succès"
+                    },
+                    "404": {
+                        "description": "tranche d'age non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-admin/tranche-ages/status": {
+            "post": {
+                "tags": [
+                    "TrancheAges"
+                ],
+                "summary": "Désactivation ou activation d'une tranche d'age",
+                "description": "Désactivation ou activation d'une tranche d'age",
+                "operationId": "createTrancheAgesStatus",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tranche_age_id": {
+                                        "description": "id de la tranche d'age",
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "description": "le statut a modifier",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mise à jour éffectué avec succès"
+                    },
+                    "404": {
+                        "description": "la tranche d'age n'a pas été trouvé"
+                    }
+                }
+            }
+        }
+    }
+}

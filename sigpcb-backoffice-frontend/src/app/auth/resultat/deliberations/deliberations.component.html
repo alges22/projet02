@@ -1,0 +1,37 @@
+<div class="m-2">
+  <div class="card">
+    <app-annexe-session
+      [agendas]="agendas"
+      [annexes]="annexes"
+    ></app-annexe-session>
+    <tab>
+      <tab-header>
+        <ng-container *ngFor="let tab of tabs">
+          <button
+            class="btn btn-tab col-6 col-md-4"
+            [routerLink]="tab.href"
+            [class.active]="tab.active"
+          >
+            <span class="btn-tab-text">
+              <app-icon [icon]="tab.icon" classe="text-dark"></app-icon>
+              {{ tab.label }}
+            </span>
+            <ng-container
+              *ngIf="
+                counts[tab.data] !== undefined && counts[tab.data] !== null
+              "
+            >
+              <span class="btn-tab-count ms-auto"
+                >{{ counts[tab.data] | padding }}
+              </span>
+            </ng-container>
+          </button>
+        </ng-container>
+      </tab-header>
+
+      <tab-body>
+        <router-outlet></router-outlet>
+      </tab-body>
+    </tab>
+  </div>
+</div>

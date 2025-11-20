@@ -1,0 +1,86 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h3 my-3">
+      Votre espace de gestion <br />
+      des procédures liées au permis <br />
+      de conduire et titres dérivés
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-lg-9">
+    <!--Login-->
+    <form
+      class="d-flex flex-column justify-content-between my-5"
+      *ngIf="page === 'login'"
+      id="login-form"
+    >
+      <h3 class="title mb-4">Connexion à l'espace suivi des candidats</h3>
+
+      <div class="text-primary mb-3">
+        <h6 style="font-size: 18px" class="mb-3">Saisissez votre numéro NPI</h6>
+        <app-single-inputs
+          [count]="10"
+          height="50px"
+          (isValid)="onNPIChanges($event)"
+        />
+      </div>
+
+      <div>
+        <button
+          type="button"
+          class="btn btn-lg btn-primary"
+          [disabled]="!canValidate()"
+          (click)="verify($event)"
+        >
+          <span *ngIf="isloading">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+          Se connecter
+        </button>
+        <div class="h6 my-3">
+          Vous n’êtes pas un moniteur ? <br />
+          <a href="">Cliquez ici</a>.
+        </div>
+      </div>
+    </form>
+
+    <!--Otp code-->
+    <div
+      class="d-flex flex-column justify-content-between my-5 px-5"
+      *ngIf="page === 'otp'"
+    >
+      <h3 class="title mb-4">Authentification</h3>
+      <h6 style="font-size: 18px; line-height: 25px" class="mb-3 text-primary">
+        Saisissez code
+      </h6>
+      <app-single-inputs
+        [count]="6"
+        (isValid)="otpCodes($event)"
+        height="35px"
+      ></app-single-inputs>
+
+      <p class="my-3">
+        <button
+          class="btn btn-primary btn-lg w-100"
+          [disabled]="!isValidOtpCode || isloading"
+          (click)="connect($event)"
+        >
+          Continuer
+        </button>
+      </p>
+      <p>
+        Vous n’avez pas reçu le code au bout d’une minute ? <br />
+        <a role="button" class="fw-semibold" (click)="resendCode()"
+          >Renvoyer le code</a
+        >
+      </p>
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

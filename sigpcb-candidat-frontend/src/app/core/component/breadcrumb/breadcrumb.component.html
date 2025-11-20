@@ -1,0 +1,14 @@
+<div class="bg-light border-bottom mb-3 p-2">
+  <div class="row align-items-center justify-content-between">
+    <div class="col-sm-8 col-md-9">
+      <div class="h6 text-primary">
+        <ng-content></ng-content>
+      </div>
+    </div>
+    <div class="col-sm-4 col-md-3 text-end" *ngIf="show">
+      <a type="button" class="btn btn-danger" (click)="back($event)">
+        <app-icon icon="arrow-left-short" [size]="14"></app-icon> {{ label }}
+      </a>
+    </div>
+  </div>
+</div>

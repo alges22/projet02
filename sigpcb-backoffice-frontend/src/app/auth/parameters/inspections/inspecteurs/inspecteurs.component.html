@@ -1,0 +1,318 @@
+<div class="mx-1">
+  <app-ng-window id="category-window">
+    <app-ng-window-header>
+      <button
+        class="btn window-btn"
+        [class.current]="pageIndex === 0"
+        (click)="selectedPage(0)"
+      >
+        Superviseur de salle
+      </button>
+      <!--<button
+        class="btn window-btn"
+        [class.current]="pageIndex === 1"
+        (click)="selectedPage(1)"
+      >
+        Annexe
+      </button>
+      <button
+        class="btn window-btn"
+        [class.current]="pageIndex === 2"
+        [disabled]="showAssignation"
+      >
+        Assignation
+      </button>-->
+    </app-ng-window-header>
+
+    <app-ng-window-page *ngIf="pageIndex == 0" data-window-current="true">
+      <div class="row">
+        <div class="offset-10 col-2 text-end">
+          <button
+            class="btn border btn-icons btn-primary"
+            (click)="openInspecteurModal('store')"
+          >
+            <app-icon icon="plus"></app-icon>
+            Superviseur de salle
+          </button>
+        </div>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th width="20%" class="">Annexe</th>
+            <th width="15%">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inspecteur of inspecteurs">
+            <td>
+              {{ inspecteur.user.first_name }}
+              {{ inspecteur.user.last_name }}
+            </td>
+            <td class="">{{ inspecteur.annexe.name }}</td>
+            <td>
+              <div class="btn-actions">
+                <app-icon
+                  icon="pencil"
+                  classe="text-warning"
+                  (click)="openInspecteurModal('edit', inspecteur)"
+                ></app-icon>
+                <app-delete
+                  (canDelete)="deleteInspecteur($event)"
+                  [activateId]="inspecteur.id"
+                ></app-delete>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="text-center" *ngIf="inspecteurs.length == 0">
+          <tr>
+            <td colspan="12">Aucune donnée</td>
+          </tr>
+        </tbody>
+      </table>
+    </app-ng-window-page>
+    <!--<app-ng-window-page *ngIf="pageIndex == 1">
+      <div class="row">
+        <div class="col-12">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Annexe</th>
+                <th width="5%" class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let annexe of annexes">
+                <td>{{ annexe.name }}</td>
+                <td class="text-center">
+                  <app-icon
+                    icon="paperclip"
+                    (click)="assign(annexe)"
+                    [size]="16"
+                    classe="text-success"
+                    title="Faire l'assignation"
+                  ></app-icon>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="text-center" *ngIf="inspecteurs.length == 0">
+              <tr>
+                <td colspan="12">Aucune donnée</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </app-ng-window-page>-->
+    <!--<app-ng-window-page *ngIf="pageIndex == 2">
+      <div class="row">
+        <div class="col-12">
+          <span class="fw-semibold text-center"
+            >Assignation pour : {{ annexe.name }}</span
+          >
+        </div>
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="examen_id">Salle</label>
+                <div class="col-6 text-end">
+                  <span info="Sélectionner une salle">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                [(ngModel)]="salle"
+                name="examen_id"
+                qv-rules="min:1"
+                qv-messages="La salle est requise"
+                (change)="onSalleSelectionChange()"
+              >
+                <option value="" selected>Sélectionner une salle</option>
+                <option *ngFor="let salle of salles" [value]="salle.id">
+                  {{ salle.name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="examen_id"></div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="examen_id">Session</label>
+                <div class="col-6 text-end">
+                  <span info="Sélectionner une session">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                [(ngModel)]="session"
+                name="examen_id"
+                qv-rules="min:1"
+                qv-messages="La session est requise"
+                [disabled]="!salle"
+                (change)="onSessionSelectionChange()"
+              >
+                <option value="" selected>Sélectionner une session</option>
+                <option *ngFor="let session of sessions" [value]="session.id">
+                  Session du
+                  {{ session.date_code | date : "dd MMMM yyyy" : "" : "fr" }}
+                </option>
+                 [disabled]="isSessionDisabled(session)"
+              </select>
+            </div>
+            <div qv-feedback="examen_id"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-2" *ngIf="displayInspecteurAnnexe">
+        <div class="col-12">
+          <label
+            class="list-group-item text-uppercase mb-1 border-0"
+            *ngFor="let inspecteur of inspecteursannexe"
+          >
+            <input
+              class="form-check-input me-1"
+              type="checkbox"
+              [value]="inspecteur.id"
+              (click)="appendInspecteur($event)"
+              [checked]="inputChecked(inspecteur.id)"
+            />
+            <span class="ms-2"
+              >{{ inspecteur.user.first_name }}
+              {{ inspecteur.user.last_name }}</span
+            >
+          </label>
+        </div>
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="inspecteurIds.length == 0 || onLoading"
+            (click)="saveAssign($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </app-ng-window-page>-->
+  </app-ng-window>
+</div>
+
+<app-modal [action]="modalInspecteur" size="">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+  <div>
+    <form action="" method="post" quickv id="salle-add-form">
+      <div class="row mb-2">
+        <div class="col-sm">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="user_id">Agent</label>
+                <div class="col-6 text-end">
+                  <span info="Sélectionner un utilisateur">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="user_id"
+                qv-rules="min:1"
+                qv-messages="L'utilisateur est requis"
+                [(ngModel)]="inspecteur.user_id"
+              >
+                <option value="" disabled selected>
+                  Sélectionner un utilisateur
+                </option>
+                <option [value]="user.id" *ngFor="let user of users">
+                  {{ user.first_name }} {{ user.last_name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="user_id"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="annexe_anatt_id"
+                  >Annexe ANaTT</label
+                >
+                <div class="col-6 text-end">
+                  <span info="Sélectionner une annexe">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="annexe_anatt_id"
+                qv-rules="min:1"
+                qv-messages="L'annexe est requise"
+                [(ngModel)]="inspecteur.annexe_anatt_id"
+              >
+                <option value="" disabled selected>
+                  Sélectionner une annexe
+                </option>
+                <option [value]="annexe.id" *ngFor="let annexe of annexes">
+                  {{ annexe.name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="annexe_anatt_id"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="onLoading"
+            qv-submit
+            (click)="save($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>

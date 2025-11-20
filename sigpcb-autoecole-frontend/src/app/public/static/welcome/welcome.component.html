@@ -1,0 +1,85 @@
+<div class="bg-primary-gradient py-5 welcome">
+  <div class="container">
+    <div class="col-lg-10 mx-auto">
+      <div
+        class="row flex-md-row-reverse align-items-center justify-content-between"
+      >
+        <div class="d-none d-md-block col-sm-7 col-md-3 mx-auto">
+          <img
+            src="assets/images/login-left.png"
+            class="d-block mx-lg-auto img-fluid"
+            loading="lazy"
+          />
+        </div>
+        <div class="col-md-6">
+          <p class="h3 text-light text-center text-md-left fw-semibold">
+            Bienvenue sur l'espace de gestion de votre établissement de conduite
+            automobile et annexes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container my-5">
+  <div class="col-lg-11 col-xl-10 mx-auto">
+    <h3 class="text-center fw-semibold my-5">
+      Quel service souhaitez-vous solliciter ?
+    </h3>
+    <div class="row justify-content-center">
+      <div class="col-md-4 col-lg-3 mb-5" *ngFor="let ps of prestations">
+        <!----Si personne n'est pas connectée---->
+        <ng-container *ngIf="!auth">
+          <app-service-card [prestation]="ps" [link]="ps.href">
+            <div class="d-none d-md-block">
+              <a
+                [routerLink]="ps.href"
+                class="btn btn-outline-primary rounded-0 d-block"
+              >
+                {{ ps.actionText }}
+              </a>
+            </div>
+            <div
+              class="d-md-none d-flex w-100 align-items-center justify-content-center"
+            >
+              <a class="btn btn-primary rounded-0" [routerLink]="ps.href">
+                <app-icon icon="arrow-right" classe="fw-bolder"></app-icon>
+              </a>
+            </div>
+          </app-service-card>
+        </ng-container>
+
+        <!----Si personne est connectée---->
+        <ng-container *ngIf="auth">
+          <app-service-card [prestation]="ps">
+            <div class="d-none d-md-block">
+              <a
+                [routerLink]="ps.href"
+                class="btn btn-outline-primary rounded-0 d-block"
+              >
+                {{ ps.actionText }}
+              </a>
+            </div>
+            <div
+              class="d-md-none d-flex w-100 align-items-center justify-content-center"
+            >
+              <a class="btn btn-primary rounded-0" [routerLink]="ps.href">
+                <app-icon icon="arrow-right" classe="fw-bolder"></app-icon>
+              </a>
+            </div>
+          </app-service-card>
+        </ng-container>
+      </div>
+    </div>
+    <div
+      class="p-3 bg-modal rounded-3 text-primary d-sm-none fw-semibold"
+      style="font-size: 14px"
+    >
+      Tout savoir sur une démarche
+      <app-icon
+        icon="box-arrow-up-right"
+        classe="fw-bolder d-inline"
+      ></app-icon>
+    </div>
+  </div>
+</div>

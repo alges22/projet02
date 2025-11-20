@@ -1,0 +1,73 @@
+.calendar-progress {
+  display: flex;
+
+  .progress-item {
+    display: flex;
+  }
+
+  small {
+    font-size: 11px;
+    display: block;
+    margin: 7px 0px 0 7px;
+    line-height: 99%;
+  }
+
+  .calendar-content {
+    width: 100%;
+
+  }
+
+  .calendar-date {
+    color: #fff;
+    max-width: 33px;
+    text-align: center;
+    padding: 3px;
+    position: relative;
+
+
+
+    .details {
+      min-width: 150px;
+      position: absolute;
+      margin-top: -20px;
+      top: -20px;
+      right: -108px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: #000;
+      font-weight: 400;
+      line-height: 99%;
+    }
+
+    .days {
+      display: inline-block;
+      font-weight: 500;
+      font-size: 18px;
+    }
+
+    .month {
+      font-size: 11px;
+    }
+  }
+
+  .calendar-bars {
+    height: 12px;
+    width: 100%;
+    margin-top: 2px;
+  }
+}
+
+.triangle-down {
+  position: absolute;
+  bottom: -13px;
+  display: block;
+  z-index: 2;
+  text-align: center;
+  left: 0;
+  right: 0;
+
+  .bi {
+    text-align: center;
+    transform: translate(10px);
+  }
+}

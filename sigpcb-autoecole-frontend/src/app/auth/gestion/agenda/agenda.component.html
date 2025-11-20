@@ -1,0 +1,27 @@
+<h6>Programme de l'année 2023</h6>
+<div class="row" *ngFor="let agenda of agendas">
+  <div class="col-12">
+    <h6 class="my-" style="text-transform: capitalize">{{ agenda.month }}</h6>
+    <div class="row">
+      <div class="col-sm">
+        <div style="padding-top: 4.5em" class="px-2 pb-3 rounded-2 bg-body">
+          <div class="row">
+            <div class="col-md-10">
+              <app-calendar-pogress
+                [programation]="agenda.programation"
+              ></app-calendar-pogress>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-center" *ngIf="agendas.lengtth && !onLoadingAgenda">
+  Aucun agenda disponible
+</div>
+
+<div *ngIf="onLoadingAgenda" class="text-center my-3">
+  Chargement de l'agenda en cours ....
+</div>

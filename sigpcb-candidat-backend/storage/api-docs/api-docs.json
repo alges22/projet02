@@ -1,0 +1,3393 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Base",
+        "description": "Gestion des API du candidat",
+        "contact": {
+            "name": "Support client",
+            "email": "contact@exemple.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/anatt-candidat/agregateurs-base": {
+            "get": {
+                "tags": [
+                    "Base"
+                ],
+                "summary": "Récupérer la liste des agregateurs",
+                "description": "Récupère une liste de tous les agregateurs enregistrés dans la base de données",
+                "operationId": "getAllAgregateur",
+                "responses": {
+                    "200": {
+                        "description": "La liste des chapitres récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "photo": {
+                                            "description": "La photo",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de l'agregateur",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom de l'agregateur",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/langues-base": {
+            "get": {
+                "tags": [
+                    "Base"
+                ],
+                "summary": "Récupérer la liste des langues",
+                "description": "Récupère une liste de toutes les langues enregistrés dans la base de données",
+                "operationId": "getAllLangues",
+                "responses": {
+                    "200": {
+                        "description": "La liste des langues récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la langue",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom de la langue",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/categorie-permis-base": {
+            "get": {
+                "tags": [
+                    "Base"
+                ],
+                "summary": "Récupérer la liste des categories de permis",
+                "description": "Récupère une liste des categorie de permis enregistrés dans la base de données",
+                "operationId": "getAllCatPermis",
+                "responses": {
+                    "200": {
+                        "description": "La liste des categorie de permis récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID du categorie permis",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom du categorie permis",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/candidat-payments": {
+            "get": {
+                "tags": [
+                    "CandidatPayments"
+                ],
+                "summary": "Obtient la liste des paiements des candidats",
+                "description": "Obtient la liste des paiements des candidats enregistrés dans la base de données",
+                "operationId": "getCandidatPayments",
+                "responses": {
+                    "200": {
+                        "description": "Liste des paiements des candidats",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID des paiements des candidats",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "candidat_id": {
+                                                "description": "ID du candidat",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "auto_ecole_id": {
+                                                "description": "ID de l'auto-école",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "agregateur": {
+                                                "description": "Nom de l'agrégateur",
+                                                "type": "string",
+                                                "example": "Nom de l'agrégateur"
+                                            },
+                                            "description": {
+                                                "description": "Description du paiement",
+                                                "type": "string",
+                                                "example": "Description du paiement"
+                                            },
+                                            "transaction_id": {
+                                                "description": "ID de transaction",
+                                                "type": "string",
+                                                "example": "123456789"
+                                            },
+                                            "reference": {
+                                                "description": "Référence du paiement",
+                                                "type": "string",
+                                                "example": "REF789456"
+                                            },
+                                            "mode": {
+                                                "description": "Mode de paiement",
+                                                "type": "string",
+                                                "example": "Mode de paiement"
+                                            },
+                                            "operation": {
+                                                "description": "Opération de paiement",
+                                                "type": "string",
+                                                "example": "Opération de paiement"
+                                            },
+                                            "transaction_key": {
+                                                "description": "Clé de transaction",
+                                                "type": "string",
+                                                "example": "TransKey123"
+                                            },
+                                            "montant": {
+                                                "description": "Le montant payé",
+                                                "type": "string",
+                                                "example": "50.00"
+                                            },
+                                            "phone_payment": {
+                                                "description": "Numéro de téléphone utilisé pour le paiement",
+                                                "type": "string",
+                                                "example": "+1234567890"
+                                            },
+                                            "ref_operateur": {
+                                                "description": "La référence de l'opérateur",
+                                                "type": "string",
+                                                "example": "OP123456"
+                                            },
+                                            "numero_recu": {
+                                                "description": "Le numéro du reçu",
+                                                "type": "string",
+                                                "example": "REC789456"
+                                            },
+                                            "moyen_payment": {
+                                                "description": "Le moyen de paiement (momo ou portefeuille)",
+                                                "type": "string",
+                                                "example": "momo"
+                                            },
+                                            "status": {
+                                                "description": "Statut du paiement (pending, approved, declined ou canceled)",
+                                                "type": "string",
+                                                "example": "approved"
+                                            },
+                                            "num_transaction": {
+                                                "description": "Numéro de transaction délivré par l'agrégateur",
+                                                "type": "string",
+                                                "example": "123456789"
+                                            },
+                                            "date_payment": {
+                                                "description": "Date de paiement",
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2023-07-19"
+                                            },
+                                            "dossier_candidat_id": {
+                                                "description": "ID du dossier du candidat",
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CandidatPayments"
+                ],
+                "summary": "Enrégistrer un nouveau paiement du candidat",
+                "description": "Crée un nouveau paiement du candidat enregistré dans la base de données",
+                "operationId": "createCandidatPayment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "auto_ecole_id": {
+                                        "description": "ID de l'auto-école",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "agregateur": {
+                                        "description": "Nom de l'agrégateur",
+                                        "type": "string",
+                                        "example": "Nom de l'agrégateur"
+                                    },
+                                    "description": {
+                                        "description": "Description du paiement",
+                                        "type": "string",
+                                        "example": "Description du paiement"
+                                    },
+                                    "transaction_id": {
+                                        "description": "ID de transaction",
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "reference": {
+                                        "description": "Référence du paiement",
+                                        "type": "string",
+                                        "example": "REF789456"
+                                    },
+                                    "mode": {
+                                        "description": "Mode de paiement",
+                                        "type": "string",
+                                        "example": "Mode de paiement"
+                                    },
+                                    "operation": {
+                                        "description": "Opération de paiement",
+                                        "type": "string",
+                                        "example": "Opération de paiement"
+                                    },
+                                    "transaction_key": {
+                                        "description": "Clé de transaction",
+                                        "type": "string",
+                                        "example": "TransKey123"
+                                    },
+                                    "montant": {
+                                        "description": "Le montant payé",
+                                        "type": "string",
+                                        "example": "50.00"
+                                    },
+                                    "phone_payment": {
+                                        "description": "Numéro de téléphone utilisé pour le paiement",
+                                        "type": "string",
+                                        "example": "+1234567890"
+                                    },
+                                    "ref_operateur": {
+                                        "description": "La référence de l'opérateur",
+                                        "type": "string",
+                                        "example": "OP123456"
+                                    },
+                                    "numero_recu": {
+                                        "description": "Le numéro du reçu",
+                                        "type": "string",
+                                        "example": "REC789456"
+                                    },
+                                    "moyen_payment": {
+                                        "description": "Le moyen de paiement (momo ou portefeuille)",
+                                        "type": "string",
+                                        "example": "momo"
+                                    },
+                                    "status": {
+                                        "description": "Statut du paiement (pending, approved, declined ou canceled)",
+                                        "type": "string",
+                                        "example": "approved"
+                                    },
+                                    "num_transaction": {
+                                        "description": "Numéro de transaction délivré par l'agrégateur",
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "date_payment": {
+                                        "description": "Date de paiement",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-07-19"
+                                    },
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau paiement du candidat créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouveau paiement du candidat créé",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/candidat-payments/{id}": {
+            "get": {
+                "tags": [
+                    "CandidatPayments"
+                ],
+                "summary": "Affiche les détails d'un paiement du candidat",
+                "description": "Affiche les détails d'un paiement du candidat enregistré dans la base de données",
+                "operationId": "getCandidatPaymentById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du paiement du candidat à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails du paiement du candidat récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du paiement du candidat",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Paiement du candidat non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CandidatPayments"
+                ],
+                "summary": "Mettre à jour un paiement du candidat",
+                "description": "Met à jour un paiement du candidat enregistré dans la base de données",
+                "operationId": "updateCandidatPayment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du paiement du candidat",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "candidat_id": {
+                                        "description": "ID du candidats",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "auto_ecole_id": {
+                                        "description": "ID de l'auto école",
+                                        "type": "integer"
+                                    },
+                                    "agregateur_id": {
+                                        "description": "Id de l'agregateur",
+                                        "type": "integer"
+                                    },
+                                    "montant": {
+                                        "description": "Le montant payé",
+                                        "type": "string"
+                                    },
+                                    "moyen_payment": {
+                                        "description": "le moyent du paiement(momo ou payment)",
+                                        "type": "boolean"
+                                    },
+                                    "status": {
+                                        "description": "Status du paiement",
+                                        "type": "boolean"
+                                    },
+                                    "num_transaction": {
+                                        "description": "Numéro de transaction délivré par l'agregateur",
+                                        "type": "string"
+                                    },
+                                    "dossier_candidat_id": {
+                                        "description": "Id du dossier du candidat",
+                                        "type": "integer"
+                                    },
+                                    "phone_payment": {
+                                        "description": "Numéro de téléphone utilsé pour le paiement",
+                                        "type": "string"
+                                    },
+                                    "ref_operateur": {
+                                        "description": "La référence de l'opérateur",
+                                        "type": "string"
+                                    },
+                                    "numero_recu": {
+                                        "description": "Le numéro du reçu",
+                                        "type": "string"
+                                    },
+                                    "date_payment": {
+                                        "description": "Date de paiement",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-03-31"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "paiement du candidat mis à jour",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du paiement du candidat mis à jour",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Paiement du candidat non trouvé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CandidatPayments"
+                ],
+                "summary": "Supprime un paiement du candidat existant",
+                "description": "Supprime un paiement du candidat spécifié de la base de données",
+                "operationId": "deleteCandidatPayment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du paiement du candidat à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paiement du candidat supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "Paiement du candidat non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/counts": {
+            "get": {
+                "tags": [
+                    "Compteurs"
+                ],
+                "summary": "Récupère les compteurs",
+                "operationId": "92b4f2f6ca21389259a693224b80bae1",
+                "parameters": [
+                    {
+                        "name": "counts",
+                        "in": "query",
+                        "description": "Liste des compteurs à récupérer, séparés par des virgules",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Compteurs récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "monitoring_count": {
+                                            "type": "integer",
+                                            "example": 69
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requête invalide",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Les paramètres 'counts' sont obligatoires"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur s'est produite lors de la récupération des compteurs"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidats": {
+            "post": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Crée un nouveau dossier-candidats",
+                "description": "Crée un nouveau dossier-candidat enregistré dans la base de donnée",
+                "operationId": "createDossierCandidats",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "candidat_id": {
+                                        "description": "ID du candidat",
+                                        "type": "integer"
+                                    },
+                                    "npi": {
+                                        "description": "npi du candidat",
+                                        "type": "string"
+                                    },
+                                    "auto_ecole_id": {
+                                        "description": "ID de l'auto ecole",
+                                        "type": "integer"
+                                    },
+                                    "categorie_permis_id": {
+                                        "description": "ID de la catégorie du permis",
+                                        "type": "integer"
+                                    },
+                                    "annexe_id": {
+                                        "description": "ID de l'annexe",
+                                        "type": "integer"
+                                    },
+                                    "langue_id": {
+                                        "description": "ID de la langue de composition",
+                                        "type": "integer"
+                                    },
+                                    "group_sanguin": {
+                                        "description": "Le groupe sanguin du candidat",
+                                        "type": "string"
+                                    },
+                                    "code_autoecole": {
+                                        "description": "Le code délivré par l'auto école",
+                                        "type": "string"
+                                    },
+                                    "fiche_medical": {
+                                        "description": "le fichier de la fiche médical",
+                                        "type": "string"
+                                    },
+                                    "groupage_test": {
+                                        "description": "le fichier du test de groupage",
+                                        "type": "string"
+                                    },
+                                    "restriction_medical": {
+                                        "description": "restriction médical du candidat",
+                                        "type": "string"
+                                    },
+                                    "candidat_type": {
+                                        "description": "Pour militaire ou civil",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau dossier-candidat créé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidats/close": {
+            "post": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Fermer un nouveau dossier",
+                "operationId": "closeDossierSession",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "dossier_session_id": {
+                                        "description": "ID du dossier session",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Dossier fermé avec succès"
+                    },
+                    "422": {
+                        "description": "Validation échouée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidats/open": {
+            "post": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Fermer un nouveau dossier",
+                "operationId": "openDossierSession",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "dossier_session_id": {
+                                        "description": "ID du dossier session",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Dossier fermé avec succès"
+                    },
+                    "422": {
+                        "description": "Validation échouée"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidats/justification-paiement": {
+            "post": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Enrégistrer un nouveau paiement du candidat",
+                "description": "Crée un nouveau paiement du candidat enregistré dans la base de données",
+                "operationId": "createJustifCandidatPayment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "agregateur": {
+                                        "description": "Nom de l'agrégateur",
+                                        "type": "string",
+                                        "example": "Nom de l'agrégateur"
+                                    },
+                                    "description": {
+                                        "description": "Description du paiement",
+                                        "type": "string",
+                                        "example": "Description du paiement"
+                                    },
+                                    "transaction_id": {
+                                        "description": "ID de transaction",
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "reference": {
+                                        "description": "Référence du paiement",
+                                        "type": "string",
+                                        "example": "REF789456"
+                                    },
+                                    "mode": {
+                                        "description": "Mode de paiement",
+                                        "type": "string",
+                                        "example": "Mode de paiement"
+                                    },
+                                    "operation": {
+                                        "description": "Opération de paiement",
+                                        "type": "string",
+                                        "example": "Opération de paiement"
+                                    },
+                                    "transaction_key": {
+                                        "description": "Clé de transaction",
+                                        "type": "string",
+                                        "example": "TransKey123"
+                                    },
+                                    "montant": {
+                                        "description": "Le montant payé",
+                                        "type": "string",
+                                        "example": "50.00"
+                                    },
+                                    "phone_payment": {
+                                        "description": "Numéro de téléphone utilisé pour le paiement",
+                                        "type": "string",
+                                        "example": "+1234567890"
+                                    },
+                                    "ref_operateur": {
+                                        "description": "La référence de l'opérateur",
+                                        "type": "string",
+                                        "example": "OP123456"
+                                    },
+                                    "numero_recu": {
+                                        "description": "Le numéro du reçu",
+                                        "type": "string",
+                                        "example": "REC789456"
+                                    },
+                                    "moyen_payment": {
+                                        "description": "Le moyen de paiement (momo ou portefeuille)",
+                                        "type": "string",
+                                        "example": "momo"
+                                    },
+                                    "status": {
+                                        "description": "Statut du paiement (pending, approved, declined ou canceled)",
+                                        "type": "string",
+                                        "example": "approved"
+                                    },
+                                    "num_transaction": {
+                                        "description": "Numéro de transaction délivré par l'agrégateur",
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "date_payment": {
+                                        "description": "Date de paiement",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-07-19"
+                                    },
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "dossier_session_id": {
+                                        "description": "ID du dossier session",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau paiement du candidat créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouveau paiement du candidat créé",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidats/expire-paiement": {
+            "post": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Enrégistrer un nouveau paiement du candidat apres une expiration de la date de session",
+                "description": "Crée un nouveau paiement du candidat enregistré dans la base de données",
+                "operationId": "createRejetExpirePayment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "agregateur": {
+                                        "description": "Nom de l'agrégateur",
+                                        "type": "string",
+                                        "example": "Nom de l'agrégateur"
+                                    },
+                                    "description": {
+                                        "description": "Description du paiement",
+                                        "type": "string",
+                                        "example": "Description du paiement"
+                                    },
+                                    "transaction_id": {
+                                        "description": "ID de transaction",
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "reference": {
+                                        "description": "Référence du paiement",
+                                        "type": "string",
+                                        "example": "REF789456"
+                                    },
+                                    "mode": {
+                                        "description": "Mode de paiement",
+                                        "type": "string",
+                                        "example": "Mode de paiement"
+                                    },
+                                    "operation": {
+                                        "description": "Opération de paiement",
+                                        "type": "string",
+                                        "example": "Opération de paiement"
+                                    },
+                                    "transaction_key": {
+                                        "description": "Clé de transaction",
+                                        "type": "string",
+                                        "example": "TransKey123"
+                                    },
+                                    "montant": {
+                                        "description": "Le montant payé",
+                                        "type": "string",
+                                        "example": "50.00"
+                                    },
+                                    "phone_payment": {
+                                        "description": "Numéro de téléphone utilisé pour le paiement",
+                                        "type": "string",
+                                        "example": "+1234567890"
+                                    },
+                                    "ref_operateur": {
+                                        "description": "La référence de l'opérateur",
+                                        "type": "string",
+                                        "example": "OP123456"
+                                    },
+                                    "numero_recu": {
+                                        "description": "Le numéro du reçu",
+                                        "type": "string",
+                                        "example": "REC789456"
+                                    },
+                                    "moyen_payment": {
+                                        "description": "Le moyen de paiement (momo ou portefeuille)",
+                                        "type": "string",
+                                        "example": "momo"
+                                    },
+                                    "status": {
+                                        "description": "Statut du paiement (pending, approved, declined ou canceled)",
+                                        "type": "string",
+                                        "example": "approved"
+                                    },
+                                    "num_transaction": {
+                                        "description": "Numéro de transaction délivré par l'agrégateur",
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "date_payment": {
+                                        "description": "Date de paiement",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-07-19"
+                                    },
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "dossier_session_id": {
+                                        "description": "ID du dossier session",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau paiement du candidat créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouveau paiement du candidat créé",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/updat-dossier-state": {
+            "post": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Mettre à jour le statut du dossier candidat par ced",
+                "description": "Mettre à jour le statut du dossier candidat avec la nouvelle valeur de statut",
+                "operationId": "updateDossierStateCed",
+                "requestBody": {
+                    "description": "Données du dossier candidat à mettre à jour",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id",
+                                    "state"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "description": "ID du dossier candidat à mettre à jour",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "state": {
+                                        "description": "Nouveau statut du dossier candidat",
+                                        "type": "string",
+                                        "example": "init"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Le statut du dossier candidat a été mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du dossier candidat",
+                                            "type": "integer"
+                                        },
+                                        "candidat_id": {
+                                            "description": "ID du candidat",
+                                            "type": "integer"
+                                        },
+                                        "npi": {
+                                            "description": "NPI du candidat",
+                                            "type": "string"
+                                        },
+                                        "langue_id": {
+                                            "description": "ID de la langue de composition",
+                                            "type": "integer"
+                                        },
+                                        "auto_ecole_id": {
+                                            "description": "ID de l'auto-école",
+                                            "type": "integer"
+                                        },
+                                        "phone": {
+                                            "description": "Le téléphone du candidat",
+                                            "type": "string"
+                                        },
+                                        "code_autoecole": {
+                                            "description": "Le code délivré par l'auto-école",
+                                            "type": "string"
+                                        },
+                                        "fiche_medical": {
+                                            "description": "Le fichier de la fiche médicale",
+                                            "type": "string"
+                                        },
+                                        "restriction_medical": {
+                                            "description": "Restriction médicale du candidat",
+                                            "type": "string"
+                                        },
+                                        "groupage_test": {
+                                            "description": "Le fichier du test de groupage",
+                                            "type": "string"
+                                        },
+                                        "candidat_type": {
+                                            "description": "Pour militaire ou civil",
+                                            "type": "string"
+                                        },
+                                        "adresse": {
+                                            "description": "L'adresse du candidat",
+                                            "type": "string"
+                                        },
+                                        "arrondissement_id": {
+                                            "description": "ID de l'arrondissement",
+                                            "type": "integer"
+                                        },
+                                        "annexe_id": {
+                                            "description": "ID de l'annexe",
+                                            "type": "integer"
+                                        },
+                                        "examen_id": {
+                                            "description": "ID de l'examen",
+                                            "type": "integer"
+                                        },
+                                        "group_sanguin": {
+                                            "description": "Le groupe sanguin du candidat",
+                                            "type": "string"
+                                        },
+                                        "medecin1_name": {
+                                            "description": "Le nom du medecin 1 du candidat",
+                                            "type": "string"
+                                        },
+                                        "medecin2_name": {
+                                            "description": "Le nom du medecin 2 du candidat",
+                                            "type": "string"
+                                        },
+                                        "hopital": {
+                                            "description": "Le nom de l'hôpital",
+                                            "type": "string"
+                                        },
+                                        "medecin1_contact": {
+                                            "description": "Le contact du medecin 1 du candidat",
+                                            "type": "string"
+                                        },
+                                        "medecin2_contact": {
+                                            "description": "Le contact du medecin 2 du candidat",
+                                            "type": "string"
+                                        },
+                                        "type_piece_id": {
+                                            "description": "ID de la pièce d'identité",
+                                            "type": "integer"
+                                        },
+                                        "num_piece_identite": {
+                                            "description": "Numéro de la pièce d'identité",
+                                            "type": "string"
+                                        },
+                                        "fichier_piece_identite": {
+                                            "description": "Le fichier de la pièce d'identité",
+                                            "type": "string"
+                                        },
+                                        "fichier_acte_nais": {
+                                            "description": "Le fichier de l'acte de naissance",
+                                            "type": "string"
+                                        },
+                                        "fichier_visite_med": {
+                                            "description": "Le fichier de la visite médicale",
+                                            "type": "string"
+                                        },
+                                        "photo": {
+                                            "description": "La photo du candidat",
+                                            "type": "string"
+                                        },
+                                        "is_paid": {
+                                            "description": "Si le candidat a payé (optionnel)",
+                                            "type": "boolean"
+                                        },
+                                        "is_valid": {
+                                            "description": "Si le dossier est validé (optionnel)",
+                                            "type": "boolean"
+                                        },
+                                        "is_close": {
+                                            "description": "Si le dossier est bouclé (optionnel)",
+                                            "type": "boolean"
+                                        },
+                                        "date_soumission": {
+                                            "description": "La date de soumission du dossier",
+                                            "type": "string"
+                                        },
+                                        "categorie_permis_id": {
+                                            "description": "ID de la catégorie du permis",
+                                            "type": "integer"
+                                        },
+                                        "date_payment": {
+                                            "description": "La date de paiement",
+                                            "type": "string"
+                                        },
+                                        "date_validation": {
+                                            "description": "La date de validation du dossier",
+                                            "type": "string"
+                                        },
+                                        "resultat_conduite": {
+                                            "description": "Résultat de la conduite",
+                                            "type": "string",
+                                            "enum": [
+                                                "success",
+                                                "failed"
+                                            ]
+                                        },
+                                        "is_deleted": {
+                                            "description": "Si le dossier est supprimé (optionnel)",
+                                            "type": "boolean"
+                                        },
+                                        "state": {
+                                            "description": "Le statut du dossier, validation Anatt (optionnel)",
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Dossier candidat non trouvé avec l'ID spécifié",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Message d'erreur",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Une erreur est survenue lors de la mise à jour du dossier candidat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Message d'erreur",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidat/{dossier_id}/full": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Obtenir les informations complètes d'un dossier candidat",
+                "description": "Récupère les informations complètes d'un dossier candidat en incluant les informations de l'auto-école et de la catégorie de permis",
+                "operationId": "fullDossier",
+                "parameters": [
+                    {
+                        "name": "dossier_id",
+                        "in": "path",
+                        "description": "ID du dossier candidat",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informations complètes du dossier candidat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du dossier candidat",
+                                            "type": "integer"
+                                        },
+                                        "candidat_id": {
+                                            "description": "ID du candidat",
+                                            "type": "integer"
+                                        },
+                                        "auto_ecole_id": {
+                                            "description": "ID de l'auto-école",
+                                            "type": "integer"
+                                        },
+                                        "num_permis": {
+                                            "description": "Numéro de permis du candidat",
+                                            "type": "string"
+                                        },
+                                        "npi": {
+                                            "description": "Numéro de permis international du candidat",
+                                            "type": "string"
+                                        },
+                                        "montant_paiement": {
+                                            "description": "Montant du paiement du candidat",
+                                            "type": "string"
+                                        },
+                                        "code_autoecole": {
+                                            "description": "Code de l'auto-école",
+                                            "type": "string"
+                                        },
+                                        "restriction_medical": {
+                                            "description": "Indicateur de restriction médicale",
+                                            "type": "string"
+                                        },
+                                        "fiche_medical": {
+                                            "description": "Nom du fichier de la fiche médicale",
+                                            "type": "string"
+                                        },
+                                        "groupage_test": {
+                                            "description": "Nom du fichier du groupage sanguin",
+                                            "type": "string"
+                                        },
+                                        "is_militaire": {
+                                            "description": "Statut militaire du candidat",
+                                            "type": "string"
+                                        },
+                                        "annexe_id": {
+                                            "description": "ID de l'annexe",
+                                            "type": "integer"
+                                        },
+                                        "group_sanguin": {
+                                            "description": "Groupe sanguin du candidat",
+                                            "type": "string"
+                                        },
+                                        "date_soumission": {
+                                            "description": "Date de soumission du dossier",
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "categorie_permis_id": {
+                                            "description": "ID de la catégorie de permis",
+                                            "type": "integer"
+                                        },
+                                        "date_payment": {
+                                            "description": "Date de paiement du candidat",
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "date_validation": {
+                                            "description": "Date de validation du dossier",
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "resultat_conduite": {
+                                            "description": "Résultat de l'examen de conduite du candidat",
+                                            "type": "string"
+                                        },
+                                        "bouton_paiement": {
+                                            "description": "Statut du bouton de paiement",
+                                            "type": "string"
+                                        },
+                                        "state": {
+                                            "description": "Statut du dossier",
+                                            "type": "string"
+                                        },
+                                        "parcours_state": {
+                                            "description": "Statut du parcours",
+                                            "type": "string"
+                                        },
+                                        "is_deleted": {
+                                            "description": "Indicateur de suppression du dossier",
+                                            "type": "boolean"
+                                        },
+                                        "auto_ecole": {
+                                            "description": "Informations de l'auto-école",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "ID de l'auto-école",
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "categorie_permis": {
+                                            "description": "Informations de la catégorie de permis",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "ID de la catégorie de permis",
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aucun résultat trouvé"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-session/{dossier_session_id}": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère les informations d'une DossierSession par son ID",
+                "description": "Récupère les informations d'une DossierSession enregistrée dans la base de données en spécifiant son ID",
+                "operationId": "getDossierSessionInformation",
+                "parameters": [
+                    {
+                        "name": "dossier_session_id",
+                        "in": "path",
+                        "description": "ID de la DossierSession",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informations de la DossierSession récupérées avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Dossier Session non trouvé"
+                    },
+                    "500": {
+                        "description": "Une erreur est survenue lors de la récupération des informations"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Mise à jour d'une DossierSession par son ID",
+                "description": "Met à jour les informations d'une DossierSession enregistrée dans la base de données en spécifiant son ID",
+                "operationId": "updateDossierSession",
+                "parameters": [
+                    {
+                        "name": "dossier_session_id",
+                        "in": "path",
+                        "description": "ID de la DossierSession",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "montant_paiement": {
+                                        "description": "Le nouveau montant du paiement",
+                                        "type": "number",
+                                        "example": "120"
+                                    },
+                                    "is_militaire": {
+                                        "description": "Le nouveau statut militaire",
+                                        "type": "string",
+                                        "enum": [
+                                            "civil",
+                                            "militaire"
+                                        ]
+                                    },
+                                    "restriction_medical": {
+                                        "description": "La nouvelle restriction médicale",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "state": {
+                                        "description": "Le nouveau statut",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "presence": {
+                                        "description": "La nouvelle présence",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "presence_conduite": {
+                                        "description": "La nouvelle présence",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "examen_id": {
+                                        "description": "Le nouvel ID de l'examen",
+                                        "type": "integer",
+                                        "nullable": true
+                                    },
+                                    "resultat_conduite": {
+                                        "description": "Le resultat de la conduite",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "DossierSession mise à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Dossier Session non trouvé"
+                    },
+                    "422": {
+                        "description": "Échec de la validation"
+                    },
+                    "500": {
+                        "description": "Une erreur est survenue lors de la mise à jour"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/check-permis-prealable": {
+            "post": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Vérifie le permis préalable d'un candidat",
+                "operationId": "4fa0f21a84a82bbb065285fd825ce878",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "candidatId": {
+                                        "description": "ID du candidat",
+                                        "type": "integer"
+                                    },
+                                    "permisPrealableId": {
+                                        "description": "ID du permis préalable",
+                                        "type": "integer"
+                                    },
+                                    "permisPrealableDure": {
+                                        "description": "Durée requise pour le permis préalable en jours",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Le temps requis pour continuer est validé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Le temps requis pour continuer est validé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Vous n'avez pas validé le temps requis pour continuer",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Vous n'avez pas validé le temps requis pour continuer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Une erreur s'est produite lors de la vérification du permis préalable",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur s'est produite lors de la vérification du permis préalable"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidats/{id}": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère un dossier-candidats par ID",
+                "description": "Récupère un dossier-candidat enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getDossierCandidatsById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du dossier-candidat à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "dossier-candidat récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "dossier-candidat non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Met à jour un dossier-candidat existant",
+                "description": "Met à jour un dossier-candidat existant dans la base de données",
+                "operationId": "updateDossierCandidats",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du dossier-candidat à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "dossier-candidat mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "dossier-candidat non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Dossier candidat non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Supprime un dossier-candidat",
+                "description": "Supprime un dossier-candidat de la base de données",
+                "operationId": "deleteDossierCandidats",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du dossier-candidat à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "dossier-candidat supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "dossier-candidat non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidats-souscriptions/{id}": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère les dossiers d'un candidat par son ID",
+                "description": "Récupère les dossiers d'un candidat enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getDossierCandidatsSouscriptionsById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du candidat",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "les dossiers d'un candidat ont été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "les dossiers d'un candidat n'ont pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidats-byautoecole/{id}": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère les dossiers d'une auto école par son ID",
+                "description": "Récupère les dossiers d'une auto école enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getDossierCandidatsAutoecoleById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'auto école",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "les dossiers ont été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "les dossiers n'ont pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/init-dossier-candidats-byautoecole/{id}": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère les nouveaux dossiers d'une auto école par son ID",
+                "description": "Récupère les nouveaux dossiers d'une auto école enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getInitDossierCandidatsAutoecoleById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'auto école",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "les dossiers ont été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "les dossiers n'ont pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/pending-dossier-candidats-byautoecole/{id}": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère les dossiers en attente d'une auto école par son ID",
+                "description": "Récupère les dossiers en attente d'une auto école enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getPendingDossierCandidatsAutoecoleById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'auto école",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "les dossiers ont été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "les dossiers n'ont pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/validate-dossier-candidats-byautoecole/{id}": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère les dossiers validés d'une auto école par son ID",
+                "description": "Récupère les dossiers validés d'une auto école enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getValidateDossierCandidatsAutoecoleById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'auto école",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "les dossiers ont été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "les dossiers n'ont pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/rejet-dossier-candidats-byautoecole/{id}": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère les dossiers rejetés d'une auto école par son ID",
+                "description": "Récupère les dossiers rejetés d'une auto école enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getRejetDossierCandidatsAutoecoleById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'auto école",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "les dossiers ont été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "les dossiers n'ont pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidats-souscription": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère le dernier dossier d'un candidat par son ID",
+                "description": "Récupère le dossier d'un candidat enregistré dans la base de données en spécifiant son ID",
+                "operationId": "getOneDossierCandidatSouscriptionById",
+                "responses": {
+                    "200": {
+                        "description": "le dossier du candidat a été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "le dossier du candidat n'a pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/candidat-session": {
+            "post": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Mettre à jour la session de dossier choisie par le candidat",
+                "operationId": "f8eaf7144efd548f9dda5508c6b494be",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat",
+                                        "type": "integer"
+                                    },
+                                    "dossier_session_id": {
+                                        "description": "ID de la session de dossier",
+                                        "type": "integer"
+                                    },
+                                    "examen_id": {
+                                        "description": "ID de l'examen choisi",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Session de dossier mise à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Félicitations, votre choix de session a été enregistré avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreurs de validation ou de correspondance de sessions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Les sessions ne correspondent pas."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Une erreur est survenue lors de la mise à jour de la session de dossier",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la mise à jour de la session de dossier."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-candidats-parcours": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère le dossier d'un candidat et son parcours pour la personne connectée",
+                "description": "Récupère le dossier d'un candidat enregistré dans la base de données pour la personne connectée",
+                "operationId": "getDossierCandidatParcours",
+                "responses": {
+                    "200": {
+                        "description": "Le dossier du candidat a été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "Le dossier du candidat n'a pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/candidats-eservices-parcours": {
+            "get": {
+                "tags": [
+                    "DossierCandidats"
+                ],
+                "summary": "Récupère les eservices d'un candidat et son parcours pour la personne connectée",
+                "description": "Récupère les eservices d'un candidat enregistré dans la base de données pour la personne connectée",
+                "operationId": "getCandidatEservicesParcours",
+                "responses": {
+                    "200": {
+                        "description": "Le dossier du candidat a été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "Le dossier du candidat n'a pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-motif-rejets": {
+            "get": {
+                "tags": [
+                    "DossierMotifRejets"
+                ],
+                "summary": "Obtient la liste des dossier-motif-rejets des candidats",
+                "description": "Obtient la liste des dossier-motif-rejets des candidats enregistrés dans la base de données",
+                "operationId": "getDossierMotifRejets",
+                "responses": {
+                    "200": {
+                        "description": "Liste des dossier-motif-rejets des candidats",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID des dossier-motif-rejets des candidats",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "motif": {
+                                                "description": "le motif",
+                                                "type": "string"
+                                            },
+                                            "dossier_candidat_id": {
+                                                "description": "ID du dossier du candidat",
+                                                "type": "integer"
+                                            },
+                                            "date_rejet": {
+                                                "description": "Date de rejet",
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2023-03-31"
+                                            },
+                                            "date_soumission": {
+                                                "description": "Date de soumission",
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2023-03-31"
+                                            },
+                                            "date_decision": {
+                                                "description": "Date de decision",
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2023-03-31"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "DossierMotifRejets"
+                ],
+                "summary": "Enrégistrer un nouveau dossier-motif-rejets du candidat",
+                "description": "Crée un nouveau dossier-motif-rejets du candidat enregistré dans la base de données",
+                "operationId": "createDossierMotifRejet",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "motif": {
+                                        "description": "le motif",
+                                        "type": "string"
+                                    },
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat",
+                                        "type": "integer"
+                                    },
+                                    "date_rejet": {
+                                        "description": "Date de rejet",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-03-31"
+                                    },
+                                    "date_soumission": {
+                                        "description": "Date de soumission",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-03-31"
+                                    },
+                                    "date_decision": {
+                                        "description": "Date de decision",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-03-31"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau dossier-motif-rejets du candidat créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouveau dossier-motif-rejets du candidat créé",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/dossier-motif-rejets/{id}": {
+            "get": {
+                "tags": [
+                    "DossierMotifRejets"
+                ],
+                "summary": "Affiche les détails d'un dossier-motif-rejets du candidat",
+                "description": "Affiche les détails d'un dossier-motif-rejets du candidat enregistré dans la base de données",
+                "operationId": "getDossierMotifRejetById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du dossier-motif-rejets du candidat à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails du dossier-motif-rejets du candidat récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du dossier-motif-rejets du candidat",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "dossier-motif-rejets du candidat non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "DossierMotifRejets"
+                ],
+                "summary": "Mettre à jour un dossier-motif-rejets du candidat",
+                "description": "Met à jour un dossier-motif-rejets du candidat enregistré dans la base de données",
+                "operationId": "updateDossierMotifRejet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du dossier-motif-rejets du candidat",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "motif": {
+                                        "description": "le motif",
+                                        "type": "string"
+                                    },
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat",
+                                        "type": "integer"
+                                    },
+                                    "date_rejet": {
+                                        "description": "Date de rejet",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-03-31"
+                                    },
+                                    "date_soumission": {
+                                        "description": "Date de soumission",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-03-31"
+                                    },
+                                    "date_decision": {
+                                        "description": "Date de decision",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-03-31"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "dossier-motif-rejets du candidat mis à jour",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du dossier-motif-rejets du candidat mis à jour",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "dossier-motif-rejets du candidat non trouvé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "DossierMotifRejets"
+                ],
+                "summary": "Supprime un dossier-motif-rejets du candidat existant",
+                "description": "Supprime un dossier-motif-rejets du candidat spécifié de la base de données",
+                "operationId": "deleteDossierMotifRejet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du dossier-motif-rejets du candidat à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "dossier-motif-rejets du candidat supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "dossier-motif-rejets du candidat non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/examens": {
+            "get": {
+                "tags": [
+                    "Examen"
+                ],
+                "summary": "Récupérer la liste des examens",
+                "description": "Récupère une liste de tous les examens enregistrés dans la base de données",
+                "operationId": "getAllExamen",
+                "responses": {
+                    "200": {
+                        "description": "La liste des candidatq récupéré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de l'examen",
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/npi-candidat": {
+            "post": {
+                "tags": [
+                    "AnipCandidat"
+                ],
+                "summary": "Vérifie le numéro npi du candidat",
+                "description": "Vérifie le numéro npi du candidat.",
+                "operationId": "getNPI",
+                "requestBody": {
+                    "description": "Données pour vérifier le numéro npi du candidat",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "npi"
+                                ],
+                                "properties": {
+                                    "npi": {
+                                        "type": "integer",
+                                        "example": "12345467890"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "vefification éffectuée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "véfirication éffectuée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "vefification non éffectuée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": ""
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "vefification non éffectuée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la vérification"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/candidat/dossier-session": {
+            "get": {
+                "tags": [
+                    "AnipCandidat"
+                ],
+                "summary": "Obtenir les informations du dossier de session d'un candidat",
+                "description": "Obtenir les informations du dossier de session d'un candidat à partir de son numéro NPI.",
+                "operationId": "getUserDossierSession",
+                "responses": {
+                    "200": {
+                        "description": "Le dossier session du candidat a été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "Le dossier session du candidat n'a pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/parcours-suivis/{candidat_id}": {
+            "get": {
+                "tags": [
+                    "ParcoursSuivis"
+                ],
+                "summary": "Affiche les détails d'un parcours d'un candidat",
+                "description": "Affiche les détails d'un parcours d'un candidat enregistré dans la base de données",
+                "operationId": "getParcoursSuivisByCandidatId",
+                "parameters": [
+                    {
+                        "name": "candidat_id",
+                        "in": "path",
+                        "description": "ID du candidat dont on veut récupéré le parcours",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails du parcours candidat récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "candidat_id": {
+                                            "description": "ID de candidat",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "parcours candidat non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/parcours-suivis": {
+            "post": {
+                "tags": [
+                    "ParcoursSuivis"
+                ],
+                "summary": "Crée un nouvel parcours candidat",
+                "description": "Crée un nouvel parcours candidat enregistré dans la base de données",
+                "operationId": "createParcoursSuivis",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "candidat_id": {
+                                        "description": "ID de du candidat",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "service": {
+                                        "description": "Service de l'action",
+                                        "type": "string",
+                                        "example": "Inscription"
+                                    },
+                                    "auto_ecole_id": {
+                                        "description": "ID de l'auto école",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "agent_id": {
+                                        "description": "ID de l'agent ayant fait l'action ",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat ",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "dossier_session_id": {
+                                        "description": "ID du dossier session du candidat ",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "categorie_permis_id": {
+                                        "description": "ID du catégorie de permis ",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "npi": {
+                                        "description": "npi du candidat ",
+                                        "type": "string",
+                                        "example": 1234567890
+                                    },
+                                    "slug": {
+                                        "description": "slug de l'action ",
+                                        "type": "string",
+                                        "example": "preinscription"
+                                    },
+                                    "message": {
+                                        "description": "le message de l'action ",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvel parcours candidat créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouvel parcours candidat créé",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/verify-npi": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Connexion",
+                "description": "Connectez-vous en utilisant votre npi.",
+                "operationId": "VerifyNpi",
+                "requestBody": {
+                    "description": "Données d'authentification",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "npi"
+                                ],
+                                "properties": {
+                                    "npi": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        },
+                                        "user": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Informations d'identification incorrectes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Informations de connexion incorrectes"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "npiincorrecte"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la connexion"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/login": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Connexion",
+                "description": "Connectez-vous en utilisant votre npi.",
+                "operationId": "login",
+                "requestBody": {
+                    "description": "Données d'authentification",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "npi",
+                                    "email",
+                                    "lang"
+                                ],
+                                "properties": {
+                                    "npi": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "62000001"
+                                    },
+                                    "lang": {
+                                        "type": "string",
+                                        "example": "fr"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        },
+                                        "user": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Informations d'identification incorrectes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Informations de connexion incorrectes"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "npiincorrecte"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la connexion"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/register": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Inscription",
+                "description": "Inscrivez-vous en utilisant votre adresse numéro npi.",
+                "operationId": "Register",
+                "requestBody": {
+                    "description": "Données d'authentification",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "npi",
+                                    "email",
+                                    "lang"
+                                ],
+                                "properties": {
+                                    "npi": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "62000001"
+                                    },
+                                    "lang": {
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "fr"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inscription réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        },
+                                        "user": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Informations d'identification incorrectes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Informations d'inscrisption incorrectes"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "Adresse e-mail ou mot de passe incorrecte"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la connexion"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/verify-otp": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Vérification du code OTP",
+                "description": "Vérifie le code OTP et connecte l'utilisateur en cas de succès.",
+                "operationId": "verifyOtp",
+                "requestBody": {
+                    "description": "Données de vérification du code OTP",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "code",
+                                    "action"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "123"
+                                    },
+                                    "code": {
+                                        "type": "integer",
+                                        "example": "123456"
+                                    },
+                                    "action": {
+                                        "type": "string",
+                                        "example": "login"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        },
+                                        "user": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Code OTP invalide ou expiré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Code de vérification invalide ou expiré"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la connexion"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/resend-code": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Renvoi le code OTP",
+                "description": "Renvoie un nouveau code OTP à l'utilisateur pour la vérification.",
+                "operationId": "resendCode",
+                "requestBody": {
+                    "description": "Données pour renvoyer le code OTP",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "action",
+                                    "email",
+                                    "lang"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "123"
+                                    },
+                                    "action": {
+                                        "type": "string",
+                                        "example": "login"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "login@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "62000001"
+                                    },
+                                    "lang": {
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "fr"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Code OTP envoyé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Un nouveau code de vérification a été envoyé à votre adresse e-mail"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Code OTP invalide ou expiré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Code de vérification invalide ou expiré"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la connexion"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/restrictions": {
+            "get": {
+                "tags": [
+                    "Restrictions"
+                ],
+                "summary": "Récupérer la liste des restrictions",
+                "description": "Récupère une liste de toutes les restrictions enregistrées dans la base de données",
+                "operationId": "getAllRestrictions",
+                "responses": {
+                    "200": {
+                        "description": "La liste des restrictions récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la restriction",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom de la restriction",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Obtient la liste des candidats",
+                "description": "Obtient la liste des candidats enregistrés dans la base de données",
+                "operationId": "getCandidat",
+                "responses": {
+                    "200": {
+                        "description": "Liste des candidats",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID du candidats",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "npi": {
+                                                "description": "npi du candidat",
+                                                "type": "integer"
+                                            },
+                                            "has_dossier_permi": {
+                                                "description": "sil a deja un dossier candidat ",
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Base",
+            "description": "Base"
+        },
+        {
+            "name": "CandidatPayments",
+            "description": "CandidatPayments"
+        },
+        {
+            "name": "Compteurs",
+            "description": "Compteurs"
+        },
+        {
+            "name": "DossierCandidats",
+            "description": "DossierCandidats"
+        },
+        {
+            "name": "DossierMotifRejets",
+            "description": "DossierMotifRejets"
+        },
+        {
+            "name": "Examen",
+            "description": "Examen"
+        },
+        {
+            "name": "AnipCandidat",
+            "description": "AnipCandidat"
+        },
+        {
+            "name": "ParcoursSuivis",
+            "description": "ParcoursSuivis"
+        },
+        {
+            "name": "Authentification",
+            "description": "Authentification"
+        },
+        {
+            "name": "Restrictions",
+            "description": "Restrictions"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        }
+    ]
+}

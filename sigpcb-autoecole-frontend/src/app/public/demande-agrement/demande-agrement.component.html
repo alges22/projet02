@@ -1,0 +1,595 @@
+<ng-container *ngIf="promoteur">
+  <div class="demande-page" [class.d-block]="page === 'basic'">
+    <h3 class="title mb-4">
+      Demande d'autorisation d’ouverture d’un Etablissement d’Enseignement de la
+      Conduite Automobile et Annexe
+    </h3>
+
+    <h6 style="font-size: 18px; line-height: 25px" class="mb-3 text-primary">
+      Information sur la demande
+    </h6>
+    <div class="alert alert-secondary" role="alert">
+      <strong>Hey !</strong> vous faîtes la demande en tant que :
+      <b>{{ promoteur.prenoms }} {{ promoteur.nom }}</b>
+    </div>
+
+    <div class="bg-gray p-3 rounded">
+      <div id="demande-basic-form">
+        <div class="mb-3">
+          <label for="ifu" class="form-label required">IFU</label>
+          <input
+            type="text"
+            [(ngModel)]="form.ifu"
+            name="ifu"
+            id="ifu"
+            class="form-control"
+            (change)="onTapeIfu()"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="auto-ecole" class="form-label required"
+            >Nom de votre auto-école</label
+          >
+          <input
+            type="text"
+            name="auto_ecole"
+            id="auto-ecole"
+            class="form-control"
+            [(ngModel)]="form.auto_ecole"
+            qv-rules="required|minlength:2"
+            qv-messages="Le nom de l'auto-école est requis"
+          />
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col mb-3">
+                <label for="departement_id" class="form-label required"
+                  >Département</label
+                >
+                <select
+                  class="form-select form-select-lg"
+                  name="departement_id"
+                  (change)="onDepartement($event.target)"
+                  id="departement_id"
+                  [(ngModel)]="form.departement_id"
+                >
+                  <option value="0" selected>Selectionner</option>
+                  <option [value]="dep.id" *ngFor="let dep of departements">
+                    {{ dep.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="col mb-3">
+                <label for="commune_id" class="form-label required"
+                  >Ville / Commune</label
+                >
+                <select
+                  class="form-select form-select-lg"
+                  name="commune_id"
+                  id="commune_id"
+                  (change)="onCommune($event.target)"
+                  [(ngModel)]="form.commune_id"
+                >
+                  <option value="0" selected>Selectionner</option>
+                  <option [value]="com.id" *ngFor="let com of communes">
+                    {{ com.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="telephone_pro" class="form-label required"
+                >N° de téléphone professionnel
+              </label>
+              <input
+                type="text"
+                name="telephone_pro"
+                id="telephone_pro"
+                class="form-control"
+                [(ngModel)]="form.telephone_pro"
+              />
+              <small class="text-muted">Le numéro de l'auto-école</small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="" class="form-label required">
+                Mail professionnel
+              </label>
+              <input
+                type="email"
+                name="email_pro"
+                id="email_pro"
+                class="form-control"
+                placeholder=""
+                [(ngModel)]="form.email_pro"
+              />
+              <small class="text-muted">Le mail de l'auto-école</small>
+            </div>
+          </div>
+
+          <div class="col-md" *ngIf="!auth">
+            <div class="mb-3">
+              <label for="email_promoteur" class="form-label required">
+                E-mail du promoteur
+              </label>
+              <input
+                type="email"
+                name="email_promoteur"
+                id="email_promoteur"
+                class="form-control"
+                placeholder="mon.email@gmail.com"
+                [(ngModel)]="form.email_promoteur"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3 d-flex justify-content-between">
+      <p>
+        <button class="btn btn-outline-primary" disabled>
+          <app-icon icon="arrow-left" /> Précédent
+        </button>
+      </p>
+      <p>
+        <button
+          class="btn btn-primary"
+          (click)="go('monitors')"
+          [disabled]="!basicFormValid()"
+        >
+          Suivant
+          <app-icon icon="arrow-right" />
+        </button>
+      </p>
+    </div>
+  </div>
+
+  <div class="demande-page" [class.d-block]="page === 'monitors'">
+    <h3 class="title mb-4">
+      Demande d'autorisation d’ouverture d’un Etablissement d’Enseignement de la
+      Conduite Automobile et Annexe
+    </h3>
+    <h6 style="font-size: 18px; line-height: 25px" class="mb-3 text-primary">
+      Moniteurs & Véhicules
+    </h6>
+    <div class="bg-gray p-3 rounded my-3">
+      <div class="row">
+        <ng-container *ngIf="moniteurs.length < 2">
+          <div class="col-9">
+            <div class="mb-3">
+              <input
+                type="text"
+                name="moniteurNpi"
+                id="moniteurNpi"
+                class="form-control"
+                placeholder="Tapez le NPI du Moniteur"
+                [(ngModel)]="moniteurNpi"
+                maxlength="10"
+                minlength="10"
+                (input)="addMoniteur()"
+                (keydown)="onKeydown($event)"
+              />
+            </div>
+            <small class="text-muted">Indiquez (02) moniteurs </small>
+          </div>
+        </ng-container>
+
+        <div class="col-12">
+          <ng-container *ngIf="moniteurs.length">
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <tr *ngFor="let m of moniteurs">
+                    <td>{{ m.prenoms }} {{ m.nom }}</td>
+                    <td>{{ m.telephone }}</td>
+                    <td>
+                      <span
+                        role="button"
+                        (click)="removeMoniteur(m.npi)"
+                        class="p-1"
+                        ><app-icon icon="x"
+                      /></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="moniteurErrors.length">
+            <div class="alert alert-primary" role="alert">
+              <p *ngFor="let item of moniteurErrors">
+                Le moniteur {{ item.nom }} {{ item.prenoms }} n'existe pas dans
+                la base de l'ANaTT. <br />
+                Veuillez prealablement effectuer son enrôlement (Voir
+                <a href="https://drivinglicencesigpcb.anatt.bj" target="_blank">
+                  drivinglicencesigpcb.anatt.bj</a
+                >
+                )
+              </p>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!moniteurs.length">
+            <div class="text-center">Ajouter un moniteur</div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <label for="vehicule" class="form-label required"
+            >Les véhicules
+          </label>
+        </div>
+        <div class="col-9">
+          <div class="mb-3">
+            <input
+              type="text"
+              name="vehicule"
+              id="vehicule"
+              class="form-control"
+              placeholder="Ex: AZ 0000 RB"
+              [(ngModel)]="vehicule"
+              minlength="6"
+            />
+          </div>
+        </div>
+        <div class="col-3">
+          <button
+            class="btn btn-primary"
+            [disabled]="vehicule.length < 6"
+            (click)="addVehicule()"
+          >
+            Ajouter
+          </button>
+        </div>
+        <div class="col-12">
+          <ng-container *ngIf="vehicules.length">
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <tr *ngFor="let v of vehicules">
+                    <td>{{ v.immatriculation }}</td>
+                    <td>
+                      <span
+                        role="button"
+                        (click)="removeVehicule(v.immatriculation)"
+                        class="p-1"
+                        ><app-icon icon="x"
+                      /></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!vehicules.length">
+            <div class="text-center">Ajouter un véhicule</div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3 d-flex justify-content-between">
+      <p>
+        <button class="btn btn-outline-primary" (click)="go('basic')">
+          <app-icon icon="arrow-left" /> Précédent
+        </button>
+      </p>
+      <p>
+        <button
+          class="btn btn-primary"
+          (click)="go('fiches')"
+          [disabled]="moniteurs.length != 2 || vehicules.length < 1"
+        >
+          Suivant
+          <app-icon icon="arrow-right" />
+        </button>
+      </p>
+    </div>
+  </div>
+  <div class="demande-page" [class.d-block]="page === 'fiches'">
+    <h3 class="title mb-4">
+      Demande d'autorisation d’ouverture d’un Etablissement d’Enseignement de la
+      Conduite Automobile et Annexe
+    </h3>
+    <h6 style="font-size: 18px; line-height: 25px" class="mb-3 text-primary">
+      Les fiches à joindre
+    </h6>
+    <div
+      class="form-group mb-4 bg-gray p-3 rounded"
+      *ngFor="let fc of fiches; let i = index"
+    >
+      <label class="mb-1" [class.required]="fc.required" [for]="fc.id">{{
+        fc.label | ucfirst
+      }}</label>
+      <app-input-file
+        [accept]="fc.accept.join(',')"
+        [id]="fc.id"
+        [type]="fc.type"
+        [placeholder]="fc.placeholder || null"
+        (changeEvent)="onFile($event, i)"
+        [defaultPath]="fc.defaultPath"
+        [multiple]="!!fc.multiple"
+      />
+    </div>
+    <div class="mt-3 d-flex justify-content-between">
+      <p>
+        <button class="btn btn-outline-primary" (click)="go('monitors')">
+          <app-icon icon="arrow-left" /> Précédent
+        </button>
+      </p>
+      <p>
+        <button
+          class="btn btn-primary"
+          [disabled]="!fichesValides()"
+          (click)="go('recap')"
+        >
+          Suivant
+          <app-icon icon="arrow-right" />
+        </button>
+      </p>
+    </div>
+  </div>
+
+  <div class="demande-page" [class.d-block]="page === 'recap'">
+    <h3 class="title mb-4">
+      Demande d'autorisation d’ouverture d’un Etablissement d’Enseignement de la
+      Conduite Automobile et Annexe
+    </h3>
+    <div class="p-1 rounded-3 bg-light">
+      <div class="d-flex">
+        <app-avatar [promoteur]="promoteur" />
+        <div class="d-flex flex-column justify-content-between ms-2">
+          <h5
+            class="pt-2"
+            style="color: #313131; font-size: 22px; font-weight: 600"
+          >
+            {{ promoteur.prenoms }} {{ promoteur.nom }}
+          </h5>
+          <h6 class="pb-2" style="color: #575656; font-size: 16px">
+            NPI : {{ promoteur.npi }}
+          </h6>
+        </div>
+      </div>
+    </div>
+    <div class="row h-100 my-3">
+      <div class="col h-100">
+        <h4 class="mt-3">Informations personnelles</h4>
+        <div class="border rounded-3 p-2">
+          <div class="mb-3">
+            <div class="fw-semibold">Sexe</div>
+            <span class="text-uppercase">{{ promoteur.sexe }}</span>
+          </div>
+
+          <div class="mb-3">
+            <div class="fw-semibold">Date de naissance</div>
+            <span class="text-uppercase">{{
+              promoteur.date_de_naissance | date : "dd MMMM yyyy" : "" : "fr"
+            }}</span>
+          </div>
+          <div class="mb-3">
+            <div class="fw-semibold">Lieu de naissance</div>
+            <span class="text-uppercase">{{
+              promoteur.lieu_de_naissance
+            }}</span>
+          </div>
+
+          <div class="mb-2">
+            <div class="fw-semibold">Adresse</div>
+            <span class="text-uppercase">{{ promoteur.adresse }}</span>
+          </div>
+          <div class="mb-3">
+            <div class="fw-semibold">Téléphone</div>
+            <span class="text-uppercase">{{ promoteur.telephone }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col h-100">
+        <h4 class="mt-3">Informations sur la demande</h4>
+        <div class="border rounded-3 p-2">
+          <div class="mb-3">
+            <div class="fw-semibold">Auto-école</div>
+            <span class="text-uppercase"> {{ form.auto_ecole }} </span>
+          </div>
+
+          <div class="mb-3">
+            <div class="fw-semibold">IFU</div>
+            <span class="text-uppercase">
+              {{ form.ifu }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <div class="fw-semibold">Raison sociale</div>
+            <span class="text-uppercase">
+              {{ raisonSociale }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <div class="fw-semibold">E-mail professionnelle</div>
+            <span class="text-uppercase">
+              {{ form.email_pro }}
+            </span>
+          </div>
+
+          <div class="mb-3">
+            <div class="fw-semibold">Téléphone professionnel</div>
+            <span class="text-uppercase">
+              {{ form.telephone_pro }}
+            </span>
+          </div>
+
+          <p class="mb-3">
+            <button class="btn btn-outline-primary w-100" (click)="go('basic')">
+              Modifier les informations
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="border rounded p-3">
+      <div class="mb-3">
+        <div class="fw-semibold">Les moniteurs</div>
+        <div class="table-responsive">
+          <table class="table">
+            <tbody>
+              <tr *ngFor="let m of moniteurs">
+                <td>{{ m.prenoms }} {{ m.nom }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="fw-semibold">Les véhicules</div>
+        <div class="table-responsive">
+          <table class="table">
+            <tbody>
+              <tr *ngFor="let v of vehicules">
+                <td>{{ v.immatriculation }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="mb-3">
+        <button class="btn btn-outline-primary w-100" (click)="go('monitors')">
+          Modifier
+        </button>
+      </p>
+    </div>
+    <div class="border rounded-3 p-3 my-3">
+      <p>({{ ficheValides.length }}) fichiers joints</p>
+      <p class="form-text text-muted">
+        <ng-container *ngFor="let f of fiches">
+          <span class="text-dark" style="font-size: 12px">
+            {{ f.label | limit : 32 }} </span
+          >,
+        </ng-container>
+      </p>
+      <p class="my-3">
+        <button class="btn btn-outline-primary w-100" (click)="go('fiches')">
+          Voir/Modifier les fiches
+        </button>
+      </p>
+    </div>
+    <div class="d-flex justify-content-between my-3">
+      <p>
+        <button class="btn btn-outline-primary" (click)="go('fiches')">
+          <app-icon icon="arrow-left" /> Précédent
+        </button>
+      </p>
+
+      <p>
+        <button
+          class="btn btn-primary"
+          [disabled]="!fichesValides() || !basicFormValid()"
+          (click)="save()"
+          type="button"
+        >
+          <ng-container *ngIf="!rejetId"> Payer et soumettre </ng-container>
+          <ng-container *ngIf="rejetId"> Soumettre </ng-container>
+          <app-icon icon="arrow-right" />
+        </button>
+      </p>
+    </div>
+  </div>
+
+  <div class="demande-page" [class.d-block]="page === 'end'">
+    <div class="border rounded p-3 bg-gray fw-semibold">
+      <ng-container *ngIf="!rejetId">
+        Votre demande d'autorisation d'ouverture de l'établissement
+        d'enseignement de la conduite automobile et annexe :
+        <span class="text-secondary">{{ form.auto_ecole }}</span
+        >, a été envoyée avec succès et est en attente de validation par
+        l'ANaTT.
+        <hr />
+      </ng-container>
+
+      <ng-container *ngIf="rejetId">
+        <div class="text-center">
+          Votre correction a été soumise avec succès.
+        </div>
+      </ng-container>
+
+      <p class="mt-3 text-center">
+        <ng-container *ngIf="auth">
+          <a href="/dashboard" class="btn btn-primary"
+            >Aller au tableau de bord</a
+          >
+        </ng-container>
+
+        <ng-container *ngIf="!auth">
+          <a href="/connexion" class="btn btn-primary">Connectez-vous</a>
+        </ng-container>
+      </p>
+    </div>
+  </div>
+</ng-container>
+
+<div
+  class="modal fade"
+  id="ifu-otp-modal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">Confirmation d'IFU</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-small small">
+          Afin de confirmer que vous êtes le propriétaire de cet IFU, un code de
+          vérification à été envoyé à votre numéro de téléphone {{ hasPhone }}.
+        </p>
+        <div class="mt-3">
+          <input
+            type="number"
+            class="form-control"
+            name="ifuOtp"
+            id="ifuOtp"
+            placeholder="Taper le code à 6 chiffres"
+            [(ngModel)]="ifuOtp"
+          />
+        </div>
+        <p class="small mt-2">
+          Vous n'avez pas reçu ?
+          <a type="button" (click)="resendIfuCode()" class="small">
+            Renvoyer le code</a
+          >
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          [disabled]="!isValidIfuOtp()"
+          class="btn btn-primary"
+          (click)="onOkIfuOtp()"
+        >
+          Confirmer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

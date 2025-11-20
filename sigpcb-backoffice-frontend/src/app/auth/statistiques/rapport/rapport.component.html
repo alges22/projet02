@@ -1,0 +1,490 @@
+<div class="m-2">
+  <div class="dropdown">
+    <button
+      class="btn btn-primary"
+      type="button"
+      id="triggerId"
+      data-bs-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <app-icon icon="download"></app-icon>
+      Exporter
+      <app-icon icon="chevron-down"></app-icon>
+    </button>
+    <div class="dropdown-menu" aria-labelledby="triggerId">
+      <a class="dropdown-item" role="button" (click)="downloadAsPdf()">PDF</a>
+      <a class="dropdown-item" role="button" (click)="downloadAsPdf('excel')"
+        >Excel</a
+      >
+      <a class="dropdown-item" role="button" (click)="downloadAsPdf('csv')"
+        >CSV</a
+      >
+    </div>
+  </div>
+
+  <div class="row align-items-center my-3">
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-6 col-md-4">
+          <div class="row filter-box">
+            <div class="col">
+              <label for="">Année</label>
+              <year [year]="year" (_change)="selectYear($event)" />
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4">
+          <div class="row filter-box">
+            <div class="col">
+              <label for="">Session</label>
+              <select
+                class="form-select"
+                name="examen_id"
+                [(ngModel)]="filters.examen_id"
+                (change)="selectSession($event.target)"
+              >
+                <option [value]="null">
+                  <ng-container *ngIf="agendas.length">
+                    Toutes les sessions ...</ng-container
+                  >
+                  <ng-container *ngIf="!agendas.length">
+                    Aucune session</ng-container
+                  >
+                </option>
+                <option [value]="session.id" *ngFor="let session of agendas">
+                  Session du {{ session.session_long }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4">
+          <div class="row filter-box">
+            <div class="col">
+              <label for="">Annexe</label>
+              <select
+                class="form-select"
+                name="annexe_id"
+                [(ngModel)]="filters.annexe_id"
+                (change)="selectAnnexe($event.target)"
+              >
+                <option [value]="null">Toutes les annexes</option>
+                <option [value]="ann.id" *ngFor="let ann of annexes">
+                  {{ ann.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 text-end">
+      <div class="dropdown mt-3" *ngIf="session">
+        <button
+          class="btn btn-primary"
+          type="button"
+          id="rapport-drop"
+          data-bs-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          {{ rapport }}
+          <app-icon icon="chevron-down"></app-icon>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="rapport-drop">
+          <a
+            class="dropdown-item"
+            role="button"
+            (click)="selectRapport('Rapport syntéthique')"
+            >Rapport Synthétique</a
+          >
+          <a
+            class="dropdown-item"
+            role="button"
+            (click)="selectRapport('Rapport d\'activité')"
+            >Rapport d'activité</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="agendas.length">
+    <ng-container>
+      <!---------------
+        -
+        -
+        Rapport synthétique
+        -
+        -
+      --------------->
+      <ng-container *ngIf="rapport == 'Rapport syntéthique'">
+        <ng-container *ngIf="stat">
+          <div
+            class="p-3 border-primary mt-3 bg-body"
+            style="border: 1px solid var(--bs-primary); border-left-width: 3px"
+          >
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="">
+                <div class="mb-2">
+                  <span class="fw-semibold">Rapport syntéthique</span>
+                </div>
+                <div class="mb-2">
+                  <span class="fw-semibold">Année</span>
+                  {{ year }}
+                </div>
+                <div class="mb-2">
+                  <span class="fw-semibold">Session</span> :
+                  {{ session?.session_long ?? "Toutes les sessions" }}
+                </div>
+                <div class="mb-2">
+                  <span class="fw-semibold">Annexe </span>
+                  : {{ !!annexe ? annexe.name : "Toutes les annexes" }}
+                </div>
+                <div class="">
+                  <span class="fw-semibold">Candidats présentés </span>
+                  : {{ stat.total | padding }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="my-5 text-uppercase">
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <tr class="bg-primary">
+                    <td
+                      colspan="20"
+                      class="text-white fw-bold text-center fs-4"
+                    >
+                      STATISTIQUES DE SESSION
+                    </td>
+                  </tr>
+                  <tr
+                    class="bg-body text-primary"
+                    align="middle"
+                    style="vertical-align: middle"
+                  >
+                    <td colspan="1" class="bb-0">
+                      <div class="vb">Candidats</div>
+                    </td>
+                    <td [attr.colspan]="stat.langues.length">Langues</td>
+                    <td colspan="2">Sexe</td>
+                    <td colspan="1" class="bb-0">
+                      <div class="vb">Total</div>
+                    </td>
+                    <td colspan="1" class="bb-0">
+                      <div class="vb">
+                        Pourcentage <br />
+                        (%)
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="bg-body">
+                    <td class="bt-0"></td>
+                    <td *ngFor="let lg of stat.langues">
+                      <div class="diagonal-text">
+                        {{ lg.name }}
+                      </div>
+                    </td>
+                    <td>M</td>
+                    <td>F</td>
+                    <td class="bt-0"></td>
+                    <td class="bt-0"></td>
+                  </tr>
+                  <tr *ngFor="let item of stat.data">
+                    <td class="py-3">
+                      {{ item.name }}
+                    </td>
+                    <td class="py-3" *ngFor="let slg of item.langues">
+                      {{ slg.count | padding : 2 }}
+                    </td>
+                    <td class="py-3" *ngFor="let sexe of item.sexes">
+                      {{ sexe.count | padding : 2 }}
+                    </td>
+                    <td class="py-3">{{ item.total | padding : 2 }}</td>
+                    <td class="py-3">
+                      {{ item.percent | padding : 2 }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!stat">
+          <div class="alert text-center alert-primary" role="alert">
+            <p>Aucun rapport prêt</p>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <!---------------
+        -
+        -
+        Rapport d'actvités
+        -
+        -
+      --------------->
+
+      <ng-container *ngIf="rapport == 'Rapport d\'activité'">
+        <ng-container *ngIf="rpActivities">
+          <div
+            class="p-3 border-primary mt-3 bg-body"
+            style="border: 1px solid var(--bs-primary); border-left-width: 3px"
+          >
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="">
+                <div class="mb-2">
+                  <span class="fw-semibold">Rapport d'activité</span>
+                </div>
+                <div class="mb-2">
+                  <span class="fw-semibold">Année </span> :
+                  {{ year }}
+                </div>
+                <div class="mb-2">
+                  <span class="fw-semibold">Session </span> :
+                  {{ session?.session_long || "Toutes les sessions" }}
+                </div>
+                <div class="mb-2">
+                  <span class="fw-semibold">Annexe </span>
+                  : {{ !!annexe ? annexe.name : "Toutes les annexes" }}
+                </div>
+                <div class="">
+                  <span class="fw-semibold">Candidats présentés </span>
+                  : {{ rpActivities.total | padding }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="my-5 text-uppercase">
+            <div class="col-sm-5 col-md-4 mb-3 ms-auto">
+              <select class="form-select" name="rptype" [(ngModel)]="rptype">
+                <option [value]="'codes'" selected>
+                  {{ "Epreuve du code" | uppercase }}
+                </option>
+                <option [value]="'conduites'">
+                  {{ "Epreuve de la conduite" | uppercase }}
+                </option>
+              </select>
+            </div>
+            <ng-container *ngIf="rptype == 'codes'">
+              <div class="table-responsive">
+                <table class="table">
+                  <tbody>
+                    <tr class="bg-primary">
+                      <td
+                        colspan="20"
+                        class="text-white fw-bold text-center fs-4"
+                      >
+                        STATISTIQUES épreuve du code
+                      </td>
+                    </tr>
+                    <tr
+                      class="bg-body text-primary"
+                      align="middle"
+                      style="vertical-align: middle"
+                    >
+                      <td colspan="" class="bb-0">
+                        <div class="vb">Rubriques</div>
+                      </td>
+
+                      <td colspan="2">Inscrits</td>
+                      <td colspan="2">Présents</td>
+                      <td colspan="2">Absents</td>
+                      <td colspan="2">Admis</td>
+                      <td colspan="2">échec</td>
+
+                      <td colspan="1" class="bb-0">
+                        <div class="vb">Total admis</div>
+                      </td>
+                    </tr>
+
+                    <tr class="bg-body">
+                      <td class="bt-0"></td>
+                      <td>H</td>
+                      <td>F</td>
+                      <td>H</td>
+                      <td>F</td>
+                      <td>H</td>
+                      <td>F</td>
+                      <td>H</td>
+                      <td>F</td>
+                      <td>H</td>
+                      <td>F</td>
+                      <td class="bt-0"></td>
+                    </tr>
+
+                    <tr *ngFor="let rpa of rpActivities.codes.list">
+                      <td>{{ rpa.categorie_permis.name }}</td>
+                      <td>{{ rpa.inscrits[0] }}</td>
+                      <td>{{ rpa.inscrits[1] }}</td>
+                      <td>{{ rpa.presents[0] }}</td>
+                      <td>{{ rpa.presents[1] }}</td>
+                      <td>{{ rpa.abscents[0] }}</td>
+                      <td>{{ rpa.abscents[1] }}</td>
+                      <td>{{ rpa.admis[0] }}</td>
+                      <td>{{ rpa.admis[1] }}</td>
+                      <td>{{ rpa.echoues[0] }}</td>
+                      <td>{{ rpa.echoues[1] }}</td>
+                      <td>{{ rpa.admis_total }}</td>
+                    </tr>
+
+                    <tr>
+                      <td>Total général</td>
+                      <td colspan="2">
+                        {{ rpActivities.codes.total | padding : 2 }}
+                      </td>
+                      <td colspan="2">
+                        {{ rpActivities.codes.total_presents | padding : 2 }}
+                      </td>
+                      <td colspan="2">
+                        {{ rpActivities.codes.total_abscent | padding : 2 }}
+                      </td>
+                      <td colspan="2">
+                        {{ rpActivities.codes.total_admis | padding : 2 }}
+                      </td>
+                      <td colspan="2">
+                        {{ rpActivities.codes.total_echoues | padding : 2 }}
+                      </td>
+                      <td>{{ rpActivities.codes.percent }}%</td>
+                    </tr>
+                    <tr class="percent-bg">
+                      <td colspan="20" class="text-start">
+                        Taux de participation à l'examen (Total présents/Total
+                        inscrits) : {{ rpActivities.codes.presence }}%
+                      </td>
+                    </tr>
+                    <tr class="percent-bg">
+                      <td colspan="20" class="text-start">
+                        Taux de réussite (Total réussis /Total présents) :
+                        {{ rpActivities.codes.percent }}%
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="rptype == 'conduites'">
+              <div class="table-responsive">
+                <table class="table">
+                  <tbody>
+                    <tr class="bg-primary">
+                      <td
+                        colspan="20"
+                        class="text-white fw-bold text-center fs-4"
+                      >
+                        STATISTIQUES épreuve de conduite
+                      </td>
+                    </tr>
+                    <tr
+                      class="bg-body text-primary"
+                      align="middle"
+                      style="vertical-align: middle"
+                    >
+                      <td colspan="" class="bb-0">
+                        <div class="vb">Rubriques</div>
+                      </td>
+
+                      <td colspan="2">Inscrits</td>
+                      <td colspan="2">Présents</td>
+                      <td colspan="2">Absents</td>
+                      <td colspan="2">Admis</td>
+                      <td colspan="2">échec</td>
+
+                      <td colspan="1" class="bb-0">
+                        <div class="vb">Total admis</div>
+                      </td>
+                    </tr>
+
+                    <tr class="bg-body">
+                      <td class="bt-0"></td>
+                      <td>H</td>
+                      <td>F</td>
+                      <td>H</td>
+                      <td>F</td>
+                      <td>H</td>
+                      <td>F</td>
+                      <td>H</td>
+                      <td>F</td>
+                      <td>H</td>
+                      <td>F</td>
+                      <td class="bt-0"></td>
+                    </tr>
+
+                    <tr *ngFor="let rpa of rpActivities.conduites.list">
+                      <td>{{ rpa.categorie_permis.name }}</td>
+                      <td>{{ rpa.inscrits[0] }}</td>
+                      <td>{{ rpa.inscrits[1] }}</td>
+                      <td>{{ rpa.presents[0] }}</td>
+                      <td>{{ rpa.presents[1] }}</td>
+                      <td>{{ rpa.abscents[0] }}</td>
+                      <td>{{ rpa.abscents[1] }}</td>
+                      <td>{{ rpa.admis[0] }}</td>
+                      <td>{{ rpa.admis[1] }}</td>
+                      <td>{{ rpa.echoues[0] }}</td>
+                      <td>{{ rpa.echoues[1] }}</td>
+                      <td>{{ rpa.admis_total }}</td>
+                    </tr>
+
+                    <tr>
+                      <td>Total général</td>
+                      <td colspan="2">
+                        {{ rpActivities.conduites.total | padding : 2 }}
+                      </td>
+                      <td colspan="2">
+                        {{
+                          rpActivities.conduites.total_presents | padding : 2
+                        }}
+                      </td>
+                      <td colspan="2">
+                        {{ rpActivities.conduites.total_abscent | padding : 2 }}
+                      </td>
+                      <td colspan="2">
+                        {{ rpActivities.conduites.total_admis | padding : 2 }}
+                      </td>
+                      <td colspan="2">
+                        {{ rpActivities.conduites.total_echoues | padding : 2 }}
+                      </td>
+                      <td>{{ rpActivities.conduites.percent }}%</td>
+                    </tr>
+                    <tr class="percent-bg">
+                      <td colspan="20" class="text-start">
+                        Taux de participation à l'examen (Total présents/Total
+                        inscrits) : {{ rpActivities.conduites.presence }}%
+                      </td>
+                    </tr>
+                    <tr class="percent-bg">
+                      <td colspan="20" class="text-start">
+                        Taux de réussite (Total réussis /Total présents) :
+                        {{ rpActivities.conduites.percent }}%
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!stat">
+          <div class="alert text-center alert-primary" role="alert">
+            <p>Aucun rapport prêt</p>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="!agendas.length">
+    <div class="alert text-center alert-primary" role="alert">
+      <p class="fw-semibold">Aucune session disponible</p>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,25 @@
+<div class="bg-modal p-3 py-4 rounded shadow-sm" *ngIf="entreprise">
+  <div class="border p-1 rounded-3 pb-2">
+    <div class="d-flex">
+      <div class="d-flex flex-column justify-content-between ms-2">
+        <h5
+          class="pt-2"
+          style="color: #313131; font-size: 22px; font-weight: 600"
+        >
+          {{ entreprise.name }}
+        </h5>
+        <p class="pb-2" style="color: #575656; font-size: 14px">
+          Téléphone : {{ entreprise.phone }}
+        </p>
+        <p class="pb-2" style="color: #575656; font-size: 14px">
+          E-mail : {{ entreprise.email }}
+        </p>
+        <p>
+          <button class="btn btn-outline-primary" (click)="edit()">
+            Modifier
+          </button>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

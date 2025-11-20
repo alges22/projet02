@@ -1,0 +1,745 @@
+<div class="bg-modal p-3 py-4 rounded shadow-sm" *ngIf="data && autoecole">
+  <div class="border p-1 rounded-3">
+    <h5 class="pt-2" style="color: #313131; font-size: 22px; font-weight: 600">
+      {{ autoecole.name }}
+    </h5>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <div class="mb-3">
+            <div class="fw-semibold h6">IFU</div>
+            {{ autoecole?.num_ifu }}
+          </div>
+          <!-- <div class="mb-3">
+            <div class="fw-semibold h6">Entreprise</div>
+            {{ autoecole?.entreprise }}
+          </div> -->
+        </div>
+        <div class="col">
+          <div class="mb-3">
+            <div class="fw-semibold h6">Département</div>
+            {{ autoecole?.departement?.name }}
+          </div>
+        </div>
+        <div class="col">
+          <div class="mb-3">
+            <div class="fw-semibold h6">Commune</div>
+            {{ autoecole?.commune?.name }}
+          </div>
+        </div>
+        <div class="col">
+          <div class="mb-3">
+            <div class="fw-semibold h6">Adresse</div>
+            {{ autoecole?.adresse }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="mb-3">
+            <div class="fw-semibold h6">N° de téléphone professionnel</div>
+            {{ autoecole?.phone }}
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="mb-3">
+            <div class="fw-semibold h6">Email professionnel</div>
+            {{ autoecole?.email }}
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="mb-3">
+            <div class="fw-semibold h6">Code d'agrément</div>
+            {{ autoecole?.agrement?.code }}
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="mb-3">
+            <div class="fw-semibold h6">Code de licence</div>
+            {{ autoecole?.licences?.[0].code }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      class="btn btn-outline-primary"
+      (click)="updateAutoEcole(autoecole)"
+    >
+      Modifier
+    </button>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-5">
+      <h5 class="my-3">Promoteur</h5>
+      <div class="card bg-transparent border">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                {{ autoecole.promoteur_info?.nom }}
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                {{ autoecole.promoteur_info?.prenoms }}
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                {{ autoecole.promoteur_info?.telephone }}
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <app-icon
+                  icon="pencil"
+                  (click)="
+                    showMP('promoteur', autoecole.id, autoecole?.promoteur)
+                  "
+                ></app-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <h5 class="my-3">Moniteurs</h5>
+      <div class="card bg-transparent border">
+        <div class="card-body">
+          <div
+            class="row"
+            *ngFor="let moniteur of autoecole?.moniteurs; let i = index"
+          >
+            <div class="col">
+              <div class="mb-3">
+                {{
+                  findMoniteurByNPI(moniteur.npi, autoecole?.moniteurs_info)
+                    ?.nom
+                }}
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                {{
+                  findMoniteurByNPI(moniteur.npi, autoecole?.moniteurs_info)
+                    ?.prenoms
+                }}
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                {{
+                  findMoniteurByNPI(moniteur.npi, autoecole?.moniteurs_info)
+                    ?.telephone
+                }}
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <app-icon
+                  icon="pencil"
+                  (click)="showMP('moniteur', autoecole.id, moniteur)"
+                ></app-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-2">
+      <h5 class="my-3">Véhicules</h5>
+      <div class="card bg-transparent border">
+        <div class="card-body">
+          <div
+            class="row"
+            *ngFor="let vehicule of autoecole?.vehicules; let i = index"
+          >
+            <div class="col">
+              <div class="mb-3">
+                {{ vehicule.immatriculation }}
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <app-icon
+                  icon="pencil"
+                  (click)="showVehicule(autoecole.id, vehicule)"
+                ></app-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h5 class="my-3">Les fiches jointes</h5>
+      <div class="card bg-transparent border">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">
+                  Copie des diplômes des moniteurs
+                </div>
+                <div
+                  *ngIf="autoecole?.fiche?.diplome_moniteur"
+                  class="prev-eye col-md-9 col-xl-7"
+                  (click)="openSuiviModal(autoecole?.fiche?.diplome_moniteur)"
+                >
+                  <div class="overlay"></div>
+                  <app-icon icon="eye"></app-icon>
+                  <img
+                    [src]="assets(autoecole?.fiche?.diplome_moniteur)"
+                    alt="Aperçu de l'image"
+                    class="img-fluid"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">Copie des permis des moniteurs</div>
+                <div
+                  *ngIf="autoecole?.fiche?.permis_moniteurs"
+                  class="prev-eye col-md-9 col-xl-7"
+                  (click)="openSuiviModal(autoecole?.fiche?.permis_moniteurs)"
+                >
+                  <div class="overlay"></div>
+                  <app-icon icon="eye"></app-icon>
+                  <img
+                    [src]="assets(autoecole?.fiche?.permis_moniteurs)"
+                    alt="Aperçu de l'image"
+                    class="img-fluid"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">
+                  Copie de la carte grise du ou des véhicules
+                </div>
+                <a
+                  *ngIf="autoecole?.fiche?.carte_grise"
+                  [href]="assets(autoecole?.fiche?.carte_grise)"
+                  target="_blank"
+                  style="color: black"
+                >
+                  <div class="prev-eye col-md-9 col-xl-7 text-center">
+                    <div class="overlay"></div>
+                    <app-icon icon="eye"></app-icon>
+                    <img
+                      src="assets/images/pdf.png"
+                      style="width: 150px; height: 70px"
+                      alt="Aperçu de l'image"
+                      class="img-fluid"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">Photo du ou des véhicule(s)</div>
+                <div
+                  *ngIf="autoecole?.fiche?.photo_vehicules"
+                  class="prev-eye col-md-9 col-xl-7"
+                  (click)="openSuiviModal(autoecole?.fiche?.photo_vehicules)"
+                >
+                  <div class="overlay"></div>
+                  <app-icon icon="eye"></app-icon>
+                  <img
+                    [src]="assets(autoecole?.fiche?.photo_vehicules)"
+                    alt="Aperçu de l'image"
+                    class="img-fluid"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="mb-3">
+                <div class="fw-semibold h6">
+                  Copie de l'attestation d'assurance et des visites technique en
+                  cours de validité
+                </div>
+                <a
+                  *ngIf="autoecole?.fiche?.assurance_visite"
+                  [href]="assets(autoecole?.fiche?.assurance_visite)"
+                  target="_blank"
+                  style="color: black"
+                >
+                  <div class="prev-eye col-md-9 col-xl-7 text-center">
+                    <div class="overlay"></div>
+                    <app-icon icon="eye"></app-icon>
+                    <img
+                      src="assets/images/pdf.png"
+                      style="width: 150px; height: 70px"
+                      alt="Aperçu de l'image"
+                      class="img-fluid"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="mt-3" *ngIf="page == 'pending'">
+                <button class="btn btn-primary" (click)="onValidate()">
+                  Valider et passer au suivant
+                </button>
+                <button class="btn btn-danger ms-2" (click)="onRejected()">
+                  Rejeter le dossier
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  [id]="'suivi-' + data.id"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content rounded-3">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <img [src]="assets(previewUrl)" class="w-block img-fluid mx-auto" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal [action]="modalEditId" size="modal-lg">
+  <div heading class="fw-semibold text-primary text-center">
+    {{ auto_ecole_formulaire }}
+  </div>
+  <form action="" quickv id="langue-form">
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Nom de l'auto-école</div>
+              <div class="col-6 text-end">
+                <span info="Le nom de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="Le nom est requis"
+              required
+              type="text"
+              name="name"
+              class="form-control"
+              [(ngModel)]="autoecole.name"
+            />
+          </div>
+          <div qv-feedback="name"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">IFU</div>
+              <div class="col-6 text-end">
+                <span info="L'IFU de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              data-qv-rules="size:12"
+              qv-messages="L'IFU est requis"
+              required
+              type="text"
+              name="num_ifu"
+              class="form-control"
+              [(ngModel)]="autoecole.num_ifu"
+            />
+          </div>
+          <div qv-feedback="num_ifu"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Téléphone professionel</div>
+              <div class="col-6 text-end">
+                <span info="Le téléphone de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="Le téléphone est requis"
+              required
+              type="text"
+              name="phone"
+              class="form-control"
+              [(ngModel)]="autoecole.phone"
+            />
+          </div>
+          <div qv-feedback="phone"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Email professionel</div>
+              <div class="col-6 text-end">
+                <span info="L'email professionel de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required|email"
+              qv-messages="L'email professionel est requis"
+              required
+              type="email"
+              name="email"
+              class="form-control"
+              [(ngModel)]="autoecole.email"
+            />
+          </div>
+          <div qv-feedback="email"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Adresse</div>
+              <div class="col-6 text-end">
+                <span info="L'adresse de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="L'adresse est requise"
+              required
+              type="text"
+              name="adresse"
+              class="form-control"
+              [(ngModel)]="autoecole.adresse"
+            />
+          </div>
+          <div qv-feedback="adresse"></div>
+        </div>
+      </div>
+      <!-- <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Véhicules de l'auto-école</div>
+              <div class="col-6 text-end">
+                <span info="Les immatriculations des véhicules séparées par des virgules">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input qv-rules="required" qv-messages="Immatriculation requise" required type="text" name="vehicules"
+              class="form-control" [(ngModel)]="autoecole.vehicules" />
+          </div>
+          <div qv-feedback="vehicules"></div>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <label class="col-6 required" for="departement_id"
+                >Département</label
+              >
+              <div class="col-6 text-end">
+                <span builbe info="Sélectionner un département">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="mb-3">
+            <select
+              class="form-select"
+              name="departement_id"
+              data-qv-rules="min:1"
+              data-qv-messages="Le département est requis"
+              [(ngModel)]="autoecole.departement_id"
+              (change)="selectDep()"
+            >
+              <option value="" disabled selected>
+                Sélectionner un département
+              </option>
+              <option
+                [value]="departement.id"
+                *ngFor="let departement of departements"
+              >
+                {{ departement.name }}
+              </option>
+            </select>
+          </div>
+          <div data-qv-feedback="departement_id"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <label class="col-6 required" for="commune_id">Commune</label>
+              <div class="col-6 text-end">
+                <span builbe info="Sélectionner une commune">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="mb-3">
+            <select
+              class="form-select"
+              name="commune_id"
+              data-qv-rules="min:1"
+              data-qv-messages="La commune est requise"
+              [(ngModel)]="autoecole.commune_id"
+            >
+              <option value="" disabled selected>
+                Sélectionner une commune
+              </option>
+              <option [value]="commune.id" *ngFor="let commune of communes">
+                {{ commune.name }}
+              </option>
+            </select>
+          </div>
+          <div data-qv-feedback="commune_id"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <label class="col-6 required" for="type">Type</label>
+              <div class="col-6 text-end">
+                <span builbe info="Sélectionner le type">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="mb-3">
+            <select
+              class="form-select"
+              name="type"
+              data-qv-rules="min:1"
+              data-qv-messages="Le type est requis"
+              [(ngModel)]="autoecole.type"
+            >
+              <option value="" disabled selected>Sélectionner le type</option>
+              <option value="civil">Civil</option>
+              <option value="militaire">Militaire</option>
+            </select>
+          </div>
+          <div data-qv-feedback="type"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <br />
+        <div class="mb-4 mt-2">
+          <p>
+            <button
+              class="btn btn-primary w-100"
+              qv-submit
+              (click)="saveAutoEcole($event)"
+              [disabled]="onLoadingAutoSave"
+            >
+              Enregistrer
+              <span *ngIf="onLoadingAutoSave">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Loading...</span>
+              </span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </form>
+</app-modal>
+
+<!-- Moniteurs & Promoteur -->
+<app-modal [action]="modalEditMPId">
+  <div heading class="fw-semibold text-primary text-center">
+    {{ mp_formulaire }}
+  </div>
+  <form action="" quickv id="moniteurs-form">
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">NPI</div>
+              <div class="col-6 text-end">
+                <span info="Le npi du moniteur">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="NPI requis"
+              required
+              type="text"
+              name="moniteur"
+              class="form-control"
+              [(ngModel)]="npi"
+            />
+          </div>
+          <div qv-feedback="moniteur"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <p>
+        <button
+          class="btn btn-primary w-100"
+          qv-submit
+          (click)="saveMP($event)"
+          [disabled]="onLoadingMPSave"
+        >
+          Enregistrer
+          <span *ngIf="onLoadingMPSave">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+      </p>
+    </div>
+  </form>
+</app-modal>
+
+<!-- Vehicule -->
+<app-modal [action]="modalEditVehiculeId">
+  <div heading class="fw-semibold text-primary text-center">
+    {{ vehicule_formulaire }}
+  </div>
+  <form action="" quickv id="immatriculations-form">
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Immatriculation</div>
+              <div class="col-6 text-end">
+                <span info="L'immatriculation du véhicule">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="Immatriculation requise"
+              required
+              type="text"
+              name="immatriculation"
+              class="form-control"
+              [(ngModel)]="immatriculation"
+            />
+          </div>
+          <div qv-feedback="immatriculation"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <p>
+        <button
+          class="btn btn-primary w-100"
+          qv-submit
+          (click)="saveVehicue($event)"
+          [disabled]="onLoadingVehiculeSave"
+        >
+          Enregistrer
+          <span *ngIf="onLoadingVehiculeSave">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+      </p>
+    </div>
+  </form>
+</app-modal>

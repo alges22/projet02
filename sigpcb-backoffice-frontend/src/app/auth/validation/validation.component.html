@@ -1,0 +1,42 @@
+<div class="m-2">
+  <tab>
+    <tab-header>
+      <button
+        class="btn btn-tab col-6 col-md-3"
+        routerLink="/validations/justifs-recus"
+        routerLinkActive="active"
+      >
+        <span class="btn-tab-text">
+          <app-icon icon="person-add" classe="text-dark"></app-icon>
+          Justificatifs reçus
+        </span>
+        <span class="btn-tab-count ms-auto">
+          {{ counts["init_justif_count"] | padding }}
+        </span>
+      </button>
+      <button
+        class="btn btn-tab col-6 col-md-3"
+        routerLink="/validations/justifs-rejetes"
+        routerLinkActive="active"
+      >
+        <span class="btn-tab-text"> Justificatifs rejetés </span>
+        <span class="btn-tab-count ms-2">
+          {{ counts["rejet_justif_count"] | padding }}
+        </span>
+      </button>
+      <button
+        class="btn btn-tab col-6 col-md-3"
+        routerLink="/validations/justifs-valides"
+        routerLinkActive="active"
+      >
+        <span class="btn-tab-text"> Justificatifs validés </span>
+        <span class="btn-tab-count ms-2">
+          {{ counts["validate_justif_count"] | padding }}
+        </span>
+      </button>
+    </tab-header>
+    <tab-body>
+      <router-outlet></router-outlet>
+    </tab-body>
+  </tab>
+</div>

@@ -1,0 +1,99 @@
+<div class="m-2">
+  <div class="d-flex justify-content-between align-items-center mt-3">
+    <button class="btn btn-refresh" (click)="refresh()">
+      <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+      <span class="text-muted" style="font-size: 10px">Actualiser</span>
+    </button>
+    <!-- <button type="button" class="btn btn-primary">
+      Exporter
+    </button> -->
+  </div>
+
+  <div class="row p-2 ">
+    <div class="col-lg-12 justify-content-between align-items-center">
+      <div class="row filter-box">
+        <div class="col">
+          <select class="form-select" name="anneeSelected" (change)="selectAnnee(filters.anneeSelected)" [(ngModel)]="filters.anneeSelected">
+            <option [value]="null">Toutes les années</option>
+            <option [value]="item.annee" *ngFor="let item of annees">
+                      {{ item.annee }}
+                    </option>
+          </select>
+        </div>
+        <div class="col">
+          <select class="form-select" name="sessionSelected" [(ngModel)]="filters.sessionSelected">
+            <option [value]="null">Toutes les sessions</option>
+            <option [value]="ex.id" *ngFor="let ex of examens">
+              {{ ex.numero == 2 ? "2ème" : ex.numero == 1 ? "1ère" : "" }}
+              session de {{ ex.mois }}
+            </option>
+          </select>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-primary" (click)="getReporting()">
+            Rechercher
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr class="bg-table-primary">
+          <th scope="col">Date de la transaction</th>
+          <th scope="col">Nom et prénoms du client</th>
+          <th scope="col" class="text-center">Téléphone</th>
+          <th scope="col">Nature de la demande</th>
+          <th scope="col" class="text-center">Méthode de paiement</th>
+          <th scope="col" class="text-center">Montant</th>
+          <th scope="col" class="text-center">Statut de la transaction</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="onLoadReporting">
+        <tr>
+          <td colspan="12" class="py-3 text-center">
+            <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+              Chargement en cours
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngFor="let item of reporting ; let i = index">
+        <tr>
+          <td scope="row">
+            <small class="text-muted">{{ item.created_at | hdate : true }}</small>
+          </td>
+          <td>{{ item.candidat?.nom }} {{ item.candidat?.prenoms }}</td>
+          <td class="text-center">{{ item?.phone_payment }} </td>
+          <td>{{ item?.description }} </td>
+          <td class="text-center">
+            <span *ngIf="item.mode=='mtn'">MTN money</span>
+            <span *ngIf="item.mode=='moov'">Moov money</span>
+            <span *ngIf="item.mode=='celtiis'">Celtiis cash</span>
+          </td>
+          <td class="text-center">{{ item?.montant }} </td>
+          <td class="text-center">
+            <span *ngIf="item.status==='approved'" class="badge badge-primary">Effectué</span>
+          </td>
+
+
+      </tbody>
+      <tbody *ngIf="!onLoadReporting && !reporting.length">
+        <tr>
+          <td colspan="12" class="py-3 text-center">Aucun nouveau paiement</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="p-3" *ngIf="paginate_data">
+      <app-pagination *ngIf="paginate_data.total > 10" [total]="paginate_data.total" (pageChange)="paginate($event)"
+        [pageNumber]="pageNumber"></app-pagination>
+    </div>
+  </div>
+
+
+
+
+</div>

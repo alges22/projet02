@@ -1,0 +1,57 @@
+.service-card {
+  &:hover {
+    box-shadow: 10px 6px 4px rgba(1, 100, 188, 0.15);
+  }
+
+  border: 1px solid var(--bs-primary);
+  border-bottom-width: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 16px;
+  text-align: center;
+  height: 100%;
+
+  .service-title {
+    font-weight: 500;
+  }
+
+  .btn {
+    font-weight: 500;
+  }
+
+  .img-box {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .btn-more {
+    margin-bottom: .575em;
+    color: var(--bs-primary);
+
+    &:hover {
+      background-color: #B3D4EF;
+    }
+  }
+}
+
+.mobile-card {
+  height: 80px;
+  font-size: 14px;
+
+
+  img {
+    max-width: 60px;
+  }
+
+  .h-100 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow: hidden;
+    /* Empêche le texte de passer à la ligne */
+    text-overflow: ellipsis;
+    /* Ajoute des points de suspension */
+  }
+}

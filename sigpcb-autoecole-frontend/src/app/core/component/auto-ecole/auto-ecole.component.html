@@ -1,0 +1,31 @@
+<div class="dropdown me-1" *ngIf="aes.length > 1">
+  <button
+    class="btn dropdown-toggle"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+    *ngIf="ae"
+    [ngClass]="className"
+  >
+    {{ ae.name }}
+  </button>
+  <div class="dropdown-menu">
+    <ng-container *ngFor="let item of aes">
+      <a class="dropdown-item" role="button" (click)="onSelect(item.id)">
+        {{ item.name }}
+      </a>
+    </ng-container>
+  </div>
+</div>
+
+<ng-container *ngIf="aes.length == 1">
+  <button
+    class="btn btn-secondary w-100 text-white"
+    type="button"
+    *ngIf="ae"
+    [disabled]
+  >
+    {{ ae.name }}
+  </button>
+</ng-container>

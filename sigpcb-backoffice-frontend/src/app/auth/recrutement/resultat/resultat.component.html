@@ -1,0 +1,37 @@
+<div class="m-2">
+  <div class="card">
+    <div class="form-group">
+      <div class="col-sm-4">
+        <select class="form-select border-0 bg-transparent text-primary" name="annexe_anatt" id="annexes-anatt"
+          (change)="annexeSelected($event)">
+          <option selected [value]="0">Sélectionner une annexe</option>
+          <option [value]="item.id" *ngFor="let item of annexeAnatts">
+            {{ item.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <tab>
+      <tab-header>
+        <ng-container *ngFor="let tab of tabs">
+          <button class="btn btn-tab col-6 col-md-4" [routerLink]="tab.href" [class.active]="tab.active">
+            <span class="btn-tab-text">
+              <app-icon [icon]="tab.icon" classe="text-dark"></app-icon>
+              {{ tab.label }}
+            </span>
+            <ng-container *ngIf="
+                counts[tab.data] !== undefined && counts[tab.data] !== null
+              ">
+              <span class="btn-tab-count ms-auto">{{ counts[tab.data] | padding }}
+              </span>
+            </ng-container>
+          </button>
+        </ng-container>
+      </tab-header>
+
+      <tab-body>
+        <router-outlet></router-outlet>
+      </tab-body>
+    </tab>
+  </div>
+</div>

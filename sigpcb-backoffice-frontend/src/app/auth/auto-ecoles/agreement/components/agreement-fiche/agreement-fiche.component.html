@@ -1,0 +1,404 @@
+<div class="bg-modal p-3 py-4 rounded shadow-sm" *ngIf="data && agrement">
+  <div class="border p-1 rounded-3">
+    <h5 class="pt-2" style="color: #313131; font-size: 22px; font-weight: 600">
+      {{ agrement.auto_ecole }}
+    </h5>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <div class="mb-3">
+            <div class="fw-semibold h6">IFU</div>
+            {{ agrement.ifu }}
+          </div>
+          <!-- <div class="mb-3">
+            <div class="fw-semibold h6">Entreprise</div>
+            {{ agrement?.entreprise }}
+          </div> -->
+        </div>
+        <div class="col">
+          <div class="mb-3">
+            <div class="fw-semibold h6">Département</div>
+            {{ agrement?.departement.name }}
+          </div>
+        </div>
+        <div class="col">
+          <div class="mb-3">
+            <div class="fw-semibold h6">Commune</div>
+            {{ agrement?.commune.name }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="mb-3">
+            <div class="fw-semibold h6">N° de téléphone professionnel</div>
+            {{ agrement.telephone_pro }}
+          </div>
+        </div>
+        <div class="col">
+          <div class="mb-3">
+            <div class="fw-semibold h6">Email professionnel</div>
+            {{ agrement.email_pro }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-5">
+      <h5 class="my-3">Moniteurs</h5>
+      <div class="card bg-transparent border">
+        <div class="card-body">
+          <div
+            class="row"
+            *ngFor="let moniteur of agrement?.moniteurs_info; let i = index"
+          >
+            <div class="col">
+              <div class="mb-3">
+                {{ moniteur.nom }}
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                {{ moniteur.prenoms }}
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                {{ moniteur.telephone }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <h5 class="my-3">Véhicules</h5>
+      <div class="card bg-transparent border">
+        <div class="card-body">
+          <div class="row">
+            <div
+              class="col-6"
+              *ngFor="let imat of agrement?.vehicules; let i = index"
+            >
+              <div class="mb-3">
+                {{ imat.immatriculation }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h5 class="my-3">Les fiches jointes</h5>
+      <div class="card bg-transparent border">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">
+                  Certificat de nationalité de fondé
+                </div>
+                <div
+                  *ngIf="agrement.fiche?.nat_promoteur"
+                  class="prev-eye col-md-9 col-xl-7"
+                  (click)="openSuiviModal(agrement.fiche?.nat_promoteur)"
+                >
+                  <div class="overlay"></div>
+                  <app-icon icon="eye"></app-icon>
+                  <img
+                    [src]="assets(agrement.fiche?.nat_promoteur)"
+                    alt="Aperçu de l'image"
+                    class="img-fluid"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">Casier judiciaire</div>
+                <div
+                  *ngIf="agrement.fiche?.casier_promoteur"
+                  class="prev-eye col-md-9 col-xl-7"
+                  (click)="openSuiviModal(agrement.fiche?.casier_promoteur)"
+                >
+                  <div class="overlay"></div>
+                  <app-icon icon="eye"></app-icon>
+                  <img
+                    [src]="assets(agrement.fiche?.casier_promoteur)"
+                    alt="Aperçu de l'image"
+                    class="img-fluid"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">Copie des status</div>
+                <a
+                  *ngIf="agrement.fiche?.copie_statut"
+                  [href]="assets(agrement.fiche?.copie_statut)"
+                  target="_blank"
+                  style="color: black"
+                >
+                  <div class="prev-eye col-md-9 col-xl-7 text-center">
+                    <div class="overlay"></div>
+                    <app-icon icon="eye"></app-icon>
+                    <img
+                      src="assets/images/pdf.png"
+                      style="width: 150px; height: 70px"
+                      alt="Aperçu de l'image"
+                      class="img-fluid"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">Attestation RCCM</div>
+                <a
+                  *ngIf="agrement.fiche?.reg_commerce"
+                  [href]="assets(agrement.fiche?.reg_commerce)"
+                  target="_blank"
+                  style="color: black"
+                >
+                  <div class="prev-eye col-md-9 col-xl-7 text-center">
+                    <div class="overlay"></div>
+                    <app-icon icon="eye"></app-icon>
+                    <img
+                      src="assets/images/pdf.png"
+                      style="width: 150px; height: 70px"
+                      alt="Aperçu de l'image"
+                      class="img-fluid"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">
+                  Copie certifiée conforme des titres
+                </div>
+                <a
+                  *ngIf="agrement.fiche?.ref_promoteur"
+                  [href]="assets(agrement.fiche?.ref_promoteur)"
+                  target="_blank"
+                  style="color: black"
+                >
+                  <div class="prev-eye col-md-9 col-xl-7 text-center">
+                    <div class="overlay"></div>
+                    <app-icon icon="eye"></app-icon>
+                    <img
+                      src="assets/images/pdf.png"
+                      style="width: 150px; height: 70px"
+                      alt="Aperçu de l'image"
+                      class="img-fluid"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">Note descriptive des locaux</div>
+                <a
+                  *ngIf="agrement.fiche?.descriptive_locaux"
+                  [href]="assets(agrement.fiche?.descriptive_locaux)"
+                  target="_blank"
+                  style="color: black"
+                >
+                  <div class="prev-eye col-md-9 col-xl-7 text-center">
+                    <div class="overlay"></div>
+                    <app-icon icon="eye"></app-icon>
+                    <img
+                      src="assets/images/pdf.png"
+                      style="width: 150px; height: 70px"
+                      alt="Aperçu de l'image"
+                      class="img-fluid"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">Attestation fiscale valide</div>
+                <a
+                  *ngIf="agrement.fiche?.attest_fiscale"
+                  [href]="assets(agrement.fiche?.attest_fiscale)"
+                  target="_blank"
+                  style="color: black"
+                >
+                  <div class="prev-eye col-md-9 col-xl-7 text-center">
+                    <div class="overlay"></div>
+                    <app-icon icon="eye"></app-icon>
+                    <img
+                      src="assets/images/pdf.png"
+                      style="width: 150px; height: 70px"
+                      alt="Aperçu de l'image"
+                      class="img-fluid"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <div class="fw-semibold h6">Attestation CNSS</div>
+                <a
+                  *ngIf="agrement.fiche?.attest_reg_organismes"
+                  [href]="assets(agrement.fiche?.attest_reg_organismes)"
+                  target="_blank"
+                  style="color: black"
+                >
+                  <div class="prev-eye col-md-9 col-xl-7 text-center">
+                    <div class="overlay"></div>
+                    <app-icon icon="eye"></app-icon>
+                    <img
+                      src="assets/images/pdf.png"
+                      style="width: 150px; height: 70px"
+                      alt="Aperçu de l'image"
+                      class="img-fluid"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <div class="mb-3 border rounded p-3">
+                <div class="fw-semibold h6">
+                  Carte grise du ou des véhicules
+                </div>
+                <div class="row">
+                  <ng-container *ngFor="let file of agrement.fiche.carte_grise">
+                    <div class="col-4">
+                      <a
+                        [href]="assets(file)"
+                        target="_blank"
+                        style="color: black"
+                      >
+                        <div class="prev-eye text-center">
+                          <div class="overlay"></div>
+                          <app-icon icon="eye"></app-icon>
+                          <div style="height: 70px; width: 100%"></div>
+                        </div>
+                      </a>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3 border rounded p-3">
+                <div class="fw-semibold h6">
+                  Assurance visite du ou des véhicules
+                </div>
+                <div class="row">
+                  <ng-container
+                    *ngFor="let file of agrement.fiche.assurance_visite"
+                  >
+                    <div class="col-4">
+                      <a
+                        [href]="assets(file)"
+                        target="_blank"
+                        style="color: black"
+                      >
+                        <div class="prev-eye text-center">
+                          <div class="overlay"></div>
+                          <app-icon icon="eye"></app-icon>
+                          <div style="height: 70px; width: 100%"></div>
+                        </div>
+                      </a>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3 border rounded p-3">
+                <div class="fw-semibold h6">Photos du ou des véhicules</div>
+                <div class="row">
+                  <ng-container
+                    *ngFor="let file of agrement.fiche.photo_vehicules"
+                  >
+                    <div class="col-4">
+                      <a
+                        [href]="assets(file)"
+                        target="_blank"
+                        style="color: black"
+                      >
+                        <div class="prev-eye text-center">
+                          <div class="overlay"></div>
+                          <app-icon icon="eye"></app-icon>
+                          <img
+                            [src]="assets(file)"
+                            style="width: 150px; height: 70px"
+                            alt="Aperçu de l'image"
+                            class="img-fluid"
+                          />
+                        </div>
+                      </a>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="mt-3" *ngIf="page == 'pending'">
+                <button class="btn btn-primary" (click)="onValidate()">
+                  Valider
+                </button>
+                <button class="btn btn-danger ms-2" (click)="onRejected()">
+                  Rejeter le dossier
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  [id]="'suivi-' + data.id"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content rounded-3">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <img [src]="assets(previewUrl)" class="w-block img-fluid mx-auto" />
+      </div>
+    </div>
+  </div>
+</div>

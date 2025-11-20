@@ -1,0 +1,44 @@
+<div>
+  <div class="row" *ngIf="programmation.month">
+    <div class="col-8">
+      <h6>
+        Agenda de l’examen du permis de conduire :
+        <span class="text-secondary">
+          Session de {{ programmation.month }} {{ programmation.annee }}</span
+        >
+      </h6>
+    </div>
+    <div class="col text-end">
+      <a routerLink="/gestions/agenda" class="text-secondary"
+        >Voir l’agenda de l’année <app-icon icon="arrow-right"></app-icon>
+      </a>
+    </div>
+    <div class="col-12">
+      <h6 class="my-" style="text-transform: capitalize">
+        {{ programmation.month }}
+      </h6>
+      <div class="row">
+        <div class="col-sm">
+          <div style="padding-top: 4.5em" class="px-2 pb-3 rounded-2 bg-body">
+            <div class="row">
+              <div class="col-md-10">
+                <app-calendar-pogress
+                  [programation]="programmation.programation"
+                ></app-calendar-pogress>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <app-candidat-formation [paginate]="false"></app-candidat-formation>
+    </div>
+    <div class="col-md-6">
+      <app-statut-validation [paginate]="false"></app-statut-validation>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<router-outlet></router-outlet>
+<app-modal [action]="modalId" size="modal-md">
+  <div heading class="fw-semibold text-primary text-center">
+    {{ role_formulaire }}
+  </div>
+  <form action="" quickv id="admin-roles-form">
+    <div class="mb-4">
+      <label for="nom_complet" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-6 required">Nom</div>
+          <div class="col-6 text-end">
+            <span info="Le role de l'agent">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input
+          qv-rules="required|startWithLetter|maxlength:100"
+          required
+          type="text"
+          name="nom_complet"
+          qv-name="nom"
+          class="form-control"
+          [(ngModel)]="role.nom_complet"
+        />
+      </div>
+      <div qv-feedback="nom_complet"></div>
+    </div>
+
+    <div class="mb-4">
+      <label for="" class="mb-2 fw-semibold d-block text-primary"
+        >Permissions</label
+      >
+      <div class="mb-4" *ngFor="let permission of permissions">
+        <strong>{{ permission.onglet }}</strong>
+        <div class="" *ngFor="let permission of permission.permissions">
+          <div class="d-flex justify-content-between">
+            <label for="permission-{{ permission.id }}" class="me-2">{{
+              permission.nom_complet
+            }}</label>
+            <div class="form-check form-switch mb-0">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="permission-{{ permission.id }}"
+                name="permission"
+                [checked]="isPermided(permission.id)"
+                (change)="updateRolePermission($event, permission.id)"
+                value="1"
+              />
+            </div>
+          </div>
+          <!-- <span class="form-text text-muted">{{permission.description}}</span> -->
+        </div>
+      </div>
+      <p>
+        <button
+          class="btn btn-primary w-100"
+          qv-submit
+          (click)="save($event)"
+          [disabled]="onLoading"
+        >
+          Enregistrer
+          <span *ngIf="onLoading">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+      </p>
+    </div>
+  </form>
+</app-modal>

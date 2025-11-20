@@ -1,0 +1,129 @@
+<div class="row p-2 justify-content-between align-items-center mb-3">
+  <div class="col-lg-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <button class="btn btn-refresh" (click)="get()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 10px">Actualiser</span>
+      </button>
+      <div class="input-group ms-1">
+        <span class="input-group-text" role="button" (click)="get()">
+          <app-icon icon="search"></app-icon>
+        </span>
+        <input
+          type="text"
+          name="search"
+          class="form-control"
+          placeholder="Taper un IFU ..."
+          [(ngModel)]="filters.search"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr class="bg-table-primary">
+        <th scope="col">Date de soumission</th>
+        <th scope="col">IFU</th>
+        <th scope="col">Nom de l'auto-école</th>
+        <th scope="col">Promoteur</th>
+        <th scope="col">Emplacement</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="onLoadAgrement">
+      <tr>
+        <td colspan="12" class="py-3 text-center">
+          <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+            Chargement en cours
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <tbody
+      *ngFor="let item of agrements | paginate : paginateArgs(); let i = index"
+    >
+      <tr>
+        <td scope="row">
+          <small class="text-muted">{{ item.created_at | hdate : true }}</small>
+        </td>
+        <td>{{ item.ifu }}</td>
+        <td>{{ item.auto_ecole }}</td>
+        <td>{{ item?.promoteur_info.nom }} {{ item?.promoteur_info.prenoms }}</td>
+        <td>
+          {{ item?.ilot }} {{ item?.quartier }} {{ item?.commune.name }}
+        </td>
+        <td>
+          <button
+            class="btn"
+            (click)="showDossier(i)"
+            [class.btn-primary]="dossierIndex !== i"
+            [class.btn-outline-primary]="dossierIndex === i"
+          >
+            <span *ngIf="dossierIndex !== i"> Examiner</span>
+            <span *ngIf="dossierIndex === i"> Fermer</span>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="dossierIndex === i">
+        <td colspan="12">
+          <app-agreement-fiche
+            [data]="item"
+            (validate)="onValidate($event, i)"
+          />
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="!onLoadAgrement && !agrements.length">
+      <tr>
+        <td colspan="12" class="py-3 text-center">Aucune nouvelle demande</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="p-3" *ngIf="paginate_data">
+    <app-pagination
+      *ngIf="paginate_data.total > 10"
+      [total]="paginate_data.total"
+      (pageChange)="paginate($event)"
+      [pageNumber]="pageNumber"
+    ></app-pagination>
+  </div>
+</div>
+
+<div class="modal fade" id="rejet-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+  aria-labelledby="modalTitleId" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary fw-semibold" id="modalTitleId" [innerHTML]="rejectData.title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="" class="form-label">Motif de rejet</label>
+          <select class="form-select" name="rejet" [(ngModel)]="rejectData.motif">
+            <option value="Dossier erroné">Dossier erroné</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="" class="form-label">Consignes</label>
+          <textarea name="consigne" class="form-control" cols="30" rows="10" placeholder="Ecrivez votre message"
+            [(ngModel)]="rejectData.consigne"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Fermer
+        </button>
+        <button type="button" class="btn btn-primary" (click)="reject()">
+          Rejeter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

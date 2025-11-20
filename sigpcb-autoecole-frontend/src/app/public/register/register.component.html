@@ -1,0 +1,186 @@
+<app-blue-aside [auth]="auth ? promoteur : null">
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      Votre espace de gestion d’établissement de conduite automobile et annexes
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-lg-11">
+    <!--Login-->
+
+    <div
+      class="register-page my-4"
+      id="register-form"
+      [class.d-flex]="page === 'register'"
+    >
+      <h3 class="title mb-4">
+        Demande Autorisation d’ouverture d’un Etablissement d’Enseignement de la
+        Conduite Automobile et Annexe
+      </h3>
+      <div class="text-primary mb-3">
+        <h6 style="font-size: 18px" class="mb-3">Saisissez votre numéro NPI</h6>
+        <app-single-inputs
+          [count]="10"
+          height="50px"
+          (isValid)="onNPIChanges($event)"
+        />
+      </div>
+
+      <div class="mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="1"
+            id="i-accepted"
+            (change)="iAccepted($event)"
+          />
+          <label class="form-check-label" for="i-accepted">
+            J’ai pris connaissance des
+            <a href="#"> conditions générales d’utilisation</a>
+          </label>
+        </div>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="btn btn-lg btn-primary w-100"
+          [disabled]="!firstPageValidate()"
+          (click)="verify()"
+        >
+          <span *ngIf="isloading">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+          Continuer
+        </button>
+      </div>
+    </div>
+    <!--Double authentification-->
+    <div class="register-page my-5" [class.d-flex]="page === 'check-npi'">
+      <h3 class="title mb-4">Authentification</h3>
+      <h6 style="font-size: 18px; line-height: 25px" class="mb-3">
+        Un code de validation à six chiffres sera envoyé à votre numéro de
+        téléphone
+        {{ phoneHased }}
+      </h6>
+      <div class="form-check mb-3">
+        <input
+          class="form-check-input"
+          name="hasPhone"
+          type="radio"
+          value="1"
+          id="has-phone"
+          [(ngModel)]="hasPhone"
+        />
+        <label class="form-check-label" for="has-phone">
+          Oui c’est mon numéro de téléphone actuel.
+        </label>
+      </div>
+      <div class="form-check mb-3">
+        <input
+          class="form-check-input"
+          type="radio"
+          value="0"
+          name="hasPhone"
+          [(ngModel)]="hasPhone"
+          id="lost-phone"
+        />
+        <label class="form-check-label" for="lost-phone">
+          Je n’ai plus accès à ce numéro de téléphone.
+        </label>
+        <p class="form-text text-danger" *ngIf="hasPhone == 0">
+          Veuillez vous rapprocher de l'ANIP pour mettre à jour vos informations
+          afin de pouvoir continuer votre processus de demande d'autorisation.
+        </p>
+      </div>
+
+      <div class="form-check mb-3">
+        <input
+          class="form-check-input"
+          type="radio"
+          value="-1"
+          name="hasPhone"
+          id="unkown-phone"
+          [(ngModel)]="hasPhone"
+        />
+        <label class="form-check-label" for="unkown-phone">
+          Je ne reconnais pas ce numéro de téléphone.
+        </label>
+        <p class="form-text text-danger" *ngIf="hasPhone == -1">
+          Cliquez <a href="" (click)="gotoPage('register', $event)">ici</a> pour
+          ressaisir correctement votre NPI.
+        </p>
+      </div>
+
+      <div class="my-3" *ngIf="hasPhone == 1">
+        <button
+          class="btn btn-primary btn-lg"
+          (click)="verifyNPIPhone($event)"
+          [disabled]="isloading"
+        >
+          Recevoir le code
+        </button>
+        <br />
+        <span *ngIf="isloading">
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </div>
+    </div>
+    <!--Otp code-->
+    <ng-container *ngIf="page === 'otp'">
+      <div class="register-page my-4" [class.d-flex]="page === 'otp'">
+        <h6
+          style="font-size: 18px; line-height: 25px"
+          class="mb-3 text-primary"
+        >
+          Saisissez le code OTP
+        </h6>
+        <app-single-inputs
+          [count]="6"
+          height="50px"
+          (isValid)="onOTPChanges($event)"
+        />
+        <p class="my-3">
+          <button
+            class="btn btn-primary btn-lg w-100"
+            [disabled]="!isValidOtpCode"
+            (click)="signup($event)"
+          >
+            <span *ngIf="isloading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+            Continuer
+          </button>
+        </p>
+        <p>
+          N'avez-vous pas reçu le code après une minute ?
+          <br />
+          <a href="" class="fw-semibold" (click)="verifyNPIPhone($event)">
+            Renvoyer le code</a
+          >
+        </p>
+      </div>
+    </ng-container>
+
+    <div class="register-page my-4" [class.d-flex]="page === 'demande'">
+      <app-demande-agrement [promoteur]="promoteur" />
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

@@ -1,0 +1,94 @@
+<div class="rounded-0">
+  <div class="text-primary d-flex justify-content-between mx-3 p-3">
+    <span class="fw-semibold">{{ role_formulaire }}</span>
+    <button
+      type="button"
+      class="btn btn-danger"
+      routerLink="/parametres/gestions/roles"
+    >
+      <app-icon icon="arrow-left-short" [size]="14"></app-icon> Retour
+    </button>
+  </div>
+  <form
+    action=""
+    quickv
+    id="role-form"
+    class="border-top"
+    *ngIf="permissions.length"
+  >
+    <div class="bg-light p-3 mx-3">
+      <div class="col-md-3 mb-3">
+        <label for="nom_complet" class="mb-1 d-block"> Nom du rôle </label>
+        <div class="input-grouped">
+          <input
+            qv-rules="required|startWithLetter|maxlength:100"
+            required
+            type="text"
+            name="nom_complet"
+            qv-name="nom"
+            class="form-control bg-white"
+            [(ngModel)]="role.nom_complet"
+          />
+        </div>
+        <div qv-feedback="nom_complet"></div>
+      </div>
+
+      <div class="mb-4">
+        <h6 for="" class="mb-3 fw-semibold text-primary">Permissions</h6>
+        <div class="row">
+          <div class="col-sm-4 mb-3" *ngFor="let permission of permissions">
+            <div class="card border bg-light">
+              <div class="card-body">
+                <strong class="d-block mb-2">{{ permission.onglet }}</strong>
+                <div
+                  class="mb-3"
+                  *ngFor="let permission of permission.permissions"
+                >
+                  <div class="d-flex justify-content-between">
+                    <label for="permission-{{ permission.id }}" class="me-2">{{
+                      permission.nom_complet
+                    }}</label>
+                    <div class="form-check form-switch mb-0">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="permission-{{ permission.id }}"
+                        name="permission"
+                        [checked]="isPermided(permission.id)"
+                        (change)="updateRolePermission($event, permission.id)"
+                        value="1"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-text text-muted mt-0">
+                    {{ permission.description }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="m-3">
+      <button
+        class="btn btn-primary"
+        qv-submit
+        (click)="save($event)"
+        [disabled]="onLoading"
+      >
+        Enregistrer
+        <span *ngIf="onLoading">
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </button>
+    </p>
+  </form>
+</div>

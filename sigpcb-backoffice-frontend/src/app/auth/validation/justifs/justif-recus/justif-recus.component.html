@@ -1,0 +1,188 @@
+<div class="row p-2 justify-content-between align-items-center">
+  <div class="col-lg-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <button class="btn btn-refresh" (click)="getJustifications()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 10px">Actualiser</span>
+      </button>
+      <div class="input-group ms-1">
+        <span
+          class="input-group-text"
+          role="button"
+          (click)="getJustifications()"
+        >
+          <app-icon icon="search"></app-icon>
+        </span>
+        <input
+          type="text"
+          name="search"
+          class="form-control"
+          placeholder="Taper un NPI ..."
+          [(ngModel)]="filters.search"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 text-end">
+    <div class="row filter-box">
+      <div class="col">
+        <select
+          class="form-select"
+          name="permisSelected"
+          (change)="getJustifications()"
+          [(ngModel)]="filters.permisSelected"
+        >
+          <option [value]="null">Tous les permis</option>
+          <option [value]="item.id" *ngFor="let item of categories">
+            {{ item.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col">
+        <select
+          class="form-select"
+          name="sessionSelected"
+          (change)="getJustifications()"
+          [(ngModel)]="filters.sessionSelected"
+        >
+          <option [value]="null">Toutes les sessions</option>
+          <option [value]="ex.id" *ngFor="let ex of examens">
+            {{ ex.numero == 2 ? "2ème" : ex.numero == 1 ? "1ère" : "" }}
+            session de {{ ex.mois }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr class="bg-table-primary">
+        <th scope="col">Date de soumission</th>
+        <th scope="col">NPI</th>
+        <th scope="col">Type de permis</th>
+        <th scope="col">Nom et prénoms</th>
+        <th scope="col">Statut</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody *ngIf="onLoadValidation">
+      <tr>
+        <td colspan="12" class="py-3 text-center">
+          <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+            Chargement en cours
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tbody
+      *ngFor="
+        let item of justifications | paginate : paginateArgs();
+        let i = index
+      "
+    >
+      <tr>
+        <td scope="row">
+          <small class="text-muted">{{ item.created_at | hdate : true }}</small>
+        </td>
+        <td>{{ item.candidat?.npi }}</td>
+        <td>Permis {{ getPermis(item.categorie_permis_id, "").name }}</td>
+        <td>{{ item.candidat?.nom }} {{ item.candidat?.prenoms }}</td>
+        <td>
+          <span class="badge badge-warning">Nouvelle</span>
+        </td>
+        <td>
+          <button
+            class="btn"
+            (click)="showDossier(i)"
+            [class.btn-primary]="justifIndex !== i"
+            [class.btn-outline-primary]="justifIndex === i"
+          >
+            <span *ngIf="justifIndex !== i"> Examiner</span>
+            <span *ngIf="justifIndex === i"> Fermer</span>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="justifIndex === i">
+        <td colspan="12">
+          <app-justif-infos
+            [data]="item"
+            (validate)="onValidate($event, i)"
+            page="init"
+          ></app-justif-infos>
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="!onLoadValidation && !justifications.length">
+      <tr>
+        <td colspan="12" class="py-3 text-center">Aucune nouvelle demande</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="p-3" *ngIf="paginate_data">
+    <app-pagination
+      *ngIf="paginate_data.total > 10"
+      [total]="paginate_data.total"
+      (pageChange)="paginate($event)"
+      [pageNumber]="pageNumber"
+    ></app-pagination>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="rejet-modal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title text-primary fw-semibold"
+          id="modalTitleId"
+          [innerHTML]="rejectData.title"
+        ></h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="" class="form-label">Consignes</label>
+          <textarea
+            name="consigne"
+            class="form-control"
+            cols="30"
+            rows="10"
+            placeholder="Ecrivez votre message"
+            [(ngModel)]="rejectData.consigne"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Fermer
+        </button>
+        <button type="button" class="btn btn-primary" (click)="reject()">
+          Rejeter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

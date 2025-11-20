@@ -1,0 +1,179 @@
+<div class="m-2">
+  <div class="col-sm-6">
+    <div class="row filter-box">
+      <div class="col">
+        <select
+          class="form-select"
+          [(ngModel)]="annexeId"
+          name="annexe"
+          (change)="onAnnexe()"
+        >
+          <option value="0">Sélectionner une annexe</option>
+          <option [value]="annexe.id" *ngFor="let annexe of annexes">
+            {{ annexe.name | uppercase }}
+          </option>
+        </select>
+      </div>
+      <div class="col-6" *ngIf="examens.length && annexeId">
+        <select
+          class="form-select"
+          [(ngModel)]="examenId"
+          name="session"
+          (change)="selectSession($event)"
+        >
+          <option [value]="examen.id" *ngFor="let examen of examens">
+            {{ examen.session_long | uppercase }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="mt-3">
+      <button
+        type="button"
+        class="btn btn-primary w-100 fs-6"
+        [disabled]="!stats.total || !annexeId"
+        (click)="generateCompos()"
+      >
+        Générer la programmation et envoyer les convocations
+      </button>
+    </div>
+  </div>
+  <div class="d-flex justify-content-between align-items-center mt-3">
+    <div class="h6">
+      <div class="mb-2">
+        <span class="text-primary fw-semibold">Session</span> :
+        {{ agenda?.session_long | uppercase }}
+      </div>
+      <div>
+        <span class="text-primary fw-semibold">Nombre de candidats total</span>
+        :
+        {{ stats.total | padding }}
+        candidat(s)
+      </div>
+    </div>
+  </div>
+  <div *ngIf="agenda">
+    <div class="row p-2 justify-content-between align-items-center mt-3">
+      <div class="col-lg-5">
+        <div class="d-flex align-items-center justify-content-between">
+          <button class="btn btn-refresh">
+            <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+            <span class="text-muted" style="font-size: 10px">Actualiser</span>
+          </button>
+          <div class="input-group ms-1"></div>
+        </div>
+      </div>
+
+      <div
+        class="p-3 border-primary mt-3 bg-body"
+        style="border: 1px solid var(--bs-primary); border-left-width: 3px"
+      >
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="h6">
+            <div class="mb-2">
+              <span class="text-primary fw-semibold">Session</span> :
+              {{ agenda.session_long | uppercase }}
+            </div>
+            <div class="mb-2">
+              <span class="text-primary fw-semibold">Nombre de candidats</span>
+              : {{ stats.total | padding }} candidat (s)
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="toggleShowResult()"
+            [disabled]="!generated"
+          >
+            <app-icon icon="eye"></app-icon>
+            <span *ngIf="!showResult">Voir la liste</span>
+            <span *ngIf="showResult">Fermer la liste</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!onLoadList && showResult">
+      <div class="my-3">
+        <p>
+          <button
+            class="btn btn-outline-primary me-2"
+            (click)="sendNotifications()"
+            [disabled]="onSending"
+          >
+            Envoyer les convocations
+          </button>
+          <button class="btn btn-primary" (click)="downloadAsPdf()">
+            Télécharger
+            <app-icon icon="download"></app-icon>
+          </button>
+        </p>
+        <div class="alert alert-primary mt-3" role="alert" *ngIf="onSending">
+          Cette opération peut prendre quelques minutes <br />
+          Veuillez patienter ...
+        </div>
+      </div>
+      <div style="overflow-y: auto; max-height: 600px">
+        <div #dataToExport>
+          <anatt-doc
+            [programs]="programmations"
+            [meta]="{ agenda: agenda, annexe: currentAnnexe }"
+          ></anatt-doc>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!!annexeId">
+      <ng-container *ngIf="!onFinding && !onLoadStatique">
+        <div class="bg-body p-4 mb-2" *ngIf="!onLoadStatique && !stats.total">
+          <strong>Aucun présenté pour ce centre</strong>
+        </div>
+        <div class="bg-body p-4" *ngIf="!generated && !onLoadList">
+          <strong>Aucune programmation générée</strong>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="onLoadStatique">
+        <div class="my-3">Chargement des statiques</div>
+      </ng-container>
+      <ng-container *ngIf="onLoadList">
+        <div class="my-3">Chargement de la programmation</div>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="!annexeId">
+      <div class="alert bg-body my-3">
+        Veuillez sélectionner une annexe pour commencer
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="my-4 col-8 col-sm-5 col-md-4" *ngIf="generationStarted">
+    <div
+      class="progress"
+      role="progressbar"
+      [attr.aria-valuenow]="progress"
+      [attr.aria-valuemin]="0"
+      [attr.aria-valuemax]="100"
+    >
+      <div
+        class="progress-bar progress-bar-striped progress-bar-animated"
+        [style.width]="progress + '%'"
+      ></div>
+    </div>
+    <p class="form-text text-muted">{{ progressionText }}</p>
+
+    <div
+      class="alert alert-primary alert-dismissible fade show mt-3"
+      role="alert"
+      *ngIf="alertMessage"
+    >
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+      {{ alertMessage }}
+    </div>
+  </div>
+</div>

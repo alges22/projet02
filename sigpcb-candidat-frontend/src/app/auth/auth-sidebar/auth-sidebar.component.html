@@ -1,0 +1,60 @@
+<div
+  class="col-7 col-sm-4 col-md-3 col-lg-2 sidebar d-none d-md-block bg-white"
+  id="side-menu"
+>
+  <div class="text-center ms-auto">
+    <a href="">
+      <img src="assets/images/logo.png" alt="" class="img-fluid" />
+    </a>
+  </div>
+  <ul class="nav justify-content-center flex-column">
+    <li class="nav-item" *ngFor="let menu of firstMenus">
+      <a
+        *ngIf="!hasChildren(menu)"
+        class="nav-link"
+        [routerLink]="menu.href"
+        [ngClass]="hasChildren(menu) ? 'dropBtn' : ''"
+        routerLinkActive="active"
+      >
+        <span class="link-group">
+          <app-icon [icon]="menu.icon"></app-icon>
+          <span class="link-text">{{ menu.label }}</span>
+        </span>
+      </a>
+      <a
+        role="button"
+        *ngIf="hasChildren(menu)"
+        class="nav-link parent-link"
+        [attr.data-navid]="menu.navid"
+        [ngClass]="hasChildren(menu) ? 'dropBtn' : ''"
+      >
+        <span class="link-group">
+          <app-icon [icon]="menu.icon"></app-icon>
+          <span class="link-text">{{ menu.label }}</span>
+        </span>
+        <span class="angle" *ngIf="menu.open"
+          ><i class="fa fa-angle-right" aria-hidden="true"></i
+        ></span>
+      </a>
+      <div
+        class="dropdown-content"
+        *ngIf="menu.children && menu.children.length"
+      >
+        <a
+          *ngFor="let child of menu.children"
+          [routerLink]="child.href"
+          routerLinkActive="active"
+          >{{ child.label }}</a
+        >
+      </div>
+    </li>
+  </ul>
+  <ul class="nav justify-align-items flex-column mt-5">
+    <li class="nav-item border-0">
+      <a routerLink="/logout" class="nav-link">
+        <i class="fas fa-light fa-sign-out" style="font-size: 14px"></i>
+        <span class="link-text">Déconnexion</span>
+      </a>
+    </li>
+  </ul>
+</div>

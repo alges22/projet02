@@ -1,0 +1,272 @@
+<form action="" class="" id="editer-calendrier" (ngSubmit)="save($event)">
+  <h5 class="fw-bold text-primary p-3 my-0" [innerHTML]="heading"></h5>
+  <div class="border-top p-3">
+    <fieldset>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="mb-3">
+            <label for="" class="form-label">Nom de votre session</label>
+            <div class="mb-3">
+              <input
+                type="text"
+                name="name"
+                id="name"
+                class="form-control"
+                placeholder="Un nom court de votre session"
+                [(ngModel)]="agenda.name"
+              />
+            </div>
+          </div>
+          <div qv-feedback="mois"></div>
+        </div>
+        <div class="col-sm-4">
+          <div class="mb-3 ms-3">
+            <label for="type" class="form-label mb-1">Type </label>
+            <select
+              class="form-select bg-transparent"
+              [(ngModel)]="agenda.type"
+              name="type"
+            >
+              <option value="ordinaire" selected>Ordinaire</option>
+              <option value="extra">Extra</option>
+              <option value="militaire">Militaire</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <label class="form-label">Annexe concernée</label>
+          <div>
+            <button
+              class="btn btn-outline-primary"
+              (click)="showAnnexeList = true"
+              type="button"
+            >
+              {{ annexeLabel }}
+            </button>
+            <div class="position-relative mt-2" *ngIf="showAnnexeList">
+              <div class="list-group position-absolute bg-white shadow">
+                <div class="list-group-item text-end">
+                  <button
+                    class="btn btn-sm btn-danger px-3"
+                    type="button"
+                    (click)="showAnnexeList = false"
+                  >
+                    x
+                  </button>
+                </div>
+                <label class="list-group-item">
+                  <input
+                    class="form-check-input me-1"
+                    type="checkbox"
+                    [checked]="allSelected()"
+                    (change)="selectAllAnnexe()"
+                  />
+                  <span class="text-primary fw-bold">Toutes les annexes</span>
+                </label>
+                <label class="list-group-item" *ngFor="let annexe of annexes">
+                  <input
+                    class="form-check-input me-1"
+                    type="checkbox"
+                    (change)="appendAnnexe(annexe)"
+                    [checked]="checked(annexe)"
+                  />
+                  {{ annexe.name }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Date étude des dossiers-->
+      <div class="row mb-3">
+        <div class="col-sm-6">
+          <label class="form-label required"
+            >Début étude dossiers (date & heure)</label
+          >
+          <div class="row mb-3 align-items-center">
+            <div class="col-7">
+              <input
+                type="date"
+                name="debut_etude_dossier_at"
+                class="form-control"
+                [(ngModel)]="agenda.debut_etude_dossier_at"
+                [min]="getCurrentDateTime()"
+              />
+            </div>
+            <div class="col-5">
+              <hour
+                [hour]="hours['debut_etude_dossier_at']"
+                (select)="toIso('debut_etude_dossier_at', $event)"
+              ></hour>
+            </div>
+          </div>
+          <div qv-feedback="debut_etude_dossier_at"></div>
+        </div>
+
+        <div class="col-sm-6">
+          <label class="form-label required"
+            >Fin d'étude du dossier (date & heure)</label
+          >
+          <div class="row align-items-center">
+            <div class="col-7">
+              <input
+                type="date"
+                name="fin_etude_dossier_at"
+                class="form-control"
+                [(ngModel)]="agenda.fin_etude_dossier_at"
+                [min]="getCurrentDateTime()"
+              />
+            </div>
+            <div class="col-5">
+              <hour
+                [hour]="hours['fin_etude_dossier_at']"
+                (select)="toIso('fin_etude_dossier_at', $event)"
+              ></hour>
+            </div>
+          </div>
+          <div qv-feedback="fin_etude_dossier_at"></div>
+        </div>
+      </div>
+
+      <!---Gestion des rejets-->
+      <div class="row mb-3">
+        <div class="col-sm-6">
+          <label class="form-label required"
+            >Début gestion des rejets (date & heure)</label
+          >
+          <div class="row">
+            <div class="col-7">
+              <input
+                type="date"
+                name="debut_gestion_rejet_at"
+                class="form-control"
+                [(ngModel)]="agenda.debut_gestion_rejet_at"
+                [min]="getCurrentDateTime()"
+              />
+            </div>
+            <div class="col-5">
+              <hour
+                [hour]="hours['debut_gestion_rejet_at']"
+                (select)="toIso('debut_gestion_rejet_at', $event)"
+              ></hour>
+            </div>
+          </div>
+          <div qv-feedback="debut_gestion_rejet_at"></div>
+        </div>
+        <div class="col-sm-6">
+          <label for="" class="form-label required"
+            >Fin gestion des rejets (date & heure)</label
+          >
+          <div class="row align-items-center mb-3">
+            <div class="col-7">
+              <input
+                type="date"
+                name="fin_gestion_rejet_at"
+                class="form-control"
+                [(ngModel)]="agenda.fin_gestion_rejet_at"
+                [min]="getCurrentDateTime()"
+              />
+            </div>
+            <div class="col-5">
+              <hour
+                [hour]="hours['fin_gestion_rejet_at']"
+                (select)="toIso('fin_gestion_rejet_at', $event)"
+              ></hour>
+            </div>
+          </div>
+          <div qv-feedback="fin_gestion_rejet_at"></div>
+        </div>
+      </div>
+      <!--Convocation, code et conduite-->
+      <div class="row mb-3">
+        <div class="col-sm-6">
+          <label class="form-label required"
+            >Envoi des convocations (date & heure)</label
+          >
+          <div class="row my-3 align-items-center">
+            <div class="col-7">
+              <input
+                type="date"
+                name="date_convocation"
+                class="form-control"
+                [(ngModel)]="agenda.date_convocation"
+                [min]="getCurrentDateTime()"
+              />
+            </div>
+            <div class="col-5">
+              <hour
+                [hour]="hours['date_convocation']"
+                (select)="toIso('date_convocation', $event)"
+              ></hour>
+            </div>
+          </div>
+          <div qv-feedback="date_convocation"></div>
+        </div>
+        <div class="col-sm-6">
+          <label class="form-label required"
+            >Composition de l'épreuve du code</label
+          >
+          <div class="row my-3 align-items-center">
+            <div class="col-7">
+              <input
+                type="date"
+                name="date_code"
+                class="form-control"
+                [(ngModel)]="agenda.date_code"
+                [min]="getCurrentDateTime()"
+              />
+            </div>
+            <div class="col-5">
+              <hour
+                [hour]="hours['date_code']"
+                (select)="toIso('date_code', $event)"
+              ></hour>
+            </div>
+          </div>
+          <div qv-feedback="date_code"></div>
+        </div>
+
+        <div class="col-sm-6">
+          <label class="form-label required"
+            >Composition de l'épreuve de la conduite</label
+          >
+          <div class="row">
+            <div class="col-7">
+              <input
+                type="date"
+                name="date_conduite"
+                class="form-control"
+                [(ngModel)]="agenda.date_conduite"
+                [min]="getCurrentDateTime()"
+              />
+            </div>
+            <div class="col-5">
+              <hour
+                [hour]="hours['date_conduite']"
+                (select)="toIso('date_conduite', $event)"
+              ></hour>
+            </div>
+          </div>
+          <div qv-feedback="date_conduite"></div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="mt-2">
+      <button class="btn btn-primary" [disabled]="onPosting">
+        <span *ngIf="!agenda.id">Enregistrer</span>
+        <span *ngIf="agenda.id">Mettre à jour</span>
+        <span *ngIf="onPosting">
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </button>
+    </div>
+  </div>
+</form>

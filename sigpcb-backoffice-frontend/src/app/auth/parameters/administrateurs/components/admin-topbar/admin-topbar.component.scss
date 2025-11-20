@@ -1,0 +1,26 @@
+//Heading
+$primary : #006F6F;
+
+.topbar {
+  .btn {
+    border: 1px solid #006F6F80;
+    min-width: 200px;
+    padding: 10px;
+    border-radius: 0;
+  }
+}
+
+.btn {
+  font-size: 0.9em;
+  font-weight: 500;
+  line-height: 16px;
+
+  &.active {
+    background-color: #ffffff;
+    border-color: #006F6F47 !important;
+  }
+
+  .material-icons {
+    margin-right: 5px;
+  }
+}

@@ -1,0 +1,546 @@
+<app-ng-window id="category-window">
+  <app-ng-window-header>
+    <button class="btn window-btn current" data-window-action="0">
+      Informations basiques
+    </button>
+    <button
+      class="btn window-btn"
+      data-window-action="1"
+      [disabled]="!question.id"
+    >
+      Langues
+    </button>
+    <button
+      class="btn window-btn"
+      data-window-action="2"
+      [disabled]="!question.id"
+    >
+      Réponses
+    </button>
+  </app-ng-window-header>
+
+  <app-ng-window-page data-window-page="0" data-window-current="true">
+    <form qv-form="basic" quickv id="questions-form" class="fieldset">
+      <div class="row">
+        <div class="col-md">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6 required">Libellé</div>
+                <div class="col-6 text-end">
+                  <span info="Le libellé de la question">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required|minlength:1|maxlength:161"
+                qv-messages="Le libellé est requis | Le libellé est trop court | Le libellé est trop long"
+                required
+                type="text"
+                name="name"
+                placeholder="Taper le libellé"
+                class="form-control"
+                [(ngModel)]="question.name"
+              />
+            </div>
+            <div qv-feedback="name"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="langue_id">Langue</label>
+                <div class="col-6 text-end">
+                  <span info="Sélectionner une langue">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="langue_id"
+                qv-rules="min:1"
+                qv-messages="La langue est requise"
+                [(ngModel)]="question.langue_id"
+              >
+                <option value="" disabled selected>
+                  Sélectionner une langue
+                </option>
+                <option [value]="langue.id" *ngFor="let langue of langues">
+                  {{ langue.name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="langue_id"></div>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="chapitre_id">Chapitre</label>
+                <div class="col-6 text-end">
+                  <span info="Sélectionner un chapitre">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="chapitre_id"
+                qv-rules="min:1"
+                qv-messages="Le chapitre est requis"
+                [(ngModel)]="question.chapitre_id"
+              >
+                <option value="" disabled selected>
+                  Sélectionner un chapitre
+                </option>
+                <option
+                  [value]="chapitre.id"
+                  *ngFor="let chapitre of chapitres"
+                >
+                  {{ chapitre.name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="chapitre_id"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6 required">Audio</div>
+                <div class="col-6 text-end">
+                  <span info="Le fichier audio">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                type="file"
+                accept="audio/*"
+                name="audio"
+                class="form-control"
+                (change)="onAudioSelected($event)"
+                required
+              />
+            </div>
+            <div qv-feedback="audio"></div>
+            <audio *ngIf="question.audio" controls>
+              <source
+                src="{{ assetLink }}{{ question.audio }}"
+                type="audio/mp3"
+              />
+              Votre navigateur ne supporte pas l'élément audio.
+            </audio>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6">Illustration</div>
+                <div class="col-6 text-end">
+                  <span info="Le fichier image">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                type="file"
+                accept="image/*"
+                name="illustration"
+                class="form-control"
+                (change)="onFileSelected($event, 'illustration')"
+              />
+            </div>
+            <div qv-feedback="illustration"></div>
+            <div class="mt-3" *ngIf="question.illustration">
+              <a
+                href="{{ assetLink }}{{ question.illustration }}"
+                target="_blank"
+                >Voir</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6">Texte</div>
+                <div class="col-6 text-end">
+                  <span info="Le texte">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <textarea
+                name="text"
+                id="text"
+                rows="5"
+                class="form-control"
+                [(ngModel)]="question.text"
+              ></textarea>
+            </div>
+            <div qv-feedback="text"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <p class="text-end">
+            <button
+              class="btn btn-primary fw-normal"
+              [disabled]="onLoading"
+              qv-submit
+              (click)="save($event)"
+            >
+              Enregistrer
+              <span *ngIf="onLoading">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Loading...</span>
+              </span>
+            </button>
+            <input
+              id="reset"
+              type="reset"
+              value="Annuler"
+              style="display: none"
+            />
+          </p>
+        </div>
+      </div>
+      <!-- <div class="window-pagination">
+        <button type="button" class="btn fw-normal" disabled>
+          <i class="bi bi-arrow-left-short"></i> Précédent
+        </button>
+        <button type="buttion" class="btn fw-normal btn-primary" qv-disabled="basic" data-window-action="1">
+          Suivant <i class="bi bi-arrow-right-short"></i>
+        </button>
+      </div> -->
+    </form>
+  </app-ng-window-page>
+  <app-ng-window-page data-window-page="1">
+    <form
+      quickv
+      qv-form="validite"
+      id="category-permis-validite"
+      qv-observers="mouseover"
+      class="fieldset"
+    >
+      <div class="row my-3">
+        <div class="col-lg-7">
+          <label for="">La validité dépend t-elle d'une tranche d'âge ?</label>
+          <div class="my-3">
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="has_tranche_no"
+                value="0"
+                name="has_tranche"
+                (change)="hasTranche($event.target)"
+                [checked]="!has_tranche"
+              />
+              <label class="form-check-label" for="has_tranche_no">Non</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="has_tranche_yes"
+                name="has_tranche"
+                value="1"
+                [checked]="has_tranche"
+                (change)="hasTranche($event.target)"
+              />
+              <label class="form-check-label" for="has_tranche_yes">Oui</label>
+            </div>
+            <div class="my-3" *ngIf="has_tranche">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-4">
+                    <label for="" class="mb-1 d-block required">
+                      Âge minimal
+                    </label>
+                    <div class="input-grouped">
+                      <input
+                        qv-rules="required|integer|between:10,80"
+                        qv-messages="Lâge minimal est requis | L'âge minimal doit être un nombre | L'âge minimal doit être compris entre 10 et 80 ans"
+                        required
+                        type="text"
+                        name="age_min"
+                        class="form-control"
+                        [(ngModel)]="tranche.age_min"
+                      />
+                    </div>
+                    <div qv-feedback="age_min"></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-4">
+                    <label for="" class="mb-1 d-block">
+                      <div class="row justify-content-between">
+                        <div class="required">Âge maximal</div>
+                      </div>
+                    </label>
+                    <div class="input-grouped">
+                      <input
+                        qv-rules="required|integer|between:10,80"
+                        qv-messages="Lâge maximal est requis | L'âge maximal doit être un nombre | L'âge maximal doit être compris entre 10 et 80 ans"
+                        required
+                        type="text"
+                        name="age_max"
+                        class="form-control"
+                        [(ngModel)]="tranche.age_max"
+                      />
+                    </div>
+                    <div qv-feedback="age_max"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <label for="" class="form-label h6">Validité</label>
+          <input
+            type="number"
+            name="validite"
+            class="form-control"
+            qv-rules="required|integer|min:1|max:10"
+            qv-messages="{0,1,2,3}La validité doit être un nombre compris entre 1 et 10ans"
+            qv-events="blur|mouseleave|keyup"
+            [(ngModel)]="tranche.validite"
+          />
+          <div qv-feedback="validite"></div>
+          <div class="col-12" *ngIf="has_tranche">
+            <button
+              *ngIf="editTranche"
+              type="button"
+              class="btn btn-outline-primary me-2"
+              (click)="addTranche($event)"
+            >
+              Mettre à jour
+            </button>
+            <button
+              *ngIf="addNewTrancheAge"
+              type="button"
+              class="btn btn-outline-primary"
+              (click)="addTranche($event)"
+            >
+              Ajouter
+            </button>
+          </div>
+        </div>
+        <div class="col-lg-5 border-start" *ngIf="has_tranche">
+          <div class="h6">Les tranches d'âges</div>
+          <div class="table-responsive bg-light rounded">
+            <table class="table" *ngIf="tranches.length">
+              <thead>
+                <tr>
+                  <th scope="col">Validité</th>
+                  <th scope="col">Tranche d'âge</th>
+                  <th scope="col">#</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="" *ngFor="let tr of tranches; let i = index">
+                  <td scope="row">{{ tr.validite }}ans</td>
+                  <td scope="row">{{ tr.age_min }}ans - {{ tr.age_max }}ans</td>
+                  <td>
+                    <app-icon
+                      (click)="editTrancheAge(i)"
+                      icon="pencil"
+                      classe="text-success"
+                    ></app-icon>
+                    <app-icon
+                      (click)="removeTranche(i)"
+                      icon="trash3"
+                      classe="text-danger"
+                    ></app-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="12">
+                    <button
+                      *ngIf="editPage"
+                      type="button"
+                      class="btn btn-outline-primary"
+                    >
+                      Nouvelle tranche d'âge
+                      <app-icon icon="plus"></app-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-center py-3" *ngIf="!tranches.length">
+              Aucune tranche d'âge
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="window-pagination">
+        <button type="button" class="btn fw-normal" data-window-action="1">
+          <i class="bi bi-arrow-left-short"></i> Précédent
+        </button>
+        <button
+          type="button"
+          class="btn fw-normal btn-primary"
+          data-window-action="2"
+          qv-disabled="validite"
+        >
+          <i class="bi bi-arrow-right-short"></i> Suivant
+        </button>
+      </div>
+    </form>
+  </app-ng-window-page>
+  <app-ng-window-page data-window-page="2">
+    <form class="fieldset" id="question-reponses-form" quickv>
+      <div class="row mb-2">
+        <div class="col-10">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="id">Réponse</label>
+                <div class="col-6 text-end">
+                  <span info="Sélectionner une réponse">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                id="reponse_id"
+                name="reponse_id"
+                [(ngModel)]="question_answer.reponse_id"
+                qv-rules="min:1"
+                qv-messages="La réponse est requise"
+                (change)="onReponse()"
+              >
+                <option value="" disabled selected>
+                  Sélectionner une réponse
+                </option>
+                <option [value]="reponse.id" *ngFor="let reponse of reponses">
+                  {{ reponse.name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="reponse_id"></div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="mb-3 text-center">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-10" for="id">Vrai</label>
+              </div>
+            </label>
+            <div class="mb-3 text-center">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [checked]="question_answer.is_correct"
+                (change)="onSelectQuestionReponse(question_answer)"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="text-end col-sm-12">
+          <button
+            class="btn btn-outline-primary justify-content-center"
+            (click)="saveReponse($event)"
+            [disabled]="onLoadingReponse"
+            qv-submit
+          >
+            Enregistrer
+            <span *ngIf="onLoadingReponse">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+      <fieldset>
+        <div class="row">
+          <div class="col-12">
+            <hr />
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th width="10%" class="text-center">Vrai</th>
+                  <th width="15%" class="">Action</th>
+                </tr>
+              </thead>
+              <tbody class="text-center" *ngIf="question_answers.length == 0">
+                <tr>
+                  <td colspan="12">Aucune donnée</td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr *ngFor="let answer of question_answers">
+                  <td>{{ answer.name }}</td>
+                  <td class="text-center">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [checked]="answer.is_correct"
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <div class="btn-actions">
+                      <app-icon
+                        icon="pencil"
+                        classe="text-warning"
+                        (click)="showReponse(answer)"
+                      ></app-icon>
+                      <app-delete
+                        (canDelete)="deleteQuestionReponse($event)"
+                        [activateId]="answer.id"
+                      ></app-delete>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </app-ng-window-page>
+</app-ng-window>

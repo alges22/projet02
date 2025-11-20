@@ -1,0 +1,372 @@
+<div class="m-2">
+  <div class="row mb-3">
+    <div class="col-6 col-md-3">
+      <label for="">Année</label>
+      <year [year]="year" (_change)="selectYear($event)" />
+    </div>
+
+    <div class="col-6 col-md-4">
+      <label for="examen_id fw-bold">Selectionner une session</label>
+      <select
+        class="form-select"
+        name="examen_id"
+        [(ngModel)]="filters.examen_id"
+        (change)="selectSession($event.target)"
+        id="examen_id"
+      >
+        <option [value]="0">
+          <ng-container *ngIf="agendas.length"> Sélectionner ...</ng-container>
+          <ng-container *ngIf="!agendas.length"> Aucune session</ng-container>
+        </option>
+        <option [value]="session.id" *ngFor="let session of agendas">
+          Session du {{ session.session_long }}
+        </option>
+      </select>
+    </div>
+    <div class="col-6 col-md-4 col-lg">
+      <label for="annexe_id">Annexe</label>
+      <select
+        class="form-select"
+        name="annexe_id"
+        [(ngModel)]="filters.annexe_id"
+        (change)="selectAnnexe($event.target)"
+        id="annexe_id"
+      >
+        <option [value]="0">Toutes les annexes</option>
+        <option [value]="ann.id" *ngFor="let ann of annexes">
+          {{ ann.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <ng-container *ngIf="agendas.length">
+    <div>
+      <ng-container>
+        <!--Statistique global-->
+        <div class="pb-5">
+          <div class="row filter-box align-items-center my-3">
+            <div class="col-6 col-md-4 col-lg">
+              <label for="taux">Taux de</label>
+              <select
+                class="form-select"
+                name="taux"
+                [(ngModel)]="filters.taux"
+                id="taux"
+              >
+                <option value="admissibility">Admissibilité</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-4 col-lg">
+              <label for="sexe">Sexes</label>
+              <select
+                class="form-select"
+                name="sexe"
+                [(ngModel)]="filters.sexe"
+                id="sexe"
+                (change)="fetch()"
+              >
+                <option [value]="null">Tous</option>
+                <option value="M">Hommes</option>
+                <option value="F">Femmes</option>
+              </select>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+              <label for="categorie_permis_id">Permis</label>
+              <select
+                class="form-select"
+                name="permisSelected"
+                [(ngModel)]="filters.categorie_permis_id"
+                id="categorie_permis_id"
+                (change)="fetch()"
+              >
+                <option [value]="0">Tous</option>
+                <option [value]="item.id" *ngFor="let item of categories">
+                  {{ item.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+              <label for="langue_id">Langues</label>
+              <select
+                class="form-select"
+                name="langue"
+                (change)="fetch()"
+                [(ngModel)]="filters.langue_id"
+              >
+                <option [value]="0">Toutes</option>
+                <option [value]="item.id" *ngFor="let item of langues">
+                  {{ item.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="card rounded-0 border border-primary my-3" *ngIf="stat">
+            <div class="card-header rounded-0 bg-primary text-white">
+              <h6 class="mb-0">
+                Taux d'admissibilité
+                <div class="mt-2 small">
+                  ({{ stat.total | padding }}) candidat(s) présenté(s)
+                </div>
+              </h6>
+            </div>
+            <div class="row">
+              <div class="col-sm-5 col-lg-4">
+                <ul class="list-group">
+                  <li class="list-group-item py-4 rounded-0">
+                    <div class="row">
+                      <div class="col-6">
+                        <strong>Permis</strong>
+                      </div>
+                      <div class="col-6">
+                        {{ permis?.name || "Tous les permis" }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item py-4 rounded-0">
+                    <div class="row">
+                      <div class="col-6">
+                        <strong>Annexes</strong>
+                      </div>
+                      <div class="col-6">
+                        {{ annexe?.name || "Toutes les annexes" }}
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="list-group-item py-4 rounded-0">
+                    <div class="row">
+                      <div class="col-6">
+                        <strong>Sexes</strong>
+                      </div>
+                      <div class="col-6">
+                        {{ sexe || "Tous les sexes" }}
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="list-group-item py-4 rounded-0">
+                    <div class="row">
+                      <div class="col-6">
+                        <strong>Langues</strong>
+                      </div>
+                      <div class="col-6">
+                        {{ langue?.name || "Toutes les langues" }}
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="list-group-item py-4 rounded-0">
+                    <div class="row">
+                      <div class="col-6">
+                        <strong>Sessions</strong>
+                      </div>
+                      <div class="col-6">
+                        {{ session?.session_long || "Toutes les sessions" }}
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="list-group-item py-4 rounded-0">
+                    <div class="row">
+                      <div class="col-6">
+                        <strong>Année</strong>
+                      </div>
+                      <div class="col-6">
+                        {{ year }}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-sm-7 col-lg-8">
+                <div class="bg-body p-3 h-100">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h6>Codes</h6>
+                      <div class="mb-3">
+                        <p>Taux d'admis / Inscrits au code</p>
+                        <p>
+                          <strong class="text-primary"
+                            >{{ stat.codes.admis_percent }}%</strong
+                          >
+                        </p>
+                      </div>
+                      <div class="mb-3">
+                        <p>Taux d'échecs / Inscrits au code</p>
+                        <p>
+                          <strong class="text-primary"
+                            >{{ stat.codes.echecs_percent }}%</strong
+                          >
+                        </p>
+                      </div>
+
+                      <div class="col-sm-7">
+                        <canvas
+                          baseChart
+                          [datasets]="codeDatasets"
+                          [type]="type"
+                        ></canvas>
+                      </div>
+                      <div class="mb-3">
+                        <p>
+                          <app-icon
+                            icon="circle-fill"
+                            classe="text-primary"
+                            [size]="14"
+                          />
+                          <span class="small">Taux d'admis</span>
+                        </p>
+                        <p>
+                          <app-icon
+                            icon="circle-fill"
+                            classe="text-warning"
+                            [size]="14"
+                          />
+                          <span class="small">Taux d'échecs</span>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <h6>Conduites</h6>
+                      <div class="mb-3">
+                        <p>Taux d'admis / Inscrits au code</p>
+                        <p>
+                          <strong class="text-primary"
+                            >{{ stat.conduites.admis_percent }}%</strong
+                          >
+                        </p>
+                      </div>
+                      <div class="mb-3">
+                        <p>Taux d'échecs / Inscrits au code</p>
+                        <p>
+                          <strong class="text-primary"
+                            >{{ stat.conduites.echecs_percent }}%</strong
+                          >
+                        </p>
+                      </div>
+
+                      <div class="col-sm-7">
+                        <canvas
+                          baseChart
+                          [datasets]="conduitesDatasets"
+                          [type]="type"
+                        ></canvas>
+                      </div>
+                      <div class="mb-3">
+                        <p>
+                          <app-icon
+                            icon="circle-fill"
+                            classe="text-primary"
+                            [size]="14"
+                          />
+                          <span class="small">Taux d'admis</span>
+                        </p>
+                        <p>
+                          <app-icon
+                            icon="circle-fill"
+                            classe="text-warning"
+                            [size]="14"
+                          />
+                          <span class="small">Taux d'échecs</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Statistique avec des graphes-->
+        <div class="card rounded-0 border border-primary my-3 bg-light">
+          <div class="p-3">
+            <div class="row filter-box align-items-center my-3">
+              <div class="col-6 col-md-4 col-lg">
+                <label for="factor" class="fw-semibold"
+                  >Données de statistique</label
+                >
+                <select
+                  class="form-select"
+                  name="factor"
+                  [(ngModel)]="chartFilters.factor"
+                  (change)="onChart()"
+                  id="factor"
+                >
+                  <option value="admissibility">Admissibilité</option>
+                  <option value="inscription">Inscription</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-4 col-lg">
+                <label for="statfor" class="fw-semibold">Statistique par</label>
+                <select
+                  class="form-select"
+                  name="statfor"
+                  [(ngModel)]="chartFilters.statfor"
+                  (change)="onChart()"
+                  id="statfor"
+                >
+                  <ng-container
+                    *ngIf="
+                      !chartFilters.annexe_id ||
+                      chartFilters.annexe_id == 'null'
+                    "
+                  >
+                    <option value="annexe">Annexe</option>
+                  </ng-container>
+                  <option value="permis" selected>Catégorie de permis</option>
+                  <option value="langue">Langue</option>
+                  <option value="sexe">Sexe</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="chartData">
+            <div class="bg-body p-3 h-100">
+              <div class="dropdown">
+                <button
+                  class="btn border-primary dropdown-toggle"
+                  type="button"
+                  id="triggerId"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <ng-container *ngFor="let tp of types">
+                    <ng-container *ngIf="chartFilters.type == tp.type">
+                      {{ tp.name }}
+                    </ng-container>
+                  </ng-container>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="triggerId">
+                  <ng-container *ngFor="let tp of types">
+                    <a
+                      class="dropdown-item"
+                      role="button"
+                      (click)="onChartType(tp.type)"
+                      >{{ tp.name }}</a
+                    >
+                  </ng-container>
+                </div>
+              </div>
+
+              <canvas
+                baseChart
+                [datasets]="chartData.data.datasets"
+                [type]="chartData.type"
+                [options]="options"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!agendas.length">
+    <div class="alert text-center alert-primary" role="alert">
+      <p class="fw-semibold">Aucune session disponible</p>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,22 @@
+.faq {
+  .faq-title {
+    color: var(--bs-primary);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 120%;
+  }
+
+  &:hover,
+  &:focus,
+  &.active {
+    background-color: #EBE9E9;
+
+    .faq-title {
+      color: #000;
+    }
+  }
+
+  .faq-body {
+    font-size: 12px;
+  }
+}

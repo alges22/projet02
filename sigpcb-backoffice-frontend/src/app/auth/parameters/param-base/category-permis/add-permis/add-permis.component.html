@@ -1,0 +1,750 @@
+<div class="m-3">
+  <app-ng-window id="category-window">
+    <app-ng-window-header>
+      <button class="btn window-btn current" data-window-action="0">
+        Informations basiques
+        <app-icon icon="chevron-right"></app-icon>
+      </button>
+      <button
+        class="btn window-btn"
+        data-window-action="1"
+        [disabled]="!basicFormIsValid()"
+      >
+        Validité du permis
+        <app-icon icon="chevron-right"></app-icon>
+      </button>
+      <button
+        class="btn window-btn"
+        [disabled]="!trancheFormIsValid() || !basicFormIsValid()"
+        data-window-action="2"
+      >
+        Extension du permis
+      </button>
+    </app-ng-window-header>
+
+    <app-ng-window-page data-window-page="0" data-window-current="true">
+      <form id="category-permis-basic" class="fieldset">
+        <div class="row">
+          <div class="col-md">
+            <div class="mb-4">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-6 required">Nom</div>
+                  <div class="col-6 text-end">
+                    <span info="Le nom de la catégorie de permis">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input
+                  qv-rules="required|startWithLetter|startWithUpper|max:3"
+                  qv-messages="Le nom est requis"
+                  required
+                  type="text"
+                  name="name"
+                  class="form-control"
+                  [(ngModel)]="category.name"
+                />
+              </div>
+              <div qv-feedback="name"></div>
+              <p class="form-text text-muted">Quel est le nom du permis ?</p>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="mb-4">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-10 required">Âge minimal</div>
+                  <div class="col-2 text-end">
+                    <span info="L'âge minimal requis pour avoir ce permis">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input
+                  required
+                  qv-rules="required|integer|min:7|max:100"
+                  qv-messages="L'âge minimal est requis|L'âge doit être un nombre entier|L'âge minimal doit être supérieur ou égal dix (10) ans"
+                  type="text"
+                  name="age_min"
+                  class="form-control"
+                  [(ngModel)]="category.age_min"
+                />
+              </div>
+              <div qv-feedback="age_min"></div>
+              <p class="form-text text-muted">
+                Quel est l'âge minimal pour avoir ce permis ?
+              </p>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="mb-4">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-6 required">Note</div>
+                  <div class="col-6 text-end">
+                    <span info="La note minimale pour avoir permis">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input
+                  required
+                  qv-rules="required|integer|min:10|max:20"
+                  qv-messages="La note minimale est requise|La note minimale doit être un entier|La note minimale  doit être supérieure ou égal dix (10) francs| La note minimale ne peut pas dépasser vingt (20)"
+                  type="number"
+                  name="note_min"
+                  class="form-control"
+                  [(ngModel)]="category.note_min"
+                />
+              </div>
+              <div qv-feedback="note_min"></div>
+              <p class="form-text text-muted">
+                Quelle est la note minimale pour avoir ce permis ?
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 mb-3">Indiquez le montant pour les:</div>
+        <div class="row">
+          <div class="col-md">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6 required">Civils</div>
+                <div class="col-6 text-end">
+                  <span info="Le montant à payer pour passer ce permis">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                required
+                min="0"
+                qv-rules="required|integer|min:0"
+                qv-messages="Le montant est requis| {1,2} Veuillez renseigner un montant raisonable"
+                type="number"
+                name="montant"
+                class="form-control"
+                [(ngModel)]="category.montant"
+              />
+            </div>
+            <div qv-feedback="montant"></div>
+            <p class="form-text text-muted">
+              Quel est le montant à payer pour passer ce permis ?
+            </p>
+          </div>
+          <div class="col-md">
+            <div class="mb-4">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-8 required">Militaires</div>
+                  <div class="col-4 text-end">
+                    <span info="Le montant à payer par les militaires">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input
+                  required
+                  min="1000"
+                  qv-rules="required|integer|min:0|max:1000000"
+                  qv-messages="{0,1,2,3} Veuillez renseigner un montant raisonable"
+                  type="number"
+                  name="montant_militaire"
+                  class="form-control"
+                  [(ngModel)]="category.montant_militaire"
+                />
+              </div>
+              <div qv-feedback="montant_militaire"></div>
+              <p class="form-text text-muted">
+                Quel est le montant à payer par les militaires ?
+              </p>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="mb-4">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-8 required">Étrangers</div>
+                  <div class="col-4 text-end">
+                    <span info="Le montant à payer par les étrangers">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input
+                  required
+                  min="0"
+                  qv-rules="required|integer|min:0|max:1000000"
+                  qv-messages="{0,1,2,3} Veuillez renseigner un montant raisonable"
+                  type="number"
+                  name="montant_etranger"
+                  class="form-control"
+                  [(ngModel)]="category.montant_etranger"
+                />
+              </div>
+              <div qv-feedback="montant_etranger"></div>
+              <p class="form-text text-muted">
+                Quel est le montant à payer par les étrangers ?
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="mb-3">
+            <label for="" class="form-label"
+              >Courte description du permis</label
+            >
+            <textarea
+              class="form-control"
+              name="description"
+              placeholder="Ajouter une courte description au permis"
+              qv-rules="max:150"
+              rows="3"
+              [(ngModel)]="category.description"
+            ></textarea>
+            <div qv-feedback="description"></div>
+          </div>
+        </div>
+        <div class="window-pagination">
+          <button type="button" class="btn fw-normal" disabled>
+            <i class="bi bi-arrow-left-short"></i> Précédent
+          </button>
+          <button
+            type="button"
+            class="btn fw-normal btn-outline-primary"
+            [disabled]="!basicFormIsValid()"
+            data-window-action="1"
+          >
+            Suivant <i class="bi bi-arrow-right-short"></i>
+          </button>
+        </div>
+      </form>
+    </app-ng-window-page>
+    <app-ng-window-page data-window-page="1">
+      <form id="category-permis-validite" class="fieldset">
+        <div class="row my-3">
+          <div class="col-lg-7">
+            <label for=""
+              >La validité dépend t-elle d'une tranche d'âge ?</label
+            >
+            <div class="my-3">
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="has_tranche_no"
+                  value="0"
+                  name="has_tranche"
+                  (change)="hasTranche($event.target)"
+                  [checked]="!has_tranche"
+                />
+                <label class="form-check-label" for="has_tranche_no">Non</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="has_tranche_yes"
+                  name="has_tranche"
+                  value="1"
+                  [checked]="has_tranche"
+                  (change)="hasTranche($event.target)"
+                />
+                <label class="form-check-label" for="has_tranche_yes"
+                  >Oui</label
+                >
+              </div>
+              <div
+                class="my-3 rounded p-2"
+                [ngClass]="{
+                  'col-md-4': !has_tranche,
+                  'bg-lighter': has_tranche
+                }"
+              >
+                <div class="row">
+                  <div class="col-md">
+                    <label for="" class="required">Validité</label>
+                    <input
+                      type="number"
+                      name="validite"
+                      class="form-control"
+                      qv-rules="required|integer|min:1|max:10"
+                      qv-messages="{0,1,2,3}La validité doit être un nombre compris entre 1 et 10ans"
+                      qv-events="blur|mouseleave|keyup"
+                      [(ngModel)]="tranche.validite"
+                    />
+                    <div qv-feedback="validite"></div>
+                  </div>
+                  <div class="col-md" *ngIf="has_tranche">
+                    <label for="" class="mb-1 d-block required">
+                      Âge minimal
+                    </label>
+                    <input
+                      qv-rules="required|integer|between:10,80"
+                      qv-messages="Lâge minimal est requis | L'âge minimal doit être un nombre | L'âge minimal doit être compris entre 10 et 80 ans"
+                      required
+                      type="text"
+                      name="age_min"
+                      class="form-control"
+                      [(ngModel)]="tranche.age_min"
+                    />
+                    <div qv-feedback="age_min"></div>
+                  </div>
+                  <div class="col-md" *ngIf="has_tranche">
+                    <label for="" class="mb-1 d-block">
+                      <div class="row justify-content-between">
+                        <div class="required">Âge maximal</div>
+                      </div>
+                    </label>
+                    <input
+                      qv-rules="required|integer|between:10,80"
+                      qv-messages="Lâge maximal est requis | L'âge maximal doit être un nombre | L'âge maximal doit être compris entre 10 et 80 ans"
+                      required
+                      type="text"
+                      name="age_max"
+                      class="form-control"
+                      [(ngModel)]="tranche.age_max"
+                    />
+                    <div qv-feedback="age_max"></div>
+                  </div>
+                </div>
+
+                <div class="col-12" *ngIf="has_tranche">
+                  <button
+                    *ngIf="editTranche"
+                    type="button"
+                    class="btn btn-outline-primary me-2"
+                    (click)="updateTranche()"
+                    [disabled]="onPostingTranches"
+                  >
+                    Mettre à jour
+                  </button>
+                  <button
+                    *ngIf="editTranche"
+                    type="button"
+                    class="btn btn-danger me-2"
+                    (click)="cancelAddTranche()"
+                    [disabled]="onPostingTranches"
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    *ngIf="addNewTrancheAge"
+                    type="button"
+                    class="btn btn-outline-primary"
+                    (click)="addTranche($event)"
+                    [disabled]="onPostingTranches"
+                  >
+                    Ajouter <app-icon icon="plus"></app-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5 border-start" *ngIf="has_tranche">
+            <div class="h6">Les tranches d'âges</div>
+            <div class="table-responsive bg-light rounded">
+              <table class="table" *ngIf="tranches.length">
+                <thead>
+                  <tr>
+                    <th scope="col">Validité</th>
+                    <th scope="col">Tranche d'âge</th>
+                    <th scope="col">#</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="" *ngFor="let tr of tranches; let i = index">
+                    <td scope="row">{{ tr.validite }}ans</td>
+                    <td scope="row">
+                      {{ tr.age_min }}ans - {{ tr.age_max }}ans
+                    </td>
+                    <td>
+                      <app-icon
+                        (click)="editTrancheAge(i)"
+                        icon="pencil"
+                        classe="text-success"
+                      ></app-icon>
+                      <app-icon
+                        (click)="openRemoveTrancheAlert(tr)"
+                        icon="trash3"
+                        classe="text-danger"
+                      ></app-icon>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="12">
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        (click)="appendNewTranche()"
+                      >
+                        Nouvelle tranche d'âge
+                        <app-icon icon="plus"></app-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center py-3" *ngIf="!tranches.length">
+                Aucune tranche d'âge
+              </div>
+
+              <div
+                class="alert alert-danger"
+                role="alert"
+                *ngIf="trancheToDelete.id"
+              >
+                <strong>
+                  <app-icon icon="exclamation-octagon"></app-icon> Attention
+                </strong>
+                <p class="mb-3">
+                  Vous êtes de vouloir retirer la tranche d'âge
+                </p>
+                <table class="table table-bordered border-light">
+                  <thead>
+                    <tr>
+                      <th>Validité</th>
+                      <th>Âge minimal</th>
+                      <th>Âge maximal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{ trancheToDelete.validite }}an(s)</td>
+                      <td>{{ trancheToDelete.age_min }}an(s)</td>
+                      <td>{{ trancheToDelete.age_max }}an(s)</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button
+                  type="button"
+                  class="btn btn-danger me-2"
+                  (click)="cancelRemoveTranche()"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-success"
+                  (click)="removeTranche()"
+                >
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="window-pagination">
+          <button type="button" class="btn fw-normal" data-window-action="1">
+            <i class="bi bi-arrow-left-short"></i> Précédent
+          </button>
+          <button
+            type="button"
+            class="btn fw-normal btn-primary"
+            data-window-action="2"
+            [disabled]="!trancheFormIsValid()"
+          >
+            <i class="bi bi-arrow-right-short"></i> Suivant
+          </button>
+        </div>
+      </form>
+    </app-ng-window-page>
+    <app-ng-window-page data-window-page="2">
+      <form class="fieldset" id="category-permis-extension">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <div class="py-2">
+              <a
+                href=""
+                class="fw-semibold"
+                (click)="selectAccordion(0, $event)"
+              >
+                Gestions des extensions
+                <app-icon
+                  icon="chevron-right"
+                  *ngIf="accordionIndex !== 0"
+                ></app-icon>
+                <app-icon
+                  icon="chevron-down"
+                  *ngIf="accordionIndex === 0"
+                ></app-icon>
+              </a>
+              <div *ngIf="accordionIndex === 0">
+                <div>
+                  <label for="" class="mb-3"
+                    >Ce permis est-il une extension ?</label
+                  >
+                  <div class="mb-3">
+                    <div class="form-check form-check-inline">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        id="is_extension_no"
+                        value="0"
+                        name="is_extension"
+                        (change)="isExtension($event.target)"
+                        [checked]="!is_extension"
+                      />
+                      <label class="form-check-label" for="is_extension_no"
+                        >Non</label
+                      >
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        id="is_extension_yes"
+                        name="is_extension"
+                        value="1"
+                        [checked]="is_extension"
+                        (change)="isExtension($event.target)"
+                      />
+                      <label class="form-check-label" for="is_extension_yes"
+                        >Oui</label
+                      >
+                    </div>
+                  </div>
+                  <!--Si le permet n'est extensible-->
+                  <div class="col-3" *ngIf="is_extension">
+                    <div class="mb-3">
+                      <label for="" class="mb-1 d-block">
+                        <div class="row justify-content-between">
+                          <div class="col-8 required">Montant</div>
+                          <div class="col-4 text-end">
+                            <span info="Le montant">
+                              <app-icon icon="info" [size]="14"></app-icon>
+                            </span>
+                          </div>
+                        </div>
+                      </label>
+                      <div class="input-grouped">
+                        <input required
+                          min="0"
+                          qv-rules="required|integer|min:0"
+                          qv-messages="Le montant est requis| {1,2} Veuillez renseigner un montant raisonable"
+                          type="number"
+                          name="montant"
+                          class="form-control" [(ngModel)]="category.montant_extension"/>
+                      </div>
+                      <div qv-feedback="montant_extension"></div>
+                    </div>
+                  </div>
+
+
+                  <!--Si le permet est extensible-->
+                  <div class="my-3" *ngIf="!is_extension">
+                    <label for="" class="mb-3"
+                      >Ce permis a t-il des extensions</label
+                    >
+                    <div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="has-extension-no"
+                          value="0"
+                          name="has_extension"
+                          [checked]="!has_extensions"
+                          (change)="hasExtensions($event.target)"
+                        />
+                        <label class="form-check-label" for="has-extension-no"
+                          >Non</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="has-extension-yes"
+                          name="has_extension"
+                          value="1"
+                          [checked]="has_extensions"
+                          (change)="hasExtensions($event.target)"
+                        />
+                        <label class="form-check-label" for="has-extension-yes"
+                          >Oui</label
+                        >
+                      </div>
+                    </div>
+
+                    <div *ngIf="has_extensions">
+                      <div *ngIf="lesExtensions.length">
+                        <div class="mb-3" *ngIf="lesExtensions">
+                          <select
+                            class="form-select form-select-lg"
+                            name="catExtSelected"
+                            [(ngModel)]="catExtSelected"
+                          >
+                            <option value="" selected>
+                              Sélectionner un permis
+                            </option>
+                            <option
+                              *ngFor="let cat of lesExtensions"
+                              [value]="cat.name"
+                            >
+                              {{ cat.name }}
+                            </option>
+                          </select>
+                          <div class="my-3">
+                            <button
+                              type="button"
+                              class="btn btn-primary"
+                              (click)="addExtension($event.target)"
+                            >
+                              Ajouter
+                            </button>
+                          </div>
+                        </div>
+                        <label for="" class="mb-2">Liste des extensions</label>
+                        <div class="col-sm-8" *ngIf="extensions.length">
+                          <div class="table-responsive">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Les extensions</th>
+                                  <th scope="col"></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr
+                                  *ngFor="let ext of extensions; let i = index"
+                                >
+                                  <td scope="row">{{ ext.name }}</td>
+                                  <td>
+                                    <div>
+                                      <app-icon
+                                        (click)="showExtRemovingAlert(ext.name)"
+                                        classe="text-danger"
+                                        icon="trash3"
+                                      ></app-icon>
+                                      <div
+                                        class="alert alert-danger"
+                                        role="alert"
+                                        *ngIf="pm_ext_to_remove === ext.name"
+                                      >
+                                        Voulez-vous retirer cette extension ?
+                                        <div class="mt-1">
+                                          <button
+                                            class="btn btn-sm btn-success"
+                                            (click)="deletePmExtension()"
+                                          >
+                                            Oui
+                                          </button>
+                                          <button
+                                            (click)="
+                                              (pm_ext_to_remove === ext.name)
+                                            "
+                                            class="btn btn-sm btn-danger"
+                                          >
+                                            Non
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="alert alert-warning"
+                          *ngIf="!extensions.length"
+                        >
+                          <p class="my-0">Aucune extension</p>
+                        </div>
+                      </div>
+
+                      <div
+                        class="alert alert-warning"
+                        *ngIf="!lesExtensions.length"
+                      >
+                        <p>Aucune catégorie extensible n'existe encore</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="py-2">
+              <a
+                href=""
+                class="fw-semibold"
+                (click)="selectAccordion(1, $event)"
+              >
+                Gestions des permis préalables
+                <app-icon
+                  icon="chevron-right"
+                  *ngIf="accordionIndex !== 1"
+                ></app-icon>
+                <app-icon
+                  icon="chevron-down"
+                  *ngIf="accordionIndex === 1"
+                ></app-icon>
+              </a>
+            </div>
+            <div *ngIf="accordionIndex === 1">
+              <div class="col-lg-6">
+                <div class="mb-3" *ngIf="categories">
+                  <label class="form-check-label mb-3" for="">
+                    Le permis préable
+                  </label>
+                  <select
+                    class="form-select form-select-lg"
+                    name="permis_prealable"
+                    [(ngModel)]="permis_prealable_id"
+                  >
+                    <option value="" selected>Sélectionner un permis</option>
+                    <option [value]="cat.id" *ngFor="let cat of categories">
+                      {{ cat.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="">Durée du permis préalable</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="category.permis_prealable_dure"
+                    class="form-control"
+                    name="permis_prealable_dure"
+                    min="1"
+                  />
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="window-pagination">
+          <button class="btn fw-normal" data-window-action="1">
+            <i class="bi bi-arrow-left-short"></i> Précédent
+          </button>
+        </div>
+      </form>
+    </app-ng-window-page>
+  </app-ng-window>
+  <p class="m-3 text-end">
+    <button
+      class="btn btn-lg px-3 btn-success"
+      [disabled]="!trancheFormIsValid() || !basicFormIsValid()"
+      (click)="save($event)"
+    >
+      Enregistrer <i class="fas fa-save"></i>
+    </button>
+  </p>
+</div>

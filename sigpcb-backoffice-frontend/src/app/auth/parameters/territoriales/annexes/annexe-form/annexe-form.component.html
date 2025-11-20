@@ -1,0 +1,588 @@
+<div
+  class="card-header text-primary d-flex justify-content-between py-3"
+  style="width: 80%; margin: auto"
+>
+  <span
+    >{{ annexe_formulaire }}
+    <strong *ngIf="annexeanatt_title">{{ annexeanatt_title }}</strong></span
+  >
+  <button
+    type="button"
+    class="btn btn-danger"
+    routerLink="/parametres/territoriales"
+  >
+    <app-icon icon="arrow-left-short" [size]="14"></app-icon> Retour
+  </button>
+</div>
+<div class="card-body" style="width: 80%; margin: auto">
+  <app-ng-window id="category-window">
+    <app-ng-window-header>
+      <button
+        class="btn window-btn"
+        [class.current]="pageIndex === 0"
+        (click)="selectedPage(0)"
+      >
+        Informations basiques
+      </button>
+      <button
+        class="btn window-btn"
+        [class.current]="pageIndex === 1"
+        (click)="selectedPage(1)"
+        [disabled]="!annexeanatt.id"
+      >
+        Salles de composition
+      </button>
+    </app-ng-window-header>
+
+    <app-ng-window-page *ngIf="pageIndex == 0" data-window-current="true">
+      <form
+        data-qv-form="basic"
+        need-validations
+        id="annexes-form"
+        class="fieldset"
+      >
+        <div class="row mb-3">
+          <div class="col-12">
+            <div class="mb-4">
+              <label for="" class="mb-1 d-block">
+                <div class="row justify-content-between">
+                  <div class="col-6 required">Nom</div>
+                  <div class="col-6 text-end">
+                    <span builbe info="Le nom de l'unité administrative">
+                      <app-icon icon="info" [size]="14"></app-icon>
+                    </span>
+                  </div>
+                </div>
+              </label>
+              <div class="input-grouped">
+                <input
+                  data-qv-rules="required|minlength:2|maxlength:80"
+                  data-qv-messages="Le nom de l'annexe est requis|{1,2}Le nom doit être compris entre 2 et 80 caractères"
+                  required
+                  type="text"
+                  name="name"
+                  class="form-control"
+                  [(ngModel)]="annexeanatt.name"
+                />
+              </div>
+              <div data-qv-feedback="name"></div>
+            </div>
+          </div>
+        </div>
+        <fieldset>
+          <legend>Départements couverts</legend>
+          <div class="row mb-2">
+            <div class="col-12">
+              <div class="mb-3">
+                <label for="" class="mb-1 d-block">
+                  <div class="row justify-content-between">
+                    <label class="col-6 required" for="departement_id_1"
+                      >Département (s)</label
+                    >
+                    <div class="col-6 text-end">
+                      <span builbe info="Sélectionner un ou des départements">
+                        <app-icon icon="info" [size]="14"></app-icon>
+                      </span>
+                    </div>
+                  </div>
+                </label>
+                <div class="mb-3">
+                  <ng-multiselect-dropdown
+                    [placeholder]="'Sélectionner un ou des départements'"
+                    [data]="departements"
+                    [settings]="settings"
+                    [(ngModel)]="selectedItems"
+                    name="departement_id_1"
+                  >
+                  </ng-multiselect-dropdown>
+                </div>
+                <div data-qv-feedback="departement_id_1"></div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Emplacement de l'annexe</legend>
+          <div class="row mb-3">
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="" class="mb-1 d-block">
+                  <div class="row justify-content-between">
+                    <label class="col-6 required" for="departement_id"
+                      >Département</label
+                    >
+                    <div class="col-6 text-end">
+                      <span builbe info="Sélectionner un département">
+                        <app-icon icon="info" [size]="14"></app-icon>
+                      </span>
+                    </div>
+                  </div>
+                </label>
+                <div class="mb-3">
+                  <select
+                    class="form-select"
+                    name="departement_id"
+                    data-qv-rules="min:1"
+                    data-qv-messages="Le département est requis"
+                    [(ngModel)]="annexeanatt.departement_id"
+                    (change)="selectDep()"
+                  >
+                    <option value="" disabled selected>
+                      Sélectionner un département
+                    </option>
+                    <option
+                      [value]="departement.id"
+                      *ngFor="let departement of departementsEmplacements"
+                    >
+                      {{ departement.name }}
+                    </option>
+                  </select>
+                </div>
+                <div data-qv-feedback="departement_id"></div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="" class="mb-1 d-block">
+                  <div class="row justify-content-between">
+                    <label class="col-6 required" for="commune_id"
+                      >Commune</label
+                    >
+                    <div class="col-6 text-end">
+                      <span builbe info="Sélectionner une commune">
+                        <app-icon icon="info" [size]="14"></app-icon>
+                      </span>
+                    </div>
+                  </div>
+                </label>
+                <div class="mb-3">
+                  <select
+                    class="form-select"
+                    name="commune_id"
+                    data-qv-rules="min:1"
+                    data-qv-messages="La commune est requise"
+                    [(ngModel)]="annexeanatt.commune_id"
+                  >
+                    <option value="" disabled selected>
+                      Sélectionner une commune
+                    </option>
+                    <option
+                      [value]="commune.id"
+                      *ngFor="let commune of communes"
+                    >
+                      {{ commune.name }}
+                    </option>
+                  </select>
+                </div>
+                <div data-qv-feedback="commune_id"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="email" class="mb-1 d-block">
+                  <div class="row justify-content-between">
+                    <div class="col-8 required">E-mail</div>
+                    <div class="col-4 text-end">
+                      <span builbe info="L'e-mail de l'annexe">
+                        <app-icon icon="info" [size]="14"></app-icon>
+                      </span>
+                    </div>
+                  </div>
+                </label>
+                <div class="input-grouped">
+                  <input
+                    type="text"
+                    name="email"
+                    placeholder="Taper l'email"
+                    class="form-control"
+                    [(ngModel)]="annexeanatt.email"
+                  />
+                </div>
+                <div data-qv-feedback="email"></div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="" class="mb-1 d-block">
+                  <div class="row justify-content-between">
+                    <div class="col-6">Téléphone</div>
+                    <div class="col-6 text-end">
+                      <span builbe info="Le téléphone de l'annexe">
+                        <app-icon icon="info" [size]="14"></app-icon>
+                      </span>
+                    </div>
+                  </div>
+                </label>
+                <div class="input-grouped">
+                  <input
+                    type="text"
+                    name="phone"
+                    placeholder="Taper le téléphone"
+                    class="form-control"
+                    [(ngModel)]="annexeanatt.phone"
+                  />
+                </div>
+                <div data-qv-feedback="phone"></div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="" class="mb-1 d-block">
+                  <div class="row justify-content-between">
+                    <div class="col-6">Adresse</div>
+                    <div class="col-6 text-end">
+                      <span builbe info="L'adresse de l'annexe">
+                        <app-icon icon="info" [size]="14"></app-icon>
+                      </span>
+                    </div>
+                  </div>
+                </label>
+                <div class="input-grouped">
+                  <textarea
+                    name="adresse_annexe"
+                    id="adresse_annexe"
+                    rows="5"
+                    class="form-control"
+                    [(ngModel)]="annexeanatt.adresse_annexe"
+                  ></textarea>
+                </div>
+                <div data-qv-feedback="adresse_annexe"></div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="" class="mb-1 d-block">
+                  <div class="row justify-content-between">
+                    <div class="col-6">Adresse conduite</div>
+                    <div class="col-6 text-end">
+                      <span builbe info="L'adresse de l'annexe">
+                        <app-icon icon="info" [size]="14"></app-icon>
+                      </span>
+                    </div>
+                  </div>
+                </label>
+                <div class="input-grouped">
+                  <textarea
+                    name="conduite_lieu_adresse"
+                    id="conduite_lieu_adresse"
+                    rows="5"
+                    class="form-control"
+                    [(ngModel)]="annexeanatt.conduite_lieu_adresse"
+                  ></textarea>
+                </div>
+                <div data-qv-feedback="conduite_lieu_adresse"></div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <div class="row mb-2">
+          <div class="col-6">
+            <div class="d-flex">
+              <label for="admin-status" class="me-2"
+                >Statut (Actif / Inactif)</label
+              >
+              <div class="form-check form-switch mb-0">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  id="admin-status"
+                  name="status"
+                  checked
+                  [(ngModel)]="annexeanatt.status"
+                  value="1"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-sm">
+            <p class="text-end">
+              <button
+                class="btn btn-primary fw-normal"
+                [disabled]="onLoading"
+                data-qv-submit
+                (click)="save($event)"
+              >
+                Enregistrer
+                <span *ngIf="onLoading">
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Loading...</span>
+                </span>
+              </button>
+              <input
+                id="reset"
+                type="reset"
+                value="Annuler"
+                style="display: none"
+              />
+            </p>
+          </div>
+        </div>
+      </form>
+    </app-ng-window-page>
+    <app-ng-window-page *ngIf="pageIndex == 1">
+      <div class="row">
+        <div class="offset-10 col-2 text-end">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="openSalleModal('store')"
+            title="Ajout de salle de composition"
+          >
+            <app-icon icon="house-add" [size]="14"></app-icon>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th width="10%" class="text-center">Contenance</th>
+                <th width="5%" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let salle of salles">
+                <td>{{ salle.name }}</td>
+                <td class="text-center">{{ salle.contenance }}</td>
+                <td>
+                  <div class="btn-actions">
+                    <app-icon
+                      icon="pencil"
+                      classe="text-warning"
+                      (click)="openSalleModal('edit', salle)"
+                    ></app-icon>
+                    <app-delete
+                      (canDelete)="deleteSalleAnnexe($event)"
+                      [activateId]="salle.id"
+                    ></app-delete>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="text-center" *ngIf="salles.length == 0">
+              <tr>
+                <td colspan="12">Aucune donnée</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </app-ng-window-page>
+  </app-ng-window>
+</div>
+<app-modal [action]="modalAssignSalle" size="">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+  <div *ngIf="salleAction === 'store'">
+    <form action="" method="post" need-validations id="salle-add-form">
+      <div class="row mb-2">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="name">Nom</label>
+                <div class="col-6 text-end">
+                  <span builbe info="Le nom de la salle">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                type="text"
+                name="name"
+                placeholder="Taper le nom"
+                data-qv-rules="required|minlength:2|maxlength:80"
+                data-qv-messages="Le nom est requis | Le nom est trop court | Le nom est trop long"
+                class="form-control"
+                [(ngModel)]="sallecompo.name"
+              />
+            </div>
+            <div data-qv-feedback="name"></div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="contenance"
+                  >Contenance</label
+                >
+                <div class="col-6 text-end">
+                  <span builbe info="La contenance de la salle">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                type="text"
+                name="contenance"
+                placeholder="Taper la contenance"
+                data-qv-rules="required|integer|min:1"
+                data-qv-messages="La contenance est requise|La contenance doit être un entier|La contenance est doit être au minimum de 1"
+                class="form-control"
+                [(ngModel)]="sallecompo.contenance"
+              />
+            </div>
+            <div data-qv-feedback="contenance"></div>
+          </div>
+        </div>
+
+        <div class="text-end col-sm-9 offset-sm-3">
+          <button
+            class="btn btn-outline-primary justify-content-center"
+            data-qv-submit
+            (click)="addAssignSalle($event)"
+          >
+            <app-icon icon="plus" [size]="18"></app-icon>
+            Ajouter
+          </button>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <hr />
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th width="10%" class="text-center">Contenance</th>
+              <th width="5%" class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sallecompo of sallecompos">
+              <td>{{ sallecompo.name }}</td>
+              <td class="text-center">{{ sallecompo.contenance }}</td>
+              <td class="text-center">
+                <app-icon
+                  icon="trash3"
+                  classe="text-danger"
+                  (click)="deleteSalle(sallecompo)"
+                ></app-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="onLoading"
+            (click)="saveAssignSalle($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="salleAction === 'edit'">
+    <form action="" method="post" need-validations id="salle-edit-form">
+      <div class="row mb-2">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="name">Nom</label>
+                <div class="col-6 text-end">
+                  <span builbe info="Le nom de la salle">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                type="text"
+                name="name"
+                placeholder="Taper le nom"
+                data-qv-rules="required|startWithLetter|minlength:2|maxlength:80"
+                data-qv-messages="Le nom est requis | Le nom doit commencer par une lettre | Le nom est trop court | Le nom est trop long"
+                class="form-control"
+                [(ngModel)]="sallecompo.name"
+                id="name"
+              />
+            </div>
+            <div data-qv-feedback="name"></div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="contenance"
+                  >Contenance</label
+                >
+                <div class="col-6 text-end">
+                  <span builbe info="La contenance de la salle">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                type="text"
+                name="contenance"
+                placeholder="Taper la contenance"
+                data-qv-rules="required|integer|min:1"
+                data-qv-messages="La contenance est requise| La contenance doit être un entier|La contenance est doit être au minimum de 1"
+                class="form-control"
+                [(ngModel)]="sallecompo.contenance"
+              />
+            </div>
+            <div data-qv-feedback="contenance"></div>
+          </div>
+        </div>
+        <div class="text-end col-sm-9 offset-sm-3">
+          <button
+            class="btn btn-outline-primary justify-content-center"
+            [disabled]="onLoadingSalle"
+            data-qv-submit
+            (click)="saveSalle($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoadingSalle">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="row mb-2"></div>
+    </form>
+  </div>
+</app-modal>

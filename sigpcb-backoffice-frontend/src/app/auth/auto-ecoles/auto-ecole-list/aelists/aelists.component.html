@@ -1,0 +1,738 @@
+<div class="row p-2 justify-content-between align-items-center mb-3">
+  <div class="col-lg-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <button class="btn btn-refresh" (click)="get()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 10px">Actualiser</span>
+      </button>
+      <div class="input-group ms-1">
+        <span class="input-group-text" role="button" (click)="get()">
+          <app-icon icon="search"></app-icon>
+        </span>
+        <input
+          type="text"
+          name="search"
+          class="form-control"
+          placeholder="Taper un IFU ..."
+          [(ngModel)]="filters.search"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 text-end">
+    <div class="row filter-box">
+      <div class="col">
+        <select
+          class="form-select"
+          name="permisSelected"
+          (change)="get()"
+          [(ngModel)]="autoecoleActive"
+        >
+          <option value="all">Toutes les auto-écoles</option>
+          <option value="true">Auto-écoles actives</option>
+          <option value="false">Auto-écoles désactivées</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row p-2 justify-content-between align-items-center mb-3">
+  <div class="col-lg-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <button class="btn border btn-icons btn-primary" (click)="importModal()">
+        <app-icon icon="download"></app-icon>
+        Importer
+      </button>
+    </div>
+  </div>
+  <div class="col-lg-3 text-end">
+    <button
+      class="btn border btn-icons btn-primary"
+      (click)="openModal('store')"
+    >
+      <app-icon icon="plus"></app-icon>
+      Ajouter
+    </button>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr class="bg-table-primary">
+        <th scope="col">Nom de l'auto-école</th>
+        <th scope="col">Type</th>
+        <th scope="col">IFU</th>
+        <th scope="col">Promoteur</th>
+        <th scope="col">Emplacement</th>
+        <th>Status</th>
+        <th width="5%">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="onLoadAutoEcole">
+      <tr>
+        <td colspan="12" class="py-3 text-center">
+          <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+            Chargement en cours
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <tbody
+      *ngFor="let item of autoecoles | paginate : paginateArgs(); let i = index"
+    >
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>
+          <span [ngSwitch]="item.type">
+            <span *ngSwitchCase="'civil'">Civil</span>
+            <span *ngSwitchCase="'militaire'">Militaire</span>
+          </span>
+        </td>
+
+        <td>{{ item.num_ifu }}</td>
+        <td>
+          {{ item.promoteur_info?.nom }} {{ item.promoteur_info?.prenoms }}
+        </td>
+        <td>
+          {{ item?.adresse }}
+        </td>
+        <td class="d-none d-md-table-cell">
+          <div class="switch-form">
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                [checked]="item.status"
+                (change)="switch(item.id, $event)"
+              />
+            </div>
+          </div>
+        </td>
+        <!-- <td>
+          <div class="btn-actions">
+            <app-icon icon="pencil" (click)="openModal('edit', item)" [size]="16" classe="text-success"></app-icon>
+          </div>
+        </td> -->
+        <td>
+          <button
+            class="btn"
+            (click)="showDossier(i)"
+            [class.btn-primary]="dossierIndex !== i"
+            [class.btn-outline-primary]="dossierIndex === i"
+          >
+            <span *ngIf="dossierIndex !== i"> Voir</span>
+            <span *ngIf="dossierIndex === i"> Fermer</span>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="dossierIndex === i">
+        <td colspan="12">
+          <app-auto-ecole-fiche
+            [data]="item"
+            [communesdepart]="communesdepart"
+            [departements]="departements"
+            page="validate"
+          />
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="!onLoadAutoEcole && !autoecoles.length">
+      <tr>
+        <td colspan="12" class="py-3 text-center">Aucune auto-école trouvée</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="p-3" *ngIf="paginate_data">
+    <app-pagination
+      *ngIf="paginate_data.total > 10"
+      [total]="paginate_data.total"
+      (pageChange)="paginate($event)"
+      [pageNumber]="pageNumber"
+    ></app-pagination>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="motif-modal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary fw-semibold" id="modalTitleId">
+          Motif
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="" class="form-label">Motif</label>
+          <textarea
+            name="consigne"
+            class="form-control"
+            cols="30"
+            rows="10"
+            placeholder="Ecrivez votre message"
+            [(ngModel)]="motif"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">
+          Fermer
+        </button>
+        <button type="button" class="btn btn-primary" (click)="desactive()">
+          Envoyer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal [action]="modalImportId" size="modal-md">
+  <div heading class="fw-semibold text-primary text-center">
+    Importer des auto-écoles
+  </div>
+  <form action="" quickv id="langue-form">
+    <div class="mb-4">
+      <div class="alert alert-info">
+        Télécharger
+        <a href="assets/files/{{ importFileName }}" class="text-success">ici</a>
+        le modèle du fichier à importer.
+        <a href="assets/files/{{ importFileName }}" class="text-success"
+          >Télécharger</a
+        >
+      </div>
+    </div>
+    <div class="mb-4">
+      <label for="" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-6 required">Fichier</div>
+          <div class="col-6 text-end">
+            <span info="Le fichier des auto-écoles à importer">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input
+          type="file"
+          accept=".xls, .xlsx"
+          name="illustration"
+          class="form-control"
+          (change)="onFileSelected($event)"
+        />
+      </div>
+      <div qv-feedback="name"></div>
+    </div>
+
+    <div class="mb-4">
+      <p>
+        <button
+          class="btn btn-primary w-100"
+          qv-submit
+          (click)="import($event)"
+          [disabled]="onLoadingImport"
+        >
+          Importer
+          <span *ngIf="onLoadingImport">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+        <input
+          id="resetImportFile"
+          type="reset"
+          value="Annuler"
+          style="display: none"
+        />
+      </p>
+    </div>
+  </form>
+</app-modal>
+
+<app-modal [action]="modalAddId" size="modal-lg">
+  <div heading class="fw-semibold text-primary text-center">
+    {{ auto_ecole_formulaire }}
+  </div>
+  <form action="" quickv id="langue-form">
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Nom de l'auto-école</div>
+              <div class="col-6 text-end">
+                <span info="Le nom de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="Le nom est requis"
+              required
+              type="text"
+              name="name"
+              class="form-control"
+              [(ngModel)]="autoecole.name"
+            />
+          </div>
+          <div qv-feedback="name"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">IFU</div>
+              <div class="col-6 text-end">
+                <span info="L'IFU de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              data-qv-rules="size:12"
+              qv-messages="L'IFU est requis"
+              required
+              type="text"
+              name="num_ifu"
+              class="form-control"
+              [(ngModel)]="autoecole.num_ifu"
+            />
+          </div>
+          <div qv-feedback="num_ifu"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Téléphone professionel</div>
+              <div class="col-6 text-end">
+                <span info="Le téléphone de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="Le téléphone est requis"
+              required
+              type="text"
+              name="phone"
+              class="form-control"
+              [(ngModel)]="autoecole.phone"
+            />
+          </div>
+          <div qv-feedback="phone"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Email professionel</div>
+              <div class="col-6 text-end">
+                <span info="L'email professionel de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required|email"
+              qv-messages="L'email professionel est requis"
+              required
+              type="email"
+              name="email"
+              class="form-control"
+              [(ngModel)]="autoecole.email"
+            />
+          </div>
+          <div qv-feedback="email"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Adresse</div>
+              <div class="col-6 text-end">
+                <span info="L'adresse de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="L'adresse est requise"
+              required
+              type="text"
+              name="adresse"
+              class="form-control"
+              [(ngModel)]="autoecole.adresse"
+            />
+          </div>
+          <div qv-feedback="adresse"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Véhicules de l'auto-école</div>
+              <div class="col-6 text-end">
+                <span
+                  info="Les immatriculations des véhicules séparées par des virgules"
+                >
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="Immatriculation requise"
+              required
+              type="text"
+              name="vehicules"
+              class="form-control"
+              [(ngModel)]="autoecole.vehicules"
+            />
+          </div>
+          <div qv-feedback="vehicules"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <label class="col-6 required" for="departement_id"
+                >Département</label
+              >
+              <div class="col-6 text-end">
+                <span builbe info="Sélectionner un département">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="mb-3">
+            <select
+              class="form-select"
+              name="departement_id"
+              data-qv-rules="min:1"
+              data-qv-messages="Le département est requis"
+              [(ngModel)]="autoecole.departement_id"
+              (change)="selectDep()"
+            >
+              <option value="" disabled selected>
+                Sélectionner un département
+              </option>
+              <option
+                [value]="departement.id"
+                *ngFor="let departement of departementsEmplacements"
+              >
+                {{ departement.name }}
+              </option>
+            </select>
+          </div>
+          <div data-qv-feedback="departement_id"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <label class="col-6 required" for="commune_id">Commune</label>
+              <div class="col-6 text-end">
+                <span builbe info="Sélectionner une commune">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="mb-3">
+            <select
+              class="form-select"
+              name="commune_id"
+              data-qv-rules="min:1"
+              data-qv-messages="La commune est requise"
+              [(ngModel)]="autoecole.commune_id"
+            >
+              <option value="" disabled selected>
+                Sélectionner une commune
+              </option>
+              <option [value]="commune.id" *ngFor="let commune of communes">
+                {{ commune.name }}
+              </option>
+            </select>
+          </div>
+          <div data-qv-feedback="commune_id"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">NPI du promoteur</div>
+              <div class="col-6 text-end">
+                <span info="Le npi du promoteur">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="Le npi est requis"
+              required
+              type="text"
+              name="npi"
+              class="form-control"
+              [(ngModel)]="autoecole.npi"
+            />
+          </div>
+          <div qv-feedback="npi"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">E-mail du promoteur</div>
+              <div class="col-6 text-end">
+                <span info="L'email du promoteur">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required|email"
+              qv-messages="L'email est requis"
+              required
+              type="email"
+              name="email_promoteur"
+              class="form-control"
+              [(ngModel)]="autoecole.email_promoteur"
+            />
+          </div>
+          <div qv-feedback="email_promoteur"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Référence autorisation</div>
+              <div class="col-6 text-end">
+                <span info="La référence d'autorisation de l'auto-école">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="La référence d'autorisation est requise"
+              required
+              type="text"
+              name="agrement_code"
+              class="form-control"
+              [(ngModel)]="autoecole.agrement_code"
+            />
+          </div>
+          <div qv-feedback="agrement_code"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Code licence</div>
+              <div class="col-6 text-end">
+                <span info="Le code licence">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="Le code licence est requis"
+              required
+              type="text"
+              name="licence_code"
+              class="form-control"
+              [(ngModel)]="autoecole.licence_code"
+            />
+          </div>
+          <div qv-feedback="licence_code"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">NPI des moniteurs</div>
+              <div class="col-6 text-end">
+                <span info="Les npi des moniteurs séparés par des virgules">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="NPI requis"
+              required
+              type="text"
+              name="moniteurs"
+              class="form-control"
+              [(ngModel)]="autoecole.moniteurs"
+            />
+          </div>
+          <small class="text-muted"
+            >Les npi des moniteurs séparés par virgules (,)</small
+          >
+          <div qv-feedback="moniteurs"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">Date expiration licence</div>
+              <div class="col-6 text-end">
+                <span info="La date d'expiration de licence">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input
+              qv-rules="required"
+              qv-messages="La date est requise"
+              required
+              type="date"
+              name="date_licence"
+              class="form-control"
+              [(ngModel)]="autoecole.date_licence"
+            />
+          </div>
+          <div qv-feedback="date_licence"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md">
+        <div class="mb-4">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <label class="col-6 required" for="type">Type</label>
+              <div class="col-6 text-end">
+                <span builbe info="Sélectionner le type">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="mb-3">
+            <select
+              class="form-select"
+              name="type"
+              data-qv-rules="min:1"
+              data-qv-messages="Le type est requis"
+              [(ngModel)]="autoecole.type"
+            >
+              <option value="" disabled selected>Sélectionner le type</option>
+              <option value="civil">Civil</option>
+              <option value="militaire">Militaire</option>
+            </select>
+          </div>
+          <div data-qv-feedback="type"></div>
+        </div>
+      </div>
+      <div class="col-md">
+        <br />
+        <div class="mb-4 mt-2">
+          <p>
+            <button
+              class="btn btn-primary w-100"
+              qv-submit
+              (click)="save($event)"
+              [disabled]="onLoadingSave"
+            >
+              Enregistrer
+              <span *ngIf="onLoadingSave">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Loading...</span>
+              </span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </form>
+</app-modal>

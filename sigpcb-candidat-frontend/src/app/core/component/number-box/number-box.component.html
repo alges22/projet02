@@ -1,0 +1,10 @@
+<div class="text-center" *ngIf="number">
+  <div
+    class="number-circle mx-auto"
+    [innerText]="number"
+    [ngClass]="{ fill: filled }"
+  ></div>
+  <div class="number-label mt-2" [class.text-primary]="filled">
+    <ng-content></ng-content>
+  </div>
+</div>

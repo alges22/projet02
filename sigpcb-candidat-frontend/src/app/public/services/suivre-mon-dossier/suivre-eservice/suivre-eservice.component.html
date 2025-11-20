@@ -1,0 +1,643 @@
+<ng-container>
+  <!--Chaque service-->
+  <ng-container *ngFor="let eservice of parcours; let i = index">
+    <!------------------- E-service Authenticité du permis ------------------->
+    <ng-container *ngIf="eservice.service == 'Authenticite'">
+      <!---------- Contenu principal ------------>
+      <div class="bg-white border rounded mb-2">
+        <!------- L'entête ------>
+        <ng-container *ngFor="let headParcours of latestParcours">
+          <div
+            class="card-header p-2 rounded bg-light d-flex justify-content-between align-items-center"
+            *ngIf="headParcours.service == 'Authenticite'"
+          >
+            <div>
+              <!-- Les titres-->
+              <h6 class="text-primary">Authenticité du permis</h6>
+
+              <span class="text-muted small">{{
+                headParcours.created_at | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+
+            <ng-container
+              *ngIf="
+                headParcours.slug == 'demande-authenticite-rejected' &&
+                !!headParcours.model_info &&
+                headParcours.model_info.date_correction == null
+              "
+            >
+              <a
+                [routerLink]="[
+                  '/services/authenticite-du-permis/rejets',
+                  headParcours.model_info.id
+                ]"
+                type="button"
+                class="btn btn-outline-primary ms-3"
+              >
+                Corriger ma demande
+              </a>
+            </ng-container>
+
+            <div
+              class="d-flex justify-content-between align-items-center"
+              role="button"
+              (click)="openCard(i)"
+            >
+              <ng-container *ngIf="headParcours.slug == 'demande-authenticite'">
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <ng-container
+                *ngIf="headParcours.slug == 'demande-authenticite-rejected'"
+              >
+                <span [class]="'badge p-2 ' + 'bg-danger'"> Rejetée </span>
+              </ng-container>
+
+              <ng-container
+                *ngIf="headParcours.slug == 'demande-authenticite-validate'"
+              >
+                <span [class]="'badge p-2 ' + 'bg-success'"> Validée </span>
+              </ng-container>
+              <ng-container
+                *ngIf="headParcours.slug == 'correction-authenticite'"
+              >
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <app-icon
+                icon="chevron-right"
+                *ngIf="cardOpendedIndex !== i"
+                classe="fw-bolder ms-3"
+              ></app-icon>
+              <app-icon
+                icon="chevron-down"
+                *ngIf="cardOpendedIndex === i"
+                classe="fw-bolder ms-3"
+              ></app-icon>
+            </div>
+          </div>
+        </ng-container>
+        <!----- Fin L'entête ----->
+
+        <ng-container *ngIf="cardOpendedIndex === i">
+          <div
+            class="m-3 small text-small"
+            *ngFor="let item of eservice.liste; let authIndex = index"
+          >
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" checked />
+                <label class="form-check-label text-primary fw-semibold">
+                  <ng-container *ngIf="item.slug == 'demande-authenticite'">
+                    Demande d'authenticité
+                  </ng-container>
+                  <ng-container
+                    *ngIf="item.slug == 'demande-authenticite-rejected'"
+                  >
+                    Demande d'authenticité rejetée
+                  </ng-container>
+
+                  <ng-container
+                    *ngIf="item.slug == 'demande-authenticite-validate'"
+                  >
+                    Demande d'authenticité validée
+                  </ng-container>
+
+                  <ng-container *ngIf="item.slug == 'correction-authenticite'">
+                    Correction soumise avec succès
+                  </ng-container>
+                </label>
+                <br />
+                <small class="text-muted small">{{
+                  item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                }}</small>
+              </div>
+              <!--Le contenu principal-->
+              <div class="bg-light p-3 rounded col-sm-11 ms-auto mb-3">
+                <div [innerHTML]="item.message"></div>
+                <div class="mt-2">
+                  <ng-container
+                    *ngIf="
+                      item.slug == 'demande-authenticite-rejected' &&
+                      item.model_info &&
+                      item.model_info.date_correction == null
+                    "
+                  >
+                    <a
+                      type="button"
+                      [routerLink]="[
+                        '/services/authenticite-du-permis/rejets',
+                        item.model_info.id
+                      ]"
+                      class="btn btn-primary ms-3"
+
+                      >Corriger la demande
+                    </a>
+                  </ng-container>
+                </div>
+                <div class="mt-2">
+                  <small class="text-muted small">{{
+                    item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                  }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!--------  Fin ----------->
+    </ng-container>
+    <!------------------- Fin E-service Authenticité du permis ------------------->
+
+    <!------------------- E-service "Duplicata/Remplcament" du permis ------------------->
+    <ng-container *ngIf="eservice.service == 'Duplicata'">
+      <!---------- Contenu principal ------------>
+      <div class="bg-white border rounded mb-2">
+        <!------- L'entête ------>
+
+        <ng-container *ngFor="let headParcours of latestParcours">
+          <div
+            class="card-header p-2 rounded bg-light d-flex justify-content-between align-items-center"
+            *ngIf="headParcours.service == 'Duplicata'"
+          >
+            <div>
+              <!-- Les titres-->
+              <h6 class="text-primary">Duplicata / Remplacement du permis</h6>
+
+              <span class="text-muted small">{{
+                headParcours.created_at | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+
+            <ng-container
+              *ngIf="
+                headParcours.slug == 'demande-duplicata-rejected' &&
+                !!headParcours.model_info &&
+                headParcours.model_info.date_correction == null
+              "
+            >
+              <a
+                [routerLink]="[
+                  '/services/duplicata-remplacement/rejets',
+                  headParcours.model_info.id
+                ]"
+                type="button"
+                class="btn btn-outline-primary ms-3"
+              >
+                Corriger ma demande
+              </a>
+            </ng-container>
+
+            <div
+              class="d-flex justify-content-between align-items-center"
+              role="button"
+              (click)="openCard(i)"
+            >
+              <ng-container *ngIf="headParcours.slug == 'correction-duplicata'">
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <ng-container
+                *ngIf="headParcours.slug == 'demande-duplicata-pending'"
+              >
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <ng-container *ngIf="headParcours.slug == 'demande-duplicata'">
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <ng-container
+                *ngIf="headParcours.slug == 'demande-duplicata-rejected'"
+              >
+                <span [class]="'badge p-2 ' + 'bg-danger'"> Rejetée </span>
+              </ng-container>
+
+              <ng-container
+                *ngIf="headParcours.slug == 'demande-duplicata-validate'"
+              >
+                <span [class]="'badge p-2 ' + 'bg-success'"> Validée </span>
+              </ng-container>
+              <app-icon
+                icon="chevron-right"
+                *ngIf="cardOpendedIndex !== i"
+                classe="fw-bolder ms-3"
+              ></app-icon>
+              <app-icon
+                icon="chevron-down"
+                *ngIf="cardOpendedIndex === i"
+                classe="fw-bolder ms-3"
+              ></app-icon>
+            </div>
+          </div>
+        </ng-container>
+        <!----- Fin L'entête ----->
+        <ng-container *ngIf="cardOpendedIndex === i">
+          <div
+            class="m-3 small text-small"
+            *ngFor="let item of eservice.liste; let duplicataIndex = index"
+          >
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" checked />
+                <label class="form-check-label text-primary fw-semibold">
+                  <ng-container *ngIf="item.slug == 'correction-duplicata'">
+                    Correction de rejet effectuée
+                  </ng-container>
+                  <ng-container *ngIf="item.slug == 'demande-duplicata'">
+                    Demande du duplicata/remplacement
+                  </ng-container>
+                  <ng-container
+                    *ngIf="item.slug == 'demande-duplicata-rejected'"
+                  >
+                    Demande du duplicata/remplacement rejetée
+                  </ng-container>
+
+                  <ng-container
+                    *ngIf="item.slug == 'demande-duplicata-validate'"
+                  >
+                    Demande du duplicata/remplacement validée
+                  </ng-container>
+                </label>
+                <br />
+                <small class="text-muted small">{{
+                  item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                }}</small>
+              </div>
+              <!--Le contenu principal-->
+              <div class="bg-light p-3 rounded col-sm-11 ms-auto mb-3">
+                <div [innerHTML]="item.message"></div>
+                <div class="mt-2">
+                  <ng-container
+                    *ngIf="
+                      item.slug == 'demande-duplicata-rejected' &&
+                      item.model_info &&
+                      item.model_info.date_correction == null
+                    "
+                  >
+                    <a
+                      type="button"
+                      [routerLink]="[
+                        '/services/duplicata-remplacement/rejets',
+                        item.model_info.id
+                      ]"
+                      class="btn btn-primary ms-3"
+
+                      >Corriger la demande
+                    </a>
+                  </ng-container>
+                </div>
+                <div class="mt-2">
+                  <small class="text-muted small">{{
+                    item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                  }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!--------  Fin ----------->
+    </ng-container>
+    <!------------------- Fin E-service Authenticité du permis ------------------->
+
+    <!------------------- E-service Permis international ------------------->
+    <ng-container *ngIf="eservice.service == 'Permis International'">
+      <!---------- Contenu principal ------------>
+      <div class="bg-white border rounded mb-2">
+        <!------- L'entête ------>
+        <ng-container *ngFor="let headParcours of latestParcours">
+          <div
+            class="card-header p-2 rounded bg-light d-flex justify-content-between align-items-center"
+            *ngIf="headParcours.service == 'Permis International'"
+          >
+            <div>
+              <!-- Les titres-->
+              <h6 class="text-primary">Permis international</h6>
+
+              <span class="text-muted small">{{
+                headParcours.created_at | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+
+            <ng-container
+              *ngIf="
+                headParcours.slug == 'demande-permis-international-rejected' &&
+                !!headParcours.model_info &&
+                headParcours.model_info.date_correction == null
+              "
+            >
+              <a
+                [routerLink]="[
+                  '/services/permis-international/rejets',
+                  headParcours.model_info.id
+                ]"
+                type="button"
+                class="btn btn-outline-primary ms-3"
+              >
+                Corriger ma demande
+              </a>
+            </ng-container>
+
+            <div class="d-flex justify-content-between align-items-center" role="button" (click)="openCard(i)">
+              <ng-container *ngIf="headParcours.slug == 'demande-permis-international'">
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <ng-container *ngIf="headParcours.slug == 'demande-permis-international-rejected'">
+                <span [class]="'badge p-2 ' + 'bg-danger'"> Rejetée </span>
+              </ng-container>
+
+              <ng-container *ngIf="headParcours.slug == 'demande-permis-international-validate'">
+                <span [class]="'badge p-2 ' + 'bg-success'"> Validée </span>
+              </ng-container>
+              <ng-container *ngIf="headParcours.slug == 'correction-permis-international'">
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <app-icon icon="chevron-right" *ngIf="cardOpendedIndex !== i" classe="fw-bolder ms-3"></app-icon>
+              <app-icon icon="chevron-down" *ngIf="cardOpendedIndex === i" classe="fw-bolder ms-3"></app-icon>
+            </div>
+          </div>
+        </ng-container>
+        <!----- Fin L'entête ----->
+
+        <ng-container *ngIf="cardOpendedIndex === i">
+          <div
+            class="m-3 small text-small"
+            *ngFor="let item of eservice.liste; let authIndex = index"
+          >
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" checked />
+                <label class="form-check-label text-primary fw-semibold">
+                  <ng-container
+                    *ngIf="item.slug == 'demande-permis-international'"
+                  >
+                    Demande du permis international
+                  </ng-container>
+                  <ng-container
+                    *ngIf="item.slug == 'demande-permis-international-rejected'"
+                  >
+                    Demande du permis international rejetée
+                  </ng-container>
+
+                  <ng-container
+                    *ngIf="item.slug == 'demande-permis-international-validate'"
+                  >
+                    Demande du permis international validée
+                  </ng-container>
+
+                  <ng-container *ngIf="item.slug == 'correction-permis-international'">
+                    Correction soumise avec succès
+                  </ng-container>
+                </label>
+                <br />
+                <small class="text-muted small">{{
+                  item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                }}</small>
+              </div>
+              <!--Le contenu principal-->
+              <div class="bg-light p-3 rounded col-sm-11 ms-auto mb-3">
+                <div [innerHTML]="item.message"></div>
+                <div class="mt-2">
+                  <ng-container
+                    *ngIf="
+                      item.slug == 'demande-permis-international-rejected' &&
+                      item.model_info &&
+                      item.model_info.date_correction == null
+                    "
+                  >
+                    <a
+                      type="button"
+                      [routerLink]="[
+                        '/services/permis-international/rejets',
+                        item.model_info.id
+                      ]"
+                      class="btn btn-primary ms-3"
+
+                      >Corriger la demande
+                    </a>
+                  </ng-container>
+                </div>
+                <div class="mt-2">
+                  <small class="text-muted small">{{
+                    item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                  }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!--------  Fin ----------->
+    </ng-container>
+    <!------------------- Fin E-service Permis international ------------------->
+
+    <!------------------- E-service Prorogation de permis ------------------->
+    <ng-container *ngIf="eservice.service == 'Prorogation'">
+      <!---------- Contenu principal ------------>
+      <div class="bg-white border rounded mb-2">
+        <!------- L'entête ------>
+        <ng-container *ngFor="let headParcours of latestParcours">
+          <div class="card-header p-2 rounded bg-light d-flex justify-content-between align-items-center"
+            *ngIf="headParcours.service == 'Prorogation'">
+            <div>
+              <!-- Les titres-->
+              <h6 class="text-primary">Prorogation de permis</h6>
+
+              <span class="text-muted small">{{
+                headParcours.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                }}</span>
+            </div>
+
+            <ng-container *ngIf="
+                    headParcours.slug == 'demande-prorogation-rejected' &&
+                    !!headParcours.model_info &&
+                    headParcours.model_info.date_correction == null
+                  ">
+              <a [routerLink]="[
+                      '/services/renouvellement-permis/rejets',
+                      headParcours.model_info.id
+                    ]" type="button" class="btn btn-outline-primary ms-3">
+                Corriger ma demande
+              </a>
+            </ng-container>
+
+            <div class="d-flex justify-content-between align-items-center" role="button" (click)="openCard(i)">
+              <ng-container *ngIf="headParcours.slug == 'demande-prorogation'">
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <ng-container *ngIf="headParcours.slug == 'demande-prorogation-rejected'">
+                <span [class]="'badge p-2 ' + 'bg-danger'"> Rejetée </span>
+              </ng-container>
+
+              <ng-container *ngIf="headParcours.slug == 'demande-prorogation-validate'">
+                <span [class]="'badge p-2 ' + 'bg-success'"> Validée </span>
+              </ng-container>
+              <ng-container *ngIf="headParcours.slug == 'correction-prorogation'">
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <app-icon icon="chevron-right" *ngIf="cardOpendedIndex !== i" classe="fw-bolder ms-3"></app-icon>
+              <app-icon icon="chevron-down" *ngIf="cardOpendedIndex === i" classe="fw-bolder ms-3"></app-icon>
+            </div>
+          </div>
+        </ng-container>
+        <!----- Fin L'entête ----->
+
+        <ng-container *ngIf="cardOpendedIndex === i">
+          <div class="m-3 small text-small" *ngFor="let item of eservice.liste; let authIndex = index">
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" checked />
+                <label class="form-check-label text-primary fw-semibold">
+                  <ng-container *ngIf="item.slug == 'demande-prorogation'">
+                    Demande de prorogration
+                  </ng-container>
+                  <ng-container *ngIf="item.slug == 'demande-prorogation-rejected'">
+                    Demande de prorogration rejetée
+                  </ng-container>
+
+                  <ng-container *ngIf="item.slug == 'demande-prorogation-validate'">
+                    Demande de prorogration validée
+                  </ng-container>
+                  <ng-container *ngIf="item.slug == 'correction-prorogation'">
+                    Correction soumise avec succès
+                  </ng-container>
+                </label>
+                <br />
+                <small class="text-muted small">{{
+                  item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                  }}</small>
+              </div>
+              <!--Le contenu principal-->
+              <div class="bg-light p-3 rounded col-sm-11 ms-auto mb-3">
+                <div [innerHTML]="item.message"></div>
+                <div class="mt-2">
+                  <ng-container *ngIf="
+                          item.slug == 'demande-prorogation-rejected' &&
+                          item.model_info &&
+                          item.model_info.date_correction == null
+                        ">
+                    <a type="button" [routerLink]="[
+                            '/services/renouvellement-permis/rejets',
+                            item.model_info.id
+                          ]" class="btn btn-primary ms-3" >Corriger la demande
+                    </a>
+                  </ng-container>
+                </div>
+                <div class="mt-2">
+                  <small class="text-muted small">{{
+                    item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                    }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!--------  Fin ----------->
+    </ng-container>
+    <!------------------- Fin E-service Prorogation de permis ------------------->
+
+    <!------------------- E-service Echange de permis ------------------->
+    <ng-container *ngIf="eservice.service == 'Echange'">
+      <!---------- Contenu principal ------------>
+      <div class="bg-white border rounded mb-2">
+        <!------- L'entête ------>
+        <ng-container *ngFor="let headParcours of latestParcours">
+          <div class="card-header p-2 rounded bg-light d-flex justify-content-between align-items-center"
+            *ngIf="headParcours.service == 'Echange'">
+            <div>
+              <!-- Les titres-->
+              <h6 class="text-primary">Echange de permis</h6>
+
+              <span class="text-muted small">{{
+                headParcours.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                }}</span>
+            </div>
+
+            <ng-container *ngIf="
+                        headParcours.slug == 'demande-echange-rejected' &&
+                        !!headParcours.model_info &&
+                        headParcours.model_info.date_correction == null
+                      ">
+              <a [routerLink]="[
+                          '/services/echange-permis/rejets',
+                          headParcours.model_info.id
+                        ]" type="button" class="btn btn-outline-primary ms-3">
+                Corriger ma demande
+              </a>
+            </ng-container>
+
+            <div class="d-flex justify-content-between align-items-center" role="button" (click)="openCard(i)">
+              <ng-container *ngIf="headParcours.slug == 'demande-echange'">
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <ng-container *ngIf="headParcours.slug == 'demande-echange-rejected'">
+                <span [class]="'badge p-2 ' + 'bg-danger'"> Rejetée </span>
+              </ng-container>
+
+              <ng-container *ngIf="headParcours.slug == 'demande-echange-validate'">
+                <span [class]="'badge p-2 ' + 'bg-success'"> Validée </span>
+              </ng-container>
+              <ng-container *ngIf="headParcours.slug == 'correction-echange'">
+                <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+              </ng-container>
+              <app-icon icon="chevron-right" *ngIf="cardOpendedIndex !== i" classe="fw-bolder ms-3"></app-icon>
+              <app-icon icon="chevron-down" *ngIf="cardOpendedIndex === i" classe="fw-bolder ms-3"></app-icon>
+            </div>
+          </div>
+        </ng-container>
+        <!----- Fin L'entête ----->
+
+        <ng-container *ngIf="cardOpendedIndex === i">
+          <div class="m-3 small text-small" *ngFor="let item of eservice.liste; let authIndex = index">
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" checked />
+                <label class="form-check-label text-primary fw-semibold">
+                  <ng-container *ngIf="item.slug == 'demande-echange'">
+                    Demande d'échange de permis
+                  </ng-container>
+                  <ng-container *ngIf="item.slug == 'demande-echange-rejected'">
+                    Demande d'échange de permis rejetée
+                  </ng-container>
+
+                  <ng-container *ngIf="item.slug == 'demande-echange-validate'">
+                    Demande d'échange de permis validée
+                  </ng-container>
+                  <ng-container *ngIf="item.slug == 'correction-echange'">
+                    Correction soumise avec succès
+                  </ng-container>
+                </label>
+                <br />
+                <small class="text-muted small">{{
+                  item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                  }}</small>
+              </div>
+              <!--Le contenu principal-->
+              <div class="bg-light p-3 rounded col-sm-11 ms-auto mb-3">
+                <div [innerHTML]="item.message"></div>
+                <div class="mt-2">
+                  <ng-container *ngIf="
+                              item.slug == 'demande-echange-rejected' &&
+                              item.model_info &&
+                              item.model_info.date_correction == null
+                            ">
+                    <a type="button" [routerLink]="[
+                                '/services/echange-permis/rejets',
+                                item.model_info.id
+                              ]" class="btn btn-primary ms-3" >Corriger la demande
+                    </a>
+                  </ng-container>
+                </div>
+                <div class="mt-2">
+                  <small class="text-muted small">{{
+                    item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                    }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!--------  Fin ----------->
+    </ng-container>
+    <!------------------- Fin E-service Echange de permis ------------------->
+  </ng-container>
+</ng-container>

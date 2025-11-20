@@ -1,0 +1,287 @@
+<div class="m-2">
+  <div class="row">
+    <div class="col-sm-3">
+      <select class="form-select border-0 bg-transparent text-primary" name="annexe_anatt" id="annexes-anatt"
+        (change)="sessionSelected($event)">
+        <option selected [value]="0">Sélectionner une session</option>
+        <option [value]="session.id" *ngFor="let session of sessions">
+          Session de {{
+          session.date_compo | date : "dd MMMM yyyy" : "" : "fr"
+          }} | {{session.entreprise?.name}}
+        </option>
+      </select>
+    </div>
+
+    <!-- <div class="col-12 mb-3" *ngIf="candidats.length">
+      <div class="col-md-3 offset-md-9 text-end mb-3">
+        <button class="btn btn-primary">
+          <app-icon icon="plus" [size]="18"></app-icon>
+          Epreuve
+        </button>
+      </div>
+      <div class="col-12">
+        <div class="table-responsive" >
+          <table class="table">
+            <thead>
+              <tr class="bg-table-primary">
+                <th scope="col">NPI</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénoms</th>
+                <th scope="col">Numéro</th>
+              </tr>
+            </thead>
+
+            <tbody *ngFor="let item of candidats; let i = index">
+              <tr>
+                <td>
+                  {{item.candidat_info?.npi}}
+                </td>
+                <td>{{ item.candidat_info?.nom | uppercase }}</td>
+                <td>{{ item.candidat_info?.prenoms }}</td>
+                <td>{{ item.candidat_info?.telephone }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div> -->
+
+    <div *ngIf="sessionId">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="h6">
+          <div>
+            <span class="text-primary fw-semibold">Nombre d'épreuves</span>
+            :
+            {{ epreuves.length | padding }}
+            épreuve(s)
+          </div>
+        </div>
+        <button class="btn btn-primary" (click)="openModal('store')">
+          <app-icon icon="plus" [size]="18"></app-icon>
+          Epreuve
+        </button>
+      </div>
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr class="bg-table-primary">
+                <th scope="col">Nom</th>
+                <th width="10%" scope="col">Points</th>
+                <th width="15%" scope="col">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody *ngIf="onLoadingEpreuve">
+              <tr>
+                <td colspan="12" class="py-3 text-center">
+                  <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+                    Chargement en cours
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody *ngFor="let item of epreuves; let i = index">
+              <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.poids }}</td>
+                <td>
+                  <div class="btn-actions">
+                    <app-icon icon="pencil" (click)="edit(item.id)" [size]="16" classe="text-success"></app-icon>
+                    <app-delete (canDelete)="destroy($event)" [activateId]="item.id"></app-delete>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="!onLoadingEpreuve && !epreuves.length">
+              <tr>
+                <td colspan="12" class="py-3 text-center">Aucune nouvelle épreuve</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="candidats.length">
+      <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
+        <div class="h6">
+          <div>
+            <span class="text-primary fw-semibold">Nombre de candidats total</span>
+            :
+            {{ candidats.length | padding }}
+            candidat(s)
+          </div>
+        </div>
+        <!-- <button type="button" class="btn btn-primary" [disabled]="!candidats.length" (click)="sendConvocation()">
+          Envoyer les convocations
+        </button> -->
+        <button type="button" class="btn btn-danger" [disabled]="!candidats.length" (click)="stopCompo()">
+          Arrêter la composition
+        </button>
+      </div>
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr class="bg-table-primary">
+                <th scope="col">NPI</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénoms</th>
+                <th scope="col">Numéro</th>
+                <th width="10%" scope="col" class="text-center">Annotation</th>
+              </tr>
+            </thead>
+
+            <tbody *ngFor="let item of candidats; let i = index">
+              <tr>
+                <td>
+                  {{item.candidat_info?.npi}}
+                </td>
+                <td>{{ item.candidat_info?.nom | uppercase }}</td>
+                <td>{{ item.candidat_info?.prenoms }}</td>
+                <td>{{ item.candidat_info?.telephone }}</td>
+                <td class="text-center">
+                  <button *ngIf="!item.conduite_note" type="button" class="btn btn-primary" (click)="annoter(item.id)" [disabled]="!epreuves.length">
+                    Noter
+                  </button>
+                  <span *ngIf="item.conduite_note">{{item.conduite_note}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal [action]="modalId" size="modal-md">
+  <div heading class="fw-semibold text-primary text-center">
+    {{ epreuve_formulaire }}
+  </div>
+  <form action="" quickv id="epreuve-conduite-form">
+    <div class="mb-4">
+      <label for="" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-6 required">Nom</div>
+          <div class="col-6 text-end">
+            <span info="Le nom de l'épreuve">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input qv-rules="required" qv-messages="Le nom de l'épreuve" required type="text" name="name" class="form-control"
+          [(ngModel)]="epreuve.name" />
+      </div>
+      <div qv-feedback="name"></div>
+    </div>
+
+    <div class="mb-4">
+      <label for="" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-6 required">Point</div>
+          <div class="col-6 text-end">
+            <span info="Le point de l'épreuve">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input qv-rules="required" qv-messages="Le point de l'épreuve" required type="text" name="point" class="form-control"
+          [(ngModel)]="epreuve.poids" />
+      </div>
+      <div qv-feedback="point"></div>
+    </div>
+
+
+    <div class="mb-4">
+      <p>
+        <button class="btn btn-primary w-100" qv-submit (click)="save($event)" [disabled]="isPostingEpreuve">
+          Enregistrer
+          <span *ngIf="isPostingEpreuve">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+      </p>
+    </div>
+  </form>
+</app-modal>
+
+<app-modal [action]="modalAnnotationId" size="modal-md">
+  <div heading class="fw-semibold text-primary text-center">
+    Annotation de {{ candidat?.prenoms }} {{ candidat?.nom }}
+  </div>
+  <form action="" quickv id="annotation-form">
+
+    <div *ngFor="let epreuve of candidat?.epreuves; let i = index" class="mb-4">
+      <label for="" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-6 required">{{ epreuve.name }}</div>
+          <div class="col-6 text-end">
+            <span info="Epreuve de {{ epreuve.name }}">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input qv-rules="required|int|between:1,20" qv-messages="La  note est requise | {1,2}La note doit être un entier compris entre 1 et 20" required type="text" name="epreuve"
+          class="form-control"  [(ngModel)]="candidat.epreuves[i].note"/>
+      </div>
+      <div qv-feedback="epreuve"></div>
+    </div>
+    <!-- <div class="mb-4">
+      <label for="" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-6 required">Nom</div>
+          <div class="col-6 text-end">
+            <span info="Le nom de l'épreuve">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input qv-rules="required" qv-messages="Le nom de l'épreuve" required type="text" name="name"
+          class="form-control" [(ngModel)]="epreuve.name" />
+      </div>
+      <div qv-feedback="name"></div>
+    </div>
+
+    <div class="mb-4">
+      <label for="" class="mb-1 d-block">
+        <div class="row justify-content-between">
+          <div class="col-6 required">Point</div>
+          <div class="col-6 text-end">
+            <span info="Le point de l'épreuve">
+              <app-icon icon="info" [size]="14"></app-icon>
+            </span>
+          </div>
+        </div>
+      </label>
+      <div class="input-grouped">
+        <input qv-rules="required" qv-messages="Le point de l'épreuve" required type="text" name="point"
+          class="form-control" [(ngModel)]="epreuve.poids" />
+      </div>
+      <div qv-feedback="point"></div>
+    </div> -->
+
+
+    <div class="mb-4">
+      <p>
+        <button type="submit" class="btn btn-primary w-100" qv-submit (click)="valider()" [disabled]="isPostingAnnotation">
+          Valider
+          <span *ngIf="isPostingAnnotation">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+      </p>
+    </div>
+  </form>
+</app-modal>

@@ -1,0 +1,66 @@
+<div class="m-2">
+  <h5 class="mb-2">Statut de validation</h5>
+  <div class="mb-3 col-sm-6 col-md-4">
+    <label for="examen_id" class="form-label">Session</label>
+    <select
+      class="form-select form-select-lg"
+      name="examen_id"
+      id="examen_id"
+      (change)="selectExamen($event.target)"
+    >
+      <option value="" selected>Sélectionner...</option>
+      <option [value]="session.id" *ngFor="let session of sessions">
+        {{ session.session_long }}
+      </option>
+    </select>
+  </div>
+
+  <tab>
+    <tab-header>
+      <button
+        class="btn btn-tab"
+        [class.active]="page === 'rejetes'"
+        (click)="selectPage('rejetes')"
+      >
+        <span class="btn-tab-text-"> Rejetés </span>
+        <span class="btn-tab-count ms-2">
+          {{ counts["monitoring_rejets_count"] | padding }}
+        </span>
+      </button>
+      <button
+        class="btn btn-tab"
+        [class.active]="page === 'valides'"
+        (click)="selectPage('valides')"
+      >
+        <span class="btn-tab-text-"> Validés </span>
+        <span class="btn-tab-count ms-2">
+          {{ counts["monitoring_validate_count"] | padding }}
+        </span>
+      </button>
+      <button
+        class="btn btn-tab"
+        [class.active]="page === 'en-attente'"
+        (click)="selectPage('en-attente')"
+      >
+        <span class="btn-tab-text-"> En attente </span>
+        <span class="btn-tab-count ms-2">
+          {{ counts["mt_pending_c"] | padding }}
+        </span>
+      </button>
+    </tab-header>
+    <tab-body>
+      <app-dossier-rejetes
+        [paginate]="paginate"
+        *ngIf="page === 'rejetes'"
+      ></app-dossier-rejetes>
+      <app-dossier-valides
+        [paginate]="paginate"
+        *ngIf="page === 'valides'"
+      ></app-dossier-valides>
+      <app-dossier-pending
+        [paginate]="paginate"
+        *ngIf="page === 'en-attente'"
+      ></app-dossier-pending>
+    </tab-body>
+  </tab>
+</div>

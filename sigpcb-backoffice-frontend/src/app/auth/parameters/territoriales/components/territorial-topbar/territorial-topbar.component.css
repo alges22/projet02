@@ -1,0 +1,19 @@
+.topbar .btn {
+  border: 1px solid rgba(0, 111, 111, 0.5019607843);
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 0;
+}
+
+.btn {
+  font-size: 0.9em;
+  font-weight: 500;
+  line-height: 16px;
+}
+.btn.active {
+  background-color: #ffffff;
+  border-color: rgba(0, 111, 111, 0.2784313725) !important;
+}
+.btn .material-icons {
+  margin-right: 5px;
+}/*# sourceMappingURL=territorial-topbar.component.css.map */

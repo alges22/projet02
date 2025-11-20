@@ -1,0 +1,173 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      {{
+        "Your space for managing driving license and related procedures"
+          | translate
+      }}
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right>
+    <ng-container *ngIf="canEdit && this.dossierSession">
+      <div class="card border">
+        <div class="card-body">
+          <div class="my-2 mb-3">
+            <button class="btn btn-outline-primary" routerLink="/dashboard">
+              <app-icon icon="arrow-left"></app-icon> Retour
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3" *ngFor="let pe of pieces; let i = index">
+              <h6 [innerHTML]="pe.label"></h6>
+              <app-input-file
+                accept=".png,.jpg"
+                (changeEvent)="onFileChange($event, i)"
+              ></app-input-file>
+              <div
+                class="mt-2"
+                *ngIf="dossierSession.fiche_medical && !pe.src.length"
+              >
+                <ng-container *ngIf="pe.name == 'medical'">
+                  <a
+                    [href]="asset(dossierSession.fiche_medical)"
+                    target="_blank"
+                    ><img
+                      [src]="asset(dossierSession.fiche_medical)"
+                      width="30"
+                      alt="fiche medical"
+                  /></a>
+                </ng-container>
+                <ng-container *ngIf="pe.name == 'groupage'">
+                  <a
+                    [href]="asset(dossierSession.dossierCandidat.groupage_test)"
+                    target="_blank"
+                    ><img
+                      [src]="
+                        asset(dossierSession.dossierCandidat.groupage_test)
+                      "
+                      width="30"
+                      alt="groupage_test"
+                  /></a>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="col-md mb-3">
+            <h6 class="mb-3">Quel est votre groupin sanguin ?</h6>
+            <div class="row">
+              <div class="col-3 mb-2" *ngFor="let g of groups; let i = index">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    name="group"
+                    type="radio"
+                    [id]="'group-' + i"
+                    (click)="selectGroup(g)"
+                    [checked]="group == g"
+                  />
+                  <label class="form-check-label" [for]="'group-' + i">{{
+                    g
+                  }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="col-md-12">
+            <h6 class="mb-3">Quelle est votre restriction médicale ?</h6>
+            <div class="row align-items-center">
+              <div
+                class="col-md-4 mb-2"
+                *ngFor="let r of restrictions; let i = index"
+              >
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    name="restriction"
+                    type="checkbox"
+                    [id]="'restriction-' + i"
+                    (change)="selectRestriction(r)"
+                    [checked]="isChecked(r)"
+                    [disabled]="isNoneSelected() && r.id !== 0"
+                  />
+                  <label class="form-check-label" [for]="'restriction-' + i">{{
+                    r.name
+                  }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <h6>{{ "Selected composition language" | translate }}</h6>
+              <div class="mb-3">
+                <div class="input-styled">
+                  <select
+                    class="form-select"
+                    name="langue"
+                    [(ngModel)]="langue"
+                    (change)="selectLangue(langue)"
+                    qv-rules="required"
+                    qv-messages="Ce champ est obligatoire"
+                  >
+                    <option value="" selected>
+                      {{ "Click to select a language" | translate }}
+                    </option>
+                    <option *ngFor="let lg of langues" [value]="lg.id">
+                      {{ lg.name }}
+                    </option>
+                  </select>
+                </div>
+                <div qv-feedback="langue"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-primary w-100" (click)="save()">
+                Modifier
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!canEdit">
+      <div
+        class="alert text-center col-sm-6 mx-auto alert-warning"
+        role="alert"
+      >
+        <p>
+          Vous n'avez aucune demande susceptible <br />
+          d'être modifiée actuellement.
+        </p>
+        <p class="mt-3">
+          <a href="/dashboard" class="btn btn-primary">Quitter</a>
+        </p>
+      </div>
+    </ng-container>
+  </app-blue-aside-right>
+</app-blue-aside>
+
+<div
+  class="modal fade"
+  id="openImageModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog bg-transparent modal-dialog-scrollable modal-dialog-centered modal-lg"
+    role="document"
+  >
+    <div class="modal-content rounded-0 p-0">
+      <div class="modal-body p-0">
+        <img [src]="imageSrc" alt="Aperçu de l'image" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>

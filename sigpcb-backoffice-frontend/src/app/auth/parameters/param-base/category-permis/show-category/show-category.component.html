@@ -1,0 +1,92 @@
+<div class="my-3" *ngIf="category">
+  <div class="card">
+    <div class="card-header bg-white fw-semibold">Informations de bases</div>
+    <div class="card-body">
+      <table class="table">
+        <tbody>
+          <tr>
+            <td scope="row">
+              <p><span>Montant Civils :</span> {{ category.montant }} FCFA</p>
+            </td>
+            <td>
+              <p>
+                <span>Montant Militaires :</span>
+                {{ category.montant_militaire }} FCFA
+              </p>
+            </td>
+            <td>
+              <p class="text-capitalize">
+                <span>Montant étrangers :</span>
+                {{ category.montant_etranger }} FCFA
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td scope="row">
+              <p><span>Âge minimal : </span> {{ category.age_min }} ans</p>
+            </td>
+            <td>
+              <p><span>Note minimal : </span> {{ category.note_min }} / 20</p>
+            </td>
+            <td>
+              <p *ngIf="category.permis_prealable">
+                <span>Permis préalable : </span>
+                <span class="text-danger">{{
+                  category.permis_prealable.name
+                }}</span>
+                | <span>Durée : </span>
+                {{ category.permis_prealable_dure }} an(s)
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td *ngIf="extensions && extensions.length">
+              <p>
+                <span> Les extensions : </span>
+                <span class="text-danger" *ngFor="let ext of extensions">{{
+                  ext.name
+                }}</span
+                >>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p
+        class="text-muted"
+        style="font-size: 12px"
+        *ngIf="category.description"
+      >
+        {{ category.description }}
+      </p>
+    </div>
+  </div>
+  <div class="card mt-3">
+    <div class="card-header bg-white fw-semibold">Validité du permis</div>
+    <div class="card-body">
+      <table class="table">
+        <tbody *ngIf="category.trancheage">
+          <tr *ngFor="let tr of category.trancheage">
+            <td scope="row">
+              <p><span>Validité :</span> {{ tr.validite }} an(s)</p>
+            </td>
+            <td *ngIf="tr.age_min">
+              <p><span>Âge minimal :</span> {{ tr.age_min }} ans</p>
+            </td>
+            <td *ngIf="tr.age_min">
+              <p><span>Âge maximal :</span> {{ tr.age_max }} ans</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="text-end m-2">
+    <button
+      [routerLink]="'/parametres/base/categorie-permis/edit/' + category.id"
+      class="btn btn-primary"
+    >
+      Modifier le permis
+    </button>
+  </p>
+</div>

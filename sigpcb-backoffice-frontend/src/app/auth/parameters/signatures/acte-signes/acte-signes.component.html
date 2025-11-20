@@ -1,0 +1,293 @@
+<div class="row align-items-center">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <!-- <app-search [url]="searchUrl" (results)="onSearches($event)">
+              </app-search> -->
+  </div>
+  <div class="col-sm-2 text-end">
+    <button
+      class="btn border btn-icons btn-primary"
+      (click)="openModal('store')"
+    >
+      <app-icon icon="plus"></app-icon>
+      Acte signé
+    </button>
+  </div>
+</div>
+<app-md-loader
+  [show]="actesignes.length < 1 && actesignes.length != 0"
+></app-md-loader>
+<table class="table mt-0">
+  <thead>
+    <tr>
+      <th scope="col">Nom</th>
+      <th scope="col" width="15%" class="text-center">Signataire</th>
+      <th scope="col" width="5%">Statut</th>
+      <th scope="col" width="15%" class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody class="text-center" *ngIf="actesignes.length == 0">
+    <tr>
+      <td colspan="12">Aucune donnée</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr *ngFor="let actesigne of actesignes; let i = index">
+      <td>{{ actesigne.name }}</td>
+      <td class="text-center">
+        <div *ngIf="actesigne.is_one_signataire">
+          <p class="text-muted" style="font-size: 12px">Unique</p>
+        </div>
+        <div *ngIf="!actesigne.is_one_signataire">
+          <p class="text-muted" style="font-size: 12px">Multiple</p>
+        </div>
+      </td>
+      <td class="text-center">
+        <app-switch
+          [checked]="actesigne.status"
+          (statusChangeEvent)="confirmSwitch($event)"
+          [activateId]="actesigne.id"
+        ></app-switch>
+      </td>
+      <td class="text-center">
+        <app-icon
+          (click)="showAssign(actesigne.id)"
+          icon="paperclip"
+          [size]="16"
+          classe="text-success"
+          title="Joindre signataire"
+        ></app-icon>
+        <app-icon
+          (click)="show(actesigne.id, 'edit')"
+          icon="pencil"
+          [size]="16"
+          classe="text-success"
+        ></app-icon>
+        <app-delete
+          (canDelete)="destroy($event)"
+          [activateId]="actesigne.id"
+        ></app-delete>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<app-modal [action]="modalId" size="">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+  <div *ngIf="action !== 'show'">
+    <form action="" method="post" quickv id="acte-sign-form">
+      <div class="row mb-2">
+        <div class="col-12">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-6 required">Nom</div>
+                <div class="col-6 text-end">
+                  <span info="Le nom de l'acte signé">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required|minlength:2|maxlength:80"
+                qv-messages="Le nom est requis | Le nom est trop court | Le nom est trop long"
+                required
+                type="text"
+                name="name"
+                placeholder="Taper le nom"
+                class="form-control"
+                [(ngModel)]="actesigne.name"
+              />
+            </div>
+            <div qv-feedback="name"></div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="mb-3 d-flex">
+            <label for="admin-is_one_signataire" class="me-2"
+              >Unique signataire (Oui / Non)</label
+            >
+            <div class="form-check form-switch mb-0">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="admin-is_one_signataire"
+                name="is_one_signataire"
+                checked
+                [(ngModel)]="actesigne.is_one_signataire"
+                value="1"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="d-flex">
+            <label for="admin-status" class="me-2"
+              >Statut (Actif / Inactif)</label
+            >
+            <div class="form-check form-switch mb-0">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="admin-status"
+                name="status"
+                checked
+                [(ngModel)]="actesigne.status"
+                value="1"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="onLoading"
+            qv-submit
+            (click)="save($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>
+
+<app-modal [action]="modalOneAssign" size="">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+  <div>
+    <form action="" method="post" quickv>
+      <div class="row mb-2">
+        <div class="col-12">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="signataire_id"
+                  >Signataire</label
+                >
+                <div class="col-6 text-end">
+                  <span info="Sélectionner un signataire">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <ng-multiselect-dropdown
+                [placeholder]="'Sélectionner un signataire'"
+                [data]="signataires"
+                [settings]="settings_one"
+                [(ngModel)]="selectedItems_one_assign"
+                name="signataire_id"
+              >
+              </ng-multiselect-dropdown>
+            </div>
+            <div qv-feedback="signataire_id"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="onLoading"
+            (click)="saveAssign($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>
+
+<app-modal [action]="modalMultipleAssign" size="">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+  <div>
+    <form action="" method="post" quickv>
+      <div class="row mb-2">
+        <div class="col-12">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="signataire_id"
+                  >Signataires</label
+                >
+                <div class="col-6 text-end">
+                  <span info="Sélectionner un signataire">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <ng-multiselect-dropdown
+                [placeholder]="'Sélectionner des signataires'"
+                [data]="signataires"
+                [settings]="settings_multiple"
+                [(ngModel)]="selectedItems_multiple_assign"
+                name="signataire_id"
+              >
+              </ng-multiselect-dropdown>
+            </div>
+            <div qv-feedback="signataire_id"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="onLoading"
+            (click)="saveAssign($event)"
+          >
+            Enregistrer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>

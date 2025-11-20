@@ -1,0 +1,213 @@
+<div class="m-3">
+  <div class="row justify-content-between mb-3">
+    <div class="col-sm-5">
+      <div class="input-group mb-3">
+        <button class="input-group-text" (click)="get()">
+          <app-icon icon="search"></app-icon>
+        </button>
+        <input
+          type="text"
+          name="search"
+          class="form-control"
+          [(ngModel)]="searchNpi"
+          placeholder="Taper le NPI du candidat..."
+          (keydown.enter)="get()"
+        />
+      </div>
+    </div>
+    <div class="col-sm-3 text-end" *ngIf="userCanAdd()">
+      <button class="btn btn-primary" (click)="addDispenseModal()">
+        <app-icon icon="plus" />
+        Dispense de paiement
+      </button>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">N°</th>
+          <th scope="col">Date création</th>
+          <th scope="col">Candidat</th>
+          <th scope="col">Statut</th>
+          <th scope="col">Date utilisation</th>
+
+          <th scope="col" *ngIf="userCanValidate()">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngFor="
+            let dispense of dispenses | paginate : paginateArgs;
+            let i = index
+          "
+        >
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ dispense.created_at | date : "dd/MM/yyyy HH:mm" }}</td>
+            <td>
+              {{ dispense.candidat_info.nom }}
+              {{ dispense.candidat_info.prenoms }}
+              <br />
+              <small class="text-muted">({{ dispense.candidat_npi }})</small>
+            </td>
+            <td>
+              <badge
+                [type]="dispense.status"
+                [text]="getBadge(dispense.status)"
+              />
+            </td>
+            <td>{{ dispense.used_at | date : "dd/MM/yyyy HH:mm" }}</td>
+
+            <td *ngIf="userCanValidate()">
+              <div class="btn-group btn-group-sm">
+                <button
+                  class="btn btn-outline-primary"
+                  [disabled]="dispense.status !== 'init'"
+                  (click)="openDispenseModal(dispense, 'validate')"
+                >
+                  <i class="bi bi-check-lg"></i>
+                </button>
+                <button
+                  class="btn btn-outline-danger"
+                  [disabled]="dispense.status !== 'init'"
+                  (click)="openDispenseModal(dispense, 'reject')"
+                >
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <popup
+            [open]="currentDispense === dispense"
+            [title]="
+              'Dispense de paiement pour: ' +
+              dispense.candidat_info.nom +
+              ' ' +
+              dispense.candidat_info.prenoms
+            "
+            (close)="currentDispense = null"
+          >
+            <popup-body>
+              <ng-container *ngIf="currentAction == 'validate'">
+                <p>
+                  Voulez-vous vraiment valider cette demande de dispense pour le
+                  candidat:
+                  <b
+                    >{{ dispense.candidat_info.nom }}
+                    {{ dispense.candidat_info.prenoms }}</b
+                  >
+                  ?
+                </p>
+              </ng-container>
+              <ng-container *ngIf="currentAction == 'reject'">
+                <p>
+                  Voulez-vous vraiment rejecter cette demande de dispense pour
+                  le candidat:
+                  <b
+                    >{{ dispense.candidat_info.nom }}
+                    {{ dispense.candidat_info.prenoms }}</b
+                  >
+                  ?
+                </p>
+              </ng-container>
+            </popup-body>
+            <popup-footer>
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="
+                  onValidate(
+                    dispense,
+                    currentAction === 'validate' ? currentAction : 'reject'
+                  )
+                "
+              >
+                Oui
+              </button>
+            </popup-footer>
+          </popup>
+        </ng-container>
+
+        <tr *ngIf="!dispenses.length">
+          <td colspan="12">
+            <div class="text-center">Aucune demande</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="p-3" *ngIf="total">
+    <app-pagination
+      [total]="total"
+      (pageChange)="paginate($event)"
+      [pageNumber]="currentPage"
+    ></app-pagination>
+  </div>
+</div>
+
+<popup
+  [open]="addModal"
+  title="Créer un dispense de paiement"
+  (close)="addModal = false"
+>
+  <popup-body>
+    <div class="input-group">
+      <button class="input-group-text">
+        <app-icon icon="search"></app-icon>
+      </button>
+      <input
+        type="text"
+        name="npi"
+        class="form-control"
+        placeholder="Taper le NPI du candidat..."
+        [(ngModel)]="npi"
+        (keyup.enter)="verifyCandidat()"
+      />
+    </div>
+    <p class="form-text text-muted mb-3" *ngIf="npi.length">
+      Tapé ({{ npi.length }})
+    </p>
+    <div class="card shadow-sm" *ngIf="info">
+      <div class="card-body pt-3">
+        <div class="d-flex align-items-center">
+          <div class="me-3">
+            <img
+              [src]="info?.avatar || 'default-avatar.png'"
+              alt="Avatar"
+              width="80"
+              class="border"
+            />
+          </div>
+          <div class="mt-2 d-flex">
+            <div class="me-2">
+              <p class="mb-2"><strong>NPI</strong>: {{ info?.npi }}</p>
+              <p class="mb-2">
+                <strong>Nom & prénoms</strong>: {{ info?.nom }}
+                {{ info?.prenoms }}
+              </p>
+              <p class="mb-2">
+                <strong>Téléphone</strong>: {{ info?.telephone }}
+              </p>
+              <p class="mb-2"><strong>Sexe</strong>: {{ info?.sexe }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </popup-body>
+  <popup-footer>
+    <div class="modal-footer" *ngIf="info">
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="npi.length < 10"
+        (click)="addDispense()"
+      >
+        Créer
+      </button>
+    </div>
+  </popup-footer>
+</popup>

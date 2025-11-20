@@ -1,0 +1,37 @@
+<ul class="list-group mx-2">
+  <li class="list-group-item rounded-0">
+    <div class="row" (click)="openTab('question-count')" role="button">
+      <div class="col-sm">
+        <h6 class="mb-1">Nombre de questions</h6>
+        <p class="text-muted small">
+          Nombre de question à générer dans chapitre lors de la composition
+        </p>
+      </div>
+      <div class="col-sm text-end">
+        <app-icon
+          [icon]="tab == 'question-count' ? 'chevron-up' : 'chevron-down'"
+        ></app-icon>
+      </div>
+    </div>
+    <div class="bg-modal rounded p-3 my-3" *ngIf="tab == 'question-count'">
+      <div class="row mb-3" *ngFor="let conf of questionConfig">
+        <div class="col-sm-6">{{ conf.chapitre.name }}</div>
+        <div class="col-sm-4">
+          <input
+            class="form-control bg-transparent form-control-sm"
+            type="number"
+            [value]="conf.count"
+            (change)="onQuestionConfig($event.target, conf.chapitre.id)"
+            min="0"
+            max="20"
+          />
+        </div>
+      </div>
+      <p>
+        <button class="btn btn-primary" (click)="saveQuestionConfig()">
+          Enregistrer
+        </button>
+      </p>
+    </div>
+  </li>
+</ul>

@@ -1,0 +1,70 @@
+{
+  "status": true,
+  "data": {
+    "paginate_data": {
+      "data": [
+        {
+          "id": 1,
+          "name": "Laconduie",
+          "ifu": "123456789012",
+          "address": "Cotonou, Bénin",
+          "phones": ["61441546", "91441546"],
+          "email": "dev.claudy@gmail.com",
+          "promoteur_nom": "Fassinou",
+          "promoteur_prenoms": "Claude",
+          "promoteur_phones": ["61441378", "41103344"],
+          "created_at": "2023-11-09 00:00:00"
+        },
+        {
+          "id": 2,
+          "name": "AutoBrioche",
+          "ifu": "987654321098",
+          "address": "Porto-Novo, Bénin",
+          "phones": ["62441546", "92441546"],
+          "email": "dev.autobrioche@gmail.com",
+          "promoteur_nom": "Agbo",
+          "promoteur_prenoms": "Sylvie",
+          "promoteur_phones": ["62441378", "42103344"],
+          "created_at": "2023-11-10 12:30:00"
+        },
+        {
+          "id": 3,
+          "name": "ABC Conduite",
+          "ifu": "987654321099",
+          "address": "Cotonou, Bénin",
+          "phones": ["66237257", "97181846"],
+          "email": "abcconduite@gmail.com",
+          "promoteur_nom": "Adjovi",
+          "promoteur_prenoms": "Marie-Paule",
+          "promoteur_phones": ["92441546", "62441546"],
+          "created_at": "2023-11-10 12:32:00"
+        },
+        {
+          "id": 4,
+          "name": "Sinapi",
+          "ifu": "987654321100",
+          "address": "Cotonou, Bénin",
+          "phones": ["95018080", "67018080"],
+          "email": "autoecole.sinapi@gmail.com",
+          "promoteur_nom": "Amoussou",
+          "promoteur_prenoms": "Jean-Claude",
+          "promoteur_phones": ["62441378", "42103344"],
+          "created_at": "2023-11-10 12:33:00"
+        },
+        {
+          "id": 5,
+          "name": "La Confiance",
+          "ifu": "123456789013",
+          "address": "Parakou, Bénin",
+          "phones": ["97181846", "66237257"],
+          "email": "autoecole.laconfiance@gmail.com",
+          "promoteur_nom": "Adjovi",
+          "promoteur_prenoms": "Marie-Paule",
+          "promoteur_phones": ["92441546", "62441546"],
+          "created_at": "2023-11-10 12:34:00"
+        }
+      ],
+      "total": 5
+    }
+  }
+}

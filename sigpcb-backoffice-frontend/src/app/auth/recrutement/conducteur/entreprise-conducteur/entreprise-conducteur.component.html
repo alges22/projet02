@@ -1,0 +1,233 @@
+<div class="row p-2 justify-content-between align-items-center mb-3">
+  <div class="col-lg-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <button class="btn btn-refresh" (click)="get()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 10px">Actualiser</span>
+      </button>
+      <div class="input-group ms-1">
+        <span class="input-group-text" role="button" (click)="get()">
+          <app-icon icon="search"></app-icon>
+        </span>
+        <input
+          type="text"
+          name="search"
+          [(ngModel)]="filters.search"
+          class="form-control"
+          placeholder="Taper un nom ..."
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="text-end">
+      <button class="btn btn-primary" (click)="edit()">Ajouter</button>
+    </div>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr class="bg-table-primary">
+        <th scope="col">Nom</th>
+        <th scope="col">Téléphone</th>
+        <th scope="col">E-mail</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody *ngIf="onLoadEntreprise">
+      <tr>
+        <td colspan="12" class="py-3 text-center">
+          <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+            Chargement en cours
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="!onLoadEntreprise">
+      <ng-container
+        *ngFor="
+          let item of entreprises | paginate : paginateArgs();
+          let i = index
+        "
+      >
+        <tr>
+          <td>
+            {{ item.name }}
+          </td>
+          <td>
+            {{ item.phone }}
+          </td>
+          <td>
+            {{ item.email }}
+          </td>
+          <td>
+            <button
+              class="btn"
+              (click)="showEntreprise(i)"
+              [class.btn-primary]="entrepriseIndex !== i"
+              [class.btn-outline-primary]="entrepriseIndex == i"
+            >
+              <span *ngIf="entrepriseIndex != i"> Voir</span>
+              <span *ngIf="entrepriseIndex == i"> Fermer</span>
+            </button>
+          </td>
+          <td>
+            <div class="btn-actions">
+              <app-icon
+                (click)="edit(item)"
+                icon="pencil"
+                [size]="16"
+                classe="text-success"
+              ></app-icon>
+              <app-delete
+                (canDelete)="destroy($event)"
+                [activateId]="item.id"
+              ></app-delete>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="entrepriseIndex == i">
+          <td colspan="12">
+            <app-entreprise-fiche
+              [entreprise]="item"
+              (_edit)="edit($event)"
+            ></app-entreprise-fiche>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+    <tbody *ngIf="!entreprises.length">
+      <tr>
+        <td colspan="12" class="py-3 text-center">Aucune nouvelle demande</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="p-3" *ngIf="paginate_data">
+    <app-pagination
+      *ngIf="paginate_data.total > 10"
+      [total]="paginate_data.total"
+      (pageChange)="paginate($event)"
+      [pageNumber]="pageNumber"
+    ></app-pagination>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="add-corporate"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">
+          <ng-container> Ajouter une entreprise </ng-container>
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" quickv id="add-entrprise-form">
+        <div class="col-md">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-8 required">Nom de l'entreprise</div>
+                <div class="col-4 text-end">
+                  <span info="Le nom de l'entreprise">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required"
+                qv-messages="Le nom est requis"
+                required
+                type="text"
+                name="name"
+                [(ngModel)]="entreprieForm.name"
+                class="form-control"
+              />
+            </div>
+            <div qv-feedback="name"></div>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-8 required">Téléphone</div>
+                <div class="col-4 text-end">
+                  <span info="Le téléphone de l'entreprise">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required"
+                qv-messages="Le téléphone est requis"
+                required
+                type="text"
+                name="phone"
+                [(ngModel)]="entreprieForm.phone"
+                class="form-control"
+              />
+            </div>
+            <div qv-feedback="phone"></div>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <div class="col-8 required">E-mail de l'entreprise</div>
+                <div class="col-4 text-end">
+                  <span info="L'email de l'entreprise">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="input-grouped">
+              <input
+                qv-rules="required|email"
+                qv-messages="L'email est requis| L'adresse e-mail est invalide"
+                type="email"
+                name="email"
+                [(ngModel)]="entreprieForm.email"
+                class="form-control"
+              />
+            </div>
+            <div qv-feedback="email"></div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="save()"
+          qv-submit
+        >
+          Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

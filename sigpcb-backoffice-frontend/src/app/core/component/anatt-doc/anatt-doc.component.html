@@ -1,0 +1,92 @@
+<div class="anatt-doc" *ngIf="programations.length">
+  <div class="anatt-doc-header">
+    <div class="top-header">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="" />
+      </div>
+
+      <div class="references">
+        <p>01 BP 1230 Cotonou</p>
+        <p>Tél : +229 91 85 11 11 <br />+229 21 31 39 98</p>
+        <p>{{ "anatt.contact@gouv.bj" }}</p>
+        <p>Rue 108 -Tokpa Hoho Lot 35B Immeuble KOUGBLENOU</p>
+      </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="sub-header">
+      <div class="sub-header-ref">
+        <div class="unite">
+          ANNEXE DEPARTEMANTALE DES TRANSPORTS ({{
+            meta.annexe?.name | uppercase
+          }})
+        </div>
+        <p class="numero">N°________/ANaTT/MIT/DTIT/ADT-ATL/SPC/DPC/SA</p>
+        <div class="doc-title">
+          EXAMEN DE PERMIS DE CONDUIRE -
+          {{ toHumanDate(meta.agenda?.date_code, true) }}
+        </div>
+      </div>
+      <div class="date">
+        <p>Cotonou, le {{ toHumanDate(undefined) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <h5 class="note-title">NOTE DE SERVICE</h5>
+    <p class="note-description r">
+      Suite à l'étude des dossiers de candidature pour les examens de permis de
+      conduire session: {{ meta.agenda?.session_long }} à
+      {{ meta.annexe?.name }},
+      <br />
+      les personnes dont les noms suivent sont invitées à participer à l'épreuve
+      du code de la route, le {{ toHumanDate(meta.agenda?.date_code, true) }}.
+    </p>
+  </div>
+  <div class="tab" *ngFor="let program of programations">
+    <div class="tab-date">{{ toHumanDate(program.date_compo) }}</div>
+    <div class="my-3" *ngFor="let group of program.group">
+      <div class="tab-caption">
+        Catégorie {{ group.name }} ({{ group.list.length }})
+      </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="bg-primary">
+            <tr>
+              <th scope="col">N°</th>
+              <th scope="col">Nom et prénoms</th>
+              <th scope="col">Numéro NPI</th>
+              <th scope="col">Auto-école</th>
+              <th scope="col">Langue</th>
+              <th scope="col">Salle</th>
+              <th scope="col">Table</th>
+              <th scope="col">Vague</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="" *ngFor="let resultat of group.list; let i = index">
+              <td>{{ i + 1 | padding : 3 }}</td>
+              <td scope="row">
+                {{ resultat.candidat.nom }} {{ resultat.candidat.prenoms }}
+              </td>
+              <td class="border">{{ resultat.npi }}</td>
+              <td>{{ resultat?.auto_ecole?.name }}</td>
+              <td>{{ resultat.langue.name }}</td>
+              <td>{{ resultat.salle.name }}</td>
+              <td>{{ resultat.num_table | padding : 2 }}</td>
+              <td>{{ resultat.vague.numero | padding : 2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="anatt-doc-footer">
+    <div class="signataire" *ngIf="meta.annexe">
+      Le Directeur général PO <br />
+      Le chef d’annexe de {{ meta.annexe.name }}
+    </div>
+  </div>
+</div>

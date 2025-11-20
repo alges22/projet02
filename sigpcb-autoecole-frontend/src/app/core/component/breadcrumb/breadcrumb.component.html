@@ -1,0 +1,17 @@
+<div *ngIf="breadcrumbs.length">
+  <h4 class="mb-0" [innerHTML]="titleBreadcrumb"></h4>
+  <nav class="breadcrumb text-small mb-0">
+    <a
+      class="breadcrumb-item"
+      [routerLink]="bd.route"
+      *ngFor="let bd of breadcrumbs"
+      >{{ bd.label }}</a
+    >
+    <span
+      class="breadcrumb-item active"
+      *ngIf="currentBreadcrumb"
+      aria-current="page"
+      >{{ currentBreadcrumb.label }}</span
+    >
+  </nav>
+</div>

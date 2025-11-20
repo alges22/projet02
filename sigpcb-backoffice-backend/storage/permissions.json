@@ -1,0 +1,585 @@
+[
+    {
+        "name": "all",
+        "guard_name": "web",
+        "onglet": "Administrateur Principal",
+        "nom_complet": "Toutes les permissions",
+        "description": "Acceder a toute la plateforme"
+    },
+
+    {
+        "name": "read-admin",
+        "guard_name": "web",
+        "onglet": "Voir les administrateurs",
+        "nom_complet": "Voir les administrateurs",
+        "description": "Voir la liste et les détails des administrateurs"
+    },
+    {
+        "name": "edit-admin",
+        "guard_name": "web",
+        "onglet": "Editer un administrateur",
+        "nom_complet": "Editer un administrateur",
+        "description": "Voir la liste et les détails des administrateurs. Ajouter, modifier, supprimer, désactiver les administrateurs."
+    },
+
+    {
+        "name": "read-roles",
+        "guard_name": "web",
+        "onglet": "Voir les rôles",
+        "nom_complet": "Voir les rôles",
+        "description": "Voir la liste et les détails des rôles"
+    },
+    {
+        "name": "edit-roles",
+        "guard_name": "web",
+        "onglet": "Editer un rôle",
+        "nom_complet": "Editer un rôle",
+        "description": "Voir la liste et les détails des rôles. Ajouter, modifier, supprimer les rôles."
+    },
+
+    {
+        "name": "read-signatures",
+        "guard_name": "web",
+        "onglet": "Voir les signataires",
+        "nom_complet": "Accéder à l'espace signature",
+        "description": "Accéder à l'espace signature"
+    },
+    {
+        "name": "edit-signatures",
+        "guard_name": "web",
+        "onglet": "Editer les signataires",
+        "nom_complet": "Créer, modifier ou supprimer des signatures",
+        "description": "Créer, modifier ou supprimer des signatures"
+    },
+    {
+        "name": "read-qestion-management",
+        "guard_name": "web",
+        "onglet": "Voir Questions",
+        "nom_complet": "Accéder à l'espace de gestion des questions.",
+        "description": "Accéder à l'espace de gestion des questions."
+    },
+    {
+        "name": "edit-qestion-management",
+        "guard_name": "web",
+        "onglet": "Gestion Questions",
+        "nom_complet": "Créer, modifier ou supprimer des questions",
+        "description": "Créer, modifier ou supprimer des questions"
+    },
+    {
+        "name": "read-chapitres-management",
+        "guard_name": "web",
+        "onglet": "Voir Chapitres",
+        "nom_complet": "Accéder à l'espace de gestion des Chapitres.",
+        "description": "Accéder à l'espace de gestion des Chapitres."
+    },
+    {
+        "name": "edit-chapitres-management",
+        "guard_name": "web",
+        "onglet": "Gestion Chapitres",
+        "nom_complet": "Créer, modifier ou supprimer des Chapitres",
+        "description": "Créer, modifier ou supprimer des Chapitres"
+    },
+    {
+        "name": "read-baremes-management",
+        "guard_name": "web",
+        "onglet": "Voir Barème",
+        "nom_complet": "Accéder à l'espace de gestion des barèmes.",
+        "description": "Accéder à l'espace de gestion des barèmes."
+    },
+    {
+        "name": "edit-baremes-management",
+        "guard_name": "web",
+        "onglet": "Gestion Barème",
+        "nom_complet": "Créer, modifier ou supprimer des barèmes",
+        "description": "Créer, modifier ou supprimer des barèmes"
+    },
+    {
+        "name": "read-reponses-possible-management",
+        "guard_name": "web",
+        "onglet": "Voir réponses possible",
+        "nom_complet": "Accéder à l'espace de gestion des réponses possible.",
+        "description": "Accéder à l'espace de gestion des réponses possible."
+    },
+    {
+        "name": "edit-reponses-possible-management",
+        "guard_name": "web",
+        "onglet": "Gestion réponses possible",
+        "nom_complet": "Créer, modifier ou supprimer des réponses possible",
+        "description": "Créer, modifier ou supprimer des réponses possible"
+    },
+    {
+        "name": "read-inspections",
+        "guard_name": "web",
+        "onglet": "Gestion des Compositions",
+        "nom_complet": "Accéder à l'espace Gestion des compositions",
+        "description": "Accéder à l'espace Gestion des compositions"
+    },
+    {
+        "name": "edit-inspections",
+        "guard_name": "web",
+        "onglet": "Gestion des Compositions",
+        "nom_complet": "Gestion des superviseur de salle et examinateur de la conduite",
+        "description": "Gestion des superviseur de salle et examinateur de la conduite"
+    },
+    {
+        "name": "read-dossier-validation",
+        "guard_name": "web",
+        "onglet": "Validation des dossiers",
+        "nom_complet": "Accéder à la validation des dossiers",
+        "description": "Accéder à la validation des dossiers"
+    },
+    {
+        "name": "edit-dossier-validation",
+        "guard_name": "web",
+        "onglet": "Gestion des dossiers",
+        "nom_complet": "Gestion des dossiers",
+        "description": "Géer la candidature au permis"
+    },
+
+    {
+        "name": "read-programming",
+        "guard_name": "web",
+        "onglet": "Voir la programmation",
+        "nom_complet": "Voir la programmation",
+        "description": "Accéder à l'espace de gestion de la programmation"
+    },
+    {
+        "name": "edit-programming",
+        "guard_name": "web",
+        "onglet": "Gérer la programmation",
+        "nom_complet": "Gérer la programmation",
+        "description": "Programmer les candidats présentés aux examens"
+    },
+
+    {
+        "name": "read-licences-management",
+        "guard_name": "web",
+        "onglet": "Liste des licences",
+        "nom_complet": "Accéder à l'onglet de gestion des licences",
+        "description": "Accéder à l'onglet de gestion des licences"
+    },
+    {
+        "name": "edit-licences-management",
+        "guard_name": "web",
+        "onglet": "Gestion des licences",
+        "nom_complet": "Créer, modifier ou supprimer des licences",
+        "description": "Créer, modifier ou supprimer des licences"
+    },
+
+    {
+        "name": "read-permit-authentication",
+        "guard_name": "web",
+        "onglet": "Demande authenticité du permis",
+        "nom_complet": "Accéder à l'onglet Authenticité du permis",
+        "description": "Accéder à l'onglet Authenticité du permis"
+    },
+    {
+        "name": "edit-permit-authentication",
+        "guard_name": "web",
+        "onglet": "Gestion authenticité du permis",
+        "nom_complet": "Créer, modifier ou supprimer l'authenticité du permis",
+        "description": "Créer, modifier ou supprimer l'authenticité du permis"
+    },
+
+    {
+        "name": "read-permit-replacement-duplicate",
+        "guard_name": "web",
+        "onglet": "Demande remplacement ou duplicata du permis",
+        "nom_complet": "Accéder à l'onglet Remplacement ou duplicata du permis",
+        "description": "Accéder à l'onglet Remplacement ou duplicata du permis"
+    },
+    {
+        "name": "edit-permit-replacement-duplicate",
+        "guard_name": "web",
+        "onglet": "Gestion remplacement ou duplicata du permis",
+        "nom_complet": "Créer, modifier ou supprimer un remplacement ou duplicata du permis",
+        "description": "Créer, modifier ou supprimer un remplacement ou duplicata du permis"
+    },
+
+    {
+        "name": "read-international-permit",
+        "guard_name": "web",
+        "onglet": "Demande permis international",
+        "nom_complet": "Accéder à l'onglet Permis international",
+        "description": "Accéder à l'onglet Permis international"
+    },
+    {
+        "name": "edit-international-permit",
+        "guard_name": "web",
+        "onglet": "Gestion permis international",
+        "nom_complet": "Créer, modifier ou supprimer des permis internationaux",
+        "description": "Créer, modifier ou supprimer des permis internationaux"
+    },
+    {
+        "name": "read-permit-exchange",
+        "guard_name": "web",
+        "onglet": "Liste des échanges de permis",
+        "nom_complet": "Accéder à la liste des échanges de permis",
+        "description": "Voir toutes les demandes d'échange de permis"
+    },
+    {
+        "name": "edit-permit-exchange",
+        "guard_name": "web",
+        "onglet": "Gérer les échanges de permis",
+        "nom_complet": "Créer, modifier ou supprimer un échange de permis",
+        "description": "Gérer les demandes d'échange de permis"
+    },
+    {
+        "name": "read-permit-extension",
+        "guard_name": "web",
+        "onglet": "Liste des prorogations de permis",
+        "nom_complet": "Accéder à la liste des prorogations de permis",
+        "description": "Voir toutes les demandes de prorogation de permis"
+    },
+    {
+        "name": "edit-permit-extension",
+        "guard_name": "web",
+        "onglet": "Gérer les prorogations de permis",
+        "nom_complet": "Créer, modifier ou supprimer une prorogation de permis",
+        "description": "Gérer les demandes de prorogation de permis"
+    },
+    {
+        "name": "read-statistics",
+        "guard_name": "web",
+        "onglet": "Consultation des statistiques",
+        "nom_complet": "Voir les statistiques",
+        "description": "Consulter les statistiques, exporter et télécharger"
+    },
+    {
+        "name": "read-faq-management",
+        "guard_name": "web",
+        "onglet": "Liste des entrées FAQ",
+        "nom_complet": "Voir les entrées de la FAQ",
+        "description": "Consulter les entrées de la FAQ"
+    },
+    {
+        "name": "edit-faq-management",
+        "guard_name": "web",
+        "onglet": "Gérer la FAQ",
+        "nom_complet": "Créer, modifier ou supprimer les entrées FAQ",
+        "description": "Gérer les entrées de la FAQ"
+    },
+    {
+        "name": "read-examiner-recruitment",
+        "guard_name": "web",
+        "onglet": "Demande recrutements des examinateurs",
+        "nom_complet": "Voir les recrutements des examinateurs",
+        "description": "Consulter les recrutements des examinateurs"
+    },
+    {
+        "name": "edit-examiner-recruitment",
+        "guard_name": "web",
+        "onglet": "Gérer les recrutements des examinateurs",
+        "nom_complet": "Créer, modifier, supprimer, valider ou rejeter les demandes des examinateurs",
+        "description": "Gérer les recrutements des examinateurs"
+    },
+    {
+        "name": "read-monitor-recruitment",
+        "guard_name": "web",
+        "onglet": "Demande recrutements des moniteurs",
+        "nom_complet": "Voir les recrutements des moniteurs",
+        "description": "Consulter les recrutements des moniteurs"
+    },
+    {
+        "name": "edit-monitor-recruitment",
+        "guard_name": "web",
+        "onglet": "Gérer recrutement des moniteurs",
+        "nom_complet": "Créer, modifier ou supprimer le recrutement des moniteurs",
+        "description": "Créer, modifier ou supprimer le recrutement des moniteurs"
+    },
+    {
+        "name": "read-company-recruitment-management",
+        "guard_name": "web",
+        "onglet": "Gestion des recruteurs, Validation Dossier (conducteurs), Programmation test recrutement, Résultats (test recrutement)",
+        "nom_complet": "Afficher la Gestion des recruteurs, Validation Dossier (conducteurs), Programmation test recrutement, Résultats (test recrutement)",
+        "description": "Afficher la Gestion des recruteurs, Validation Dossier (conducteurs), Programmation test recrutement, Résultats (test recrutement)"
+    },
+    {
+        "name": "edit-company-recruitment-management",
+        "guard_name": "web",
+        "onglet": "Gestion des recruteurs, Validation Dossier (conducteurs), Programmation test recrutement, Résultats (test recrutement)",
+        "nom_complet": "Gérer la Gestion des recruteurs, Validation Dossier (conducteurs), Programmation test recrutement, Résultats (test recrutement)",
+        "description": "Gérer la Gestion des recruteurs, Validation Dossier (conducteurs), Programmation test recrutement, Résultats (test recrutement)"
+    },
+    {
+        "name": "read-composition-recruitment-management",
+        "guard_name": "web",
+        "onglet": "Composition (test) de recrutement",
+        "nom_complet": "Accéder à la gestion des compositions",
+        "description": "Accéder à la gestion des compositions"
+    },
+    {
+        "name": "edit-composition-recruitment-management",
+        "guard_name": "web",
+        "onglet": "Gestion des compositions (test recruteement)",
+        "nom_complet": "Créer, modifier ou supprimer la gestion des compositions",
+        "description": "Créer, modifier ou supprimer la gestion des compositions"
+    },
+    {
+        "name": "read-exam-results-recruitment",
+        "guard_name": "web",
+        "onglet": "Résultats (test recrutement)",
+        "nom_complet": "Accéder aux résultats des compositions recrutement",
+        "description": "Accéder aux résultats des compositions recrutement"
+    },
+    {
+        "name": "edit-exam-results-recruitment",
+        "guard_name": "web",
+        "onglet": "Gestion résultats (test recrutement)",
+        "nom_complet": "Créer, modifier ou supprimer les résultats des compositions recrutement",
+        "description": "Créer, modifier ou supprimer les résultats des compositions recrutement"
+    },
+    {
+        "name": "read-customer-support",
+        "guard_name": "web",
+        "onglet": "Support client",
+        "nom_complet": "Accéder au support client",
+        "description": "Accéder au support client"
+    },
+    {
+        "name": "edit-customer-support",
+        "guard_name": "web",
+        "onglet": "Gestion support client",
+        "nom_complet": "Gérer le support client",
+        "description": "Gérer le support client"
+    },
+    {
+        "name": "read-agenda-management",
+        "guard_name": "web",
+        "onglet": "Agenda",
+        "nom_complet": "Voir l'agenda",
+        "description": "Permet de consulter l'agenda, les événements planifiés"
+    },
+    {
+        "name": "edit-agenda-management",
+        "guard_name": "web",
+        "onglet": "Gestion de l'agenda",
+        "nom_complet": "Gérer l'agenda",
+        "description": "Autorise à ajouter, modifier, consulter et supprimer des événements dans l'agenda pour une organisation efficace"
+    },
+    {
+        "name": "read-annex-management",
+        "guard_name": "web",
+        "onglet": "Unités territoriales",
+        "nom_complet": "Voir les annexes",
+        "description": "Voir les annexes"
+    },
+    {
+        "name": "edit-annex-management",
+        "guard_name": "web",
+        "onglet": "Gestion unités territoriales",
+        "nom_complet": "Gérer les annexes",
+        "description": "Autorisé à ajouter, modifier, consulter et supprimer des annexes."
+    },
+    {
+        "name": "read-arrondissement",
+        "guard_name": "web",
+        "onglet": "Arrondissements",
+        "nom_complet": "Voir les Arrondissements",
+        "description": "Voir les Arrondissements"
+    },
+    {
+        "name": "edit-arrondissement",
+        "guard_name": "web",
+        "onglet": "Gestion Arrondissements",
+        "nom_complet": "Gérer les Arrondissements",
+        "description": "Autorisé à ajouter, modifier, consulter et supprimer des Arrondissements."
+    },
+
+    {
+        "name": "read-commune",
+        "guard_name": "web",
+        "onglet": "Communes",
+        "nom_complet": "Voir les Communes",
+        "description": "Voir les Communes"
+    },
+    {
+        "name": "edit-commune",
+        "guard_name": "web",
+        "onglet": "Gestion Communes",
+        "nom_complet": "Gérer les Communes",
+        "description": "Autorisé à ajouter, modifier, consulter et supprimer des Communes."
+    },
+    {
+        "name": "read-department",
+        "guard_name": "web",
+        "onglet": "Departement",
+        "nom_complet": "Voir les Departement",
+        "description": "Voir les Departement"
+    },
+    {
+        "name": "edit-department",
+        "guard_name": "web",
+        "onglet": "Gestion Departement",
+        "nom_complet": "Gérer les Departement",
+        "description": "Autorisé à ajouter, modifier, consulter et supprimer des Departement."
+    },
+    {
+        "name": "read-permit-categories-management",
+        "guard_name": "web",
+        "onglet": "Catégories de permis",
+        "nom_complet": "Voir les catégories de permis",
+        "description": "Voir les catégories de permis"
+    },
+    {
+        "name": "edit-permit-categories-management",
+        "guard_name": "web",
+        "onglet": "Gestion des catégories de permis",
+        "nom_complet": "Gérer les catégories de permis",
+        "description": "Autorise à ajouter, modifier, consulter et supprimer les catégories de permis pour une gestion claire et structurée"
+    },
+    {
+        "name": "read-languages-management",
+        "guard_name": "web",
+        "onglet": "Les langues",
+        "nom_complet": "Voir les langues",
+        "description": "Voir les langues disponibles"
+    },
+    {
+        "name": "edit-languages-management",
+        "guard_name": "web",
+        "onglet": "Gestion des langues",
+        "nom_complet": "Gérer les langues",
+        "description": "Permet d'ajouter, modifier, consulter et supprimer des langues pour une meilleure personnalisation et accessibilité"
+    },
+    {
+        "name": "read-restrictions-management",
+        "guard_name": "web",
+        "onglet": "Les restrictions",
+        "nom_complet": "Voir les restrictions",
+        "description": "Voir les restrictions appliquées"
+    },
+    {
+        "name": "edit-restrictions-management",
+        "guard_name": "web",
+        "onglet": "Gestion des restrictions",
+        "nom_complet": "Gérer les restrictions",
+        "description": "Autorise à ajouter, modifier, consulter et supprimer des restrictions pour assurer une gestion fine des autorisations"
+    },
+    {
+        "name": "read-reporting-management",
+        "guard_name": "web",
+        "onglet": "Reporting",
+        "nom_complet": "Voir les reportings",
+        "description": "Accéder au reporting des paiements"
+    },
+    {
+        "name": "read-exam-results-management",
+        "guard_name": "web",
+        "onglet": "Résultats des examens",
+        "nom_complet": "Voir les résultats des examens",
+        "description": "Voir les résultats des examens, les filtrer, imprimer et télécharger."
+    },
+    {
+        "name": "read-driving-school-management",
+        "guard_name": "web",
+        "onglet": "Liste auto-écoles",
+        "nom_complet": "Voir les auto-écoles",
+        "description": "Voir les auto-écoles"
+    },
+    {
+        "name": "edit-driving-school-management",
+        "guard_name": "web",
+        "onglet": "Gestion auto-écoles",
+        "nom_complet": "Gérer les auto-écoles",
+        "description": "Accéder, créer, modifier, supprimer et gérer les demandes d'auto école"
+    },
+    {
+        "name": "read-agreement-management",
+        "guard_name": "web",
+        "onglet": "Demande d'agréments",
+        "nom_complet": "Voir les agréments",
+        "description": "Voir les agréments"
+    },
+    {
+        "name": "edit-agreement-management",
+        "guard_name": "web",
+        "onglet": "Gestion agréments",
+        "nom_complet": "Gérer les agréments",
+        "description": "Accéder à l'onglet de gestion des agréments"
+    },
+    {
+        "name": "read-base-configuration",
+        "guard_name": "web",
+        "onglet": "Les configuration de base",
+        "nom_complet": "Voir la configuration de base",
+        "description": "Voir la configuration générale de base"
+    },
+    {
+        "name": "edit-base-configuration",
+        "guard_name": "web",
+        "onglet": "Gérer les configurations de base",
+        "nom_complet": "Modifier la configuration de base",
+        "description": "Modifier ou supprimer les configurations générales de base"
+    },
+    {
+        "name": "read-titles-management",
+        "guard_name": "web",
+        "onglet": "Les titres (profils)",
+        "nom_complet": "Voir les titres (profils)",
+        "description": "Voir les titres et profils"
+    },
+    {
+        "name": "edit-titles-management",
+        "guard_name": "web",
+        "onglet": "Gestion des titres (profils)",
+        "nom_complet": "Gérer les titres (profils)",
+        "description": "Permet d’ajouter, modifier ou supprimer un titre."
+    },
+    {
+        "name": "read-administrative-units-management",
+        "guard_name": "web",
+        "onglet": "Unités administratives",
+        "nom_complet": "Voir les unités administratives",
+        "description": "Voir les unités administratives"
+    },
+    {
+        "name": "edit-administrative-units-management",
+        "guard_name": "web",
+        "onglet": "Gestion des unités administratives",
+        "nom_complet": "Gérer les unités administratives",
+        "description": "Permet d’ajouter, de modifier et de supprimer des unités administratives"
+    },
+    {
+        "name": "read-candidates-menu-access",
+        "guard_name": "web",
+        "onglet": "Liste des candidats",
+        "nom_complet": "Voir le menu candidats",
+        "description": "Voir les candidats, les parcours et les actions des candidats."
+    },
+    {
+        "name": "read-transmission-menu-access",
+        "guard_name": "web",
+        "onglet": "Transmissions",
+        "nom_complet": "Voir le menu transmission",
+        "description": "Voir les résultats des examens, les recalés, les absences, et les données de transmissions. Télécharger les informations de permis."
+    },
+    {
+        "name": "read-log",
+        "guard_name": "web",
+        "onglet": "Logs",
+        "nom_complet": "Voir les logs.",
+        "description": "Voir les logs."
+    },
+    {
+        "name": "read-dispense-paiement",
+        "guard_name": "web",
+        "onglet": "Dispenses de paiement",
+        "nom_complet": "Voir le menu Dispenses de paiement",
+        "description": "Voir la liste des Dispenses de paiement"
+    },
+    {
+        "name": "edit-dispense-paiement",
+        "guard_name": "web",
+        "onglet": "Dispenses de paiement",
+        "nom_complet": "Gérer les Dispenses de paiement",
+        "description": "Permet d’ajouter les Dispenses de paiement"
+    },
+    {
+        "name": "manage-dispense-paiement",
+        "guard_name": "web",
+        "onglet": "Dispenses de paiement",
+        "nom_complet": "Gérer les Dispenses de paiement",
+        "description": "Permet de valider ou rejeter les Dispenses de paiement"
+    }
+]

@@ -1,0 +1,48 @@
+<div class="m-3">
+  <a routerLink="/candidats" class="btn btn-primary">Aller aux candidats</a>
+  <hr />
+  <div class="card col-sm-6 shadow-0" *ngIf="info">
+    <div class="card-body pt-3">
+      <div class="d-flex align-items-center">
+        <div class="me-3">
+          <img [src]="info.avatar" alt="Avatar" width="80" class="border" />
+        </div>
+        <div class="mt-2 d-flex">
+          <div class="me-2">
+            <p class="mb-2"><strong>NPI</strong>: {{ info.npi }}</p>
+            <p class="mb-2">
+              <strong>Nom & prénoms</strong>: {{ info.nom }} {{ info.prenoms }}
+            </p>
+            <p class="mb-2"><strong>Téléphone</strong>: {{ info.telephone }}</p>
+            <p class="mb-2"><strong>Sexe</strong>: {{ info.sexe }}</p>
+            <p class="mb-2">
+              <strong>Nationalité</strong>: {{ info.nationality ?? "-" }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="permisHistories.length">
+    <ul class="list-group border mt-3">
+      <li
+        class="list-group-item"
+        *ngFor="let item of permisHistories; let i = index"
+      >
+        <h5 class="text-primary">
+          Candidature au permis {{ item.categoriePermis.name }}
+        </h5>
+        <app-candidat-dossier [dossier]="item.dossier" />
+
+        <ng-container *ngFor="let ds of item.dossierSessions">
+          <app-candidat-dossier-session [data]="ds" />
+        </ng-container>
+      </li>
+    </ul>
+  </ng-container>
+  <ng-container *ngIf="!permisHistories.length">
+    <div class="alert alert-primary text-center" role="alert">
+      Aucun parcours trouvé
+    </div>
+  </ng-container>
+</div>

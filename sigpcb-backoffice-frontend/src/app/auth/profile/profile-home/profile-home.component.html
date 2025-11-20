@@ -1,0 +1,76 @@
+<div class="container my-3" *ngIf="user">
+  <div class="my-4">
+    <h3 class="text-primary fw-semibold">Mon profil</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-5">
+      <div class="card mx-auto">
+        <div class="card-header bg-white fw-semibold">Mes informations</div>
+        <div class="card-body">
+          <table class="table">
+            <tbody>
+              <div class="row">
+                <div class="col-sm-4">
+                  <p>
+                    <span>Nom & prénoms :</span> <br />
+                    {{ user.last_name }}
+                    {{ user.first_name }}
+                  </p>
+                </div>
+                <div class="col-sm-4">
+                  <p>
+                    <span>E-mail : </span> <br />
+                    {{ user.email }}
+                  </p>
+                </div>
+                <div class="col-sm-4">
+                  <p class="text-capitalize">
+                    <span>N° de téléphone :</span> <br />
+                    {{ user.phone }}
+                  </p>
+                </div>
+                <div class="col-sm-4">
+                  <p class="text-capitalize">
+                    <span>Unité administrative :</span> <br />
+                    {{ user.unite_admin?.name }}
+                  </p>
+                </div>
+                <div class="col-sm-4">
+                  <p class="text-capitalize">
+                    <span>Votre titre :</span> <br />
+                    <span class="fw-normal" *ngIf="user.titre">{{
+                      user.titre.name
+                    }}</span>
+
+                    <span class="fw-normal" *ngIf="!user.titre">
+                      Aucun titre
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="card" *ngIf="user.roles.length">
+        <div class="card-header bg-white fw-semibold">Rôles</div>
+        <div class="card-body">
+          <span *ngFor="let role of user.roles" class="m-2 rounded-0">
+            {{ role.nom_complet }}
+          </span>
+        </div>
+        <div class="card-header bg-white fw-semibold">Permissions</div>
+        <div class="card-body">
+          <button
+            *ngFor="let permission of permissions"
+            class="m-2 btn btn-outline-primary border d-inline-block rounded"
+          >
+            {{ permission.nom_complet }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,94 @@
+<div class="row p-2 justify-content-between align-items-center mb-3">
+  <div class="col-lg-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <button class="btn btn-refresh" (click)="get()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 10px">Actualiser</span>
+      </button>
+      <div class="input-group ms-1">
+        <span class="input-group-text" role="button" (click)="get()">
+          <app-icon icon="search"></app-icon>
+        </span>
+        <input
+          type="text"
+          name="search"
+          class="form-control"
+          placeholder="Taper un NPI ..."
+          [(ngModel)]="filters.search"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr class="bg-table-primary">
+        <th scope="col">Date de soumission</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">N° du Permis</th>
+        <th scope="col">Demandeur</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="onLoadAuthPermis">
+      <tr>
+        <td colspan="12" class="py-3 text-center">
+          <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+            Chargement en cours
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <tbody
+      *ngFor="
+        let item of authenticite_permis | paginate : paginateArgs();
+        let i = index
+      "
+    >
+      <tr>
+        <td scope="row">
+          <small class="text-muted">{{ item.created_at | hdate : true }}</small>
+        </td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.num_permis }}</td>
+        <td>
+          {{ item?.demandeur_info.nom }} {{ item?.demandeur_info.prenoms }}
+        </td>
+
+        <td>
+          <button
+            class="btn"
+            (click)="showDossier(i)"
+            [class.btn-primary]="dossierIndex !== i"
+            [class.btn-outline-primary]="dossierIndex === i"
+          >
+            <span *ngIf="dossierIndex !== i"> Voir</span>
+            <span *ngIf="dossierIndex === i"> Fermer</span>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="dossierIndex === i">
+        <td colspan="12">
+          <app-auth-permis-fiche [data]="item" page="rejected" />
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="!onLoadAuthPermis && !authenticite_permis.length">
+      <tr>
+        <td colspan="12" class="py-3 text-center">Aucune demande</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="p-3" *ngIf="paginate_data">
+    <app-pagination
+      *ngIf="paginate_data.total > 10"
+      [total]="paginate_data.total"
+      (pageChange)="paginate($event)"
+      [pageNumber]="pageNumber"
+    ></app-pagination>
+  </div>
+</div>

@@ -1,0 +1,335 @@
+<div class="service-details">
+  <h3 class="title">
+    {{ "Re-enrollment for the driving license exam" | translate }}
+  </h3>
+  <h4 class="subtitle">{{ "Information" | translate }}</h4>
+  <div class="card border">
+    <div class="card-header">
+      <h6>
+        {{
+          "The minimum age required to obtain a driver's license" | translate
+        }}
+      </h6>
+    </div>
+    <div class="card-body">
+      <ul>
+        <li>Seize (16) ans au moins pour la catégorie A1</li>
+        <li>Dix-huit (18) ans au moins pour les catégories (A2 ; B ; F)</li>
+        <li>Vingt-et-un (21) ans pour les catégories A3, C, C1, D1, D et E.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card border mt-4">
+    <div class="card-header">
+      <h6>Première inscription au permis</h6>
+    </div>
+    <div class="card-body bg-light">
+      <ul class="mb-0">
+        <li>Nationaux : 20 200 F CFA</li>
+        <li>Candidat FAB : 4 700 F CFA</li>
+        <li>Non nationaux : 40 200 F CFA</li>
+      </ul>
+      A ces montants fixes s’ajoutent le droit du trésor public qui varie en
+      fonction de la catégorie de permis sollicitée par le candidat. Nous avons
+      donc :
+      <ul class="mb-0">
+        <li>Catégorie A1 : 1 000 F CFA</li>
+        <li>Catégorie A2, A3, B ou F : 3 000 F CFA</li>
+        <li>Catégorie C : 4 000 F CFA</li>
+        <li>Catégorie C1 : 6 000 F CFA</li>
+        <li>Catégorie D1 ou D : 4 000 F CFA</li>
+        <li>Catégorie E : 4 000 F CFA</li>
+        <li>Droit Impôt : Timbre Fiscal : Valeur 2000 FCFA</li>
+      </ul>
+    </div>
+    <div class="card-header">
+      <h6>{{ "Process" | translate }}</h6>
+    </div>
+    <div class="card-body bg-light">
+      <div class="row">
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <app-number-box [number]="1" [filled]="true">
+            {{ "Information about the driver's license" | translate }}
+          </app-number-box>
+        </div>
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <app-number-box [number]="2" [filled]="true"
+            >{{ "Medical information" | translate }}
+          </app-number-box>
+        </div>
+
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <app-number-box [number]="3" [filled]="true">{{
+            "Candidate's Documents" | translate
+          }}</app-number-box>
+        </div>
+
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <app-number-box [number]="4" [filled]="true">
+            {{ "Summary" | translate }}
+          </app-number-box>
+        </div>
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <app-number-box [number]="5" [filled]="true">
+            {{ "Payment" | translate }}
+          </app-number-box>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-4 col-md">
+          <div class="v-line"></div>
+        </div>
+        <div class="col-4 col-md">
+          <div class="v-line"></div>
+        </div>
+        <div class="col-4 col-md">
+          <div class="v-line"></div>
+        </div>
+        <div class="col-4 col-md">
+          <div class="v-line"></div>
+        </div>
+        <div class="col-4 col-md">
+          <div class="v-line"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body bg-light">
+      <div class="row">
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <div class="card">
+            <div class="card-body">
+              {{
+                "Provide the information about the driving license you wish to obtain"
+                  | translate
+              }}
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <div class="card">
+            <div class="card-body">
+              {{ "Provide your medical information" | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <div class="card">
+            <div class="card-body">
+              {{ "Upload your identification document" | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <div class="card">
+            <div class="card-body">
+              {{
+                "Review all your information and make any necessary changes"
+                  | translate
+              }}
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <div class="card">
+            <div class="card-body">
+              {{
+                "Pay, download your invoice, and contact your driving school for further instructions."
+                  | translate
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mt-3">
+        <span class="fw-semibold">{{ "Average duration" | translate }} : </span>
+        10 minutes
+      </p>
+    </div>
+  </div>
+
+  <div class="card border mt-4">
+    <div class="card-header">
+      <h6>{{ "Re-registration" | translate }}</h6>
+    </div>
+    <div class="card-body bg-light">
+      {{
+        "You will need to choose the type of license, your examination center, and the driving school that will present you for the exam, and make the payment for the registration fees associated with this license. Please note that certain licenses are subject to specific conditions. If you wish to obtain a 'C' license, for example, your 'B' license must be at least 1 year old"
+          | translate
+      }}
+    </div>
+    <div class="card-header">
+      <h6>{{ "Process" | translate }}</h6>
+    </div>
+
+    <div class="card-body bg-light">
+      <div class="row">
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <app-number-box [number]="1" [filled]="true">
+            {{ "Information about the driver's license" | translate }}
+          </app-number-box>
+        </div>
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <app-number-box [number]="2" [filled]="true"
+            >{{ "Payment" | translate }}
+          </app-number-box>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-4 col-md">
+          <div class="v-line"></div>
+        </div>
+        <div class="col-4 col-md">
+          <div class="v-line"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body bg-light">
+      <div class="row">
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <div class="card">
+            <div class="card-body">
+              {{
+                "Provide the information about the driving license you wish to obtain"
+                  | translate
+              }}
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <div class="card">
+            <div class="card-body">
+              {{
+                "Pay, download your invoice, and contact your driving school for further instructions"
+                  | translate
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mt-3">
+        <span class="fw-semibold">{{ "Average duration" | translate }} : </span>
+        10 minutes
+      </p>
+    </div>
+  </div>
+  <div class="card border mt-4">
+    <div class="card-header">
+      <h6>{{ "Registration for the driving test" | translate }}</h6>
+    </div>
+    <div class="card-body bg-light">
+      {{
+        "You will need to choose your examination center and the driving school that will present you"
+          | translate
+      }}
+    </div>
+    <div class="card-header">
+      <h6>{{ "Process" | translate }}</h6>
+    </div>
+
+    <div class="card-body bg-light">
+      <div class="row">
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <app-number-box [number]="1" [filled]="true">
+            {{ "Information about the driver's license" | translate }}
+          </app-number-box>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-4 col-md">
+          <div class="v-line"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body bg-light">
+      <div class="row">
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <div class="card">
+            <div class="card-body">
+              {{
+                "Choose a new center or driving school if you wish to discontinue your journey with your current driving school"
+                  | translate
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mt-3">
+        <span class="fw-semibold">{{ "Average duration" | translate }} : </span>
+        10 minutes
+      </p>
+    </div>
+  </div>
+  <div class="card border mt-4">
+    <div class="card-header">
+      <h6>
+        {{
+          "After being absent from the theory or practical driving test"
+            | translate
+        }}
+      </h6>
+    </div>
+    <div class="card-body bg-light">
+      {{
+        "If your excuse for absence is accepted, you can request a new examination without having to pay the registration fee. If your excuse for absence is not accepted, you will need to register again so that your driving school can present you for another session of the driving license exam. If you have not yet provided a justification for your absence, you can either submit a valid excuse or register again if you do not have any supporting documents"
+          | translate
+      }}
+    </div>
+  </div>
+
+  <div class="card border mt-4">
+    <div class="card-header">
+      <h6>
+        {{
+          "Process (When you have not yet justified your absence)" | translate
+        }}
+      </h6>
+    </div>
+
+    <div class="card-body bg-light">
+      <div class="row">
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <app-number-box [number]="1" [filled]="true">
+            {{ "Justification" | translate }}
+          </app-number-box>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-4 col-md">
+          <div class="v-line"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body bg-light">
+      <div class="row">
+        <div class="col-4 col-md mb-3 mb-md-0">
+          <div class="card">
+            <div class="card-body">
+              {{
+                "Explain the reason for your absence and provide supporting documentation"
+                  | translate
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mt-3">
+        <span class="fw-semibold">{{ "Average duration" | translate }} : </span>
+        10 minutes
+      </p>
+    </div>
+  </div>
+  <div class="mt-4 text-center">
+    <a href="" class="btn btn-primary">{{
+      "Submit my application" | translate
+    }}</a>
+  </div>
+</div>

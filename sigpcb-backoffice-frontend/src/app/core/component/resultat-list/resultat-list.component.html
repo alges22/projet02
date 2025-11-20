@@ -1,0 +1,80 @@
+<div class="anatt-doc" *ngIf="resultats.length">
+  <div class="anatt-doc-header">
+    <div class="top-header">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="" />
+      </div>
+
+      <div class="references">
+        <p>01 BP 1230 Cotonou</p>
+        <p>Tél : +229 91 85 11 11 <br />+229 21 31 39 98</p>
+        <p>{{ "anatt.contact@gouv.bj" }}</p>
+        <p>Rue 108 -Tokpa Hoho Lot 35B Immeuble KOUGBLENOU</p>
+      </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="sub-header">
+      <div class="sub-header-ref">
+        <div class="unite">
+          ANNEXE DEPARTEMANTALE DES TRANSPORTS
+          {{ meta.annexe?.name | uppercase }}
+        </div>
+        <p class="numero">N°________/ANaTT/MIT/DTIT/ADT-ATL/SPC/DPC/SA</p>
+        <div class="doc-title">
+          EXAMEN DE PERMIS DE CONDUIRE -
+          {{ meta.agenda?.session_long | uppercase }}
+        </div>
+      </div>
+      <div class="date" *ngIf="meta.agenda">
+        <p>Cotonou, le {{ meta.agenda.date_code | hdate }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <h5 class="note-title">NOTE DE SERVICE</h5>
+    <p class="note-description r">
+      Suite aux résultats de l'épreuve du code de la session :
+      {{ meta.agenda?.session_long }}, les personnes dont les noms suivent sont
+      priées de trouver ci-dessous leurs résultats d'examen.
+    </p>
+  </div>
+  <div class="tab">
+    <div class="tab-date">{{ meta.agenda?.session_long }}</div>
+    <div class="my-3" *ngFor="let resultat of resultats">
+      <div class="tab-caption">Catégorie {{ resultat.permis.name }}</div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="bg-primary text-dark">
+            <tr>
+              <th scope="col">N°</th>
+              <th scope="col">Nom et prénoms</th>
+              <th scope="col">Numéro NPI</th>
+              <th scope="col">Auto-école</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="" *ngFor="let resultat of resultat.list; let i = index">
+              <td>{{ i + 1 | padding : 3 }}</td>
+              <td scope="row">
+                {{ resultat.candidat.nom }} {{ resultat.candidat.prenoms }}
+              </td>
+              <td class="border">{{ resultat.npi }}</td>
+              <td>{{ resultat?.auto_ecole?.name }}</td>
+              <td>{{ resultat?.status }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="anatt-doc-footer">
+    <div class="signataire" *ngIf="meta.annexe">
+      Le Directeur général PO <br />
+      Le chef d’annexe de {{ meta.annexe.name }}
+    </div>
+  </div>
+</div>

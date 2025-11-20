@@ -1,0 +1,55 @@
+<div class="calendar-progress d-none d-md-flex" *ngIf="programation.length">
+  <div
+    class="progress-item"
+    *ngFor="let pg of programation"
+    [style.width]="!pg.end ? '100%' : 'max-content'"
+  >
+    <div class="calendar-date rounded-1" [style.background-color]="pg.color">
+      <span class="days" [innerText]="pg.days | padding : 2"></span>
+      <span class="month" [innerText]="pg.month | slice : 0 : 3"> </span>
+      <div class="details" *ngIf="pg.details">
+        <span [innerHTML]="pg.details"></span>
+        <svg
+          width="125"
+          height="25"
+          viewBox="0 0 125 25"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M11 26L1.47372 6.5H20.5263L11 26Z" fill="#111111" />
+          <path d="M13 27L23.5 7H134" stroke="#111111" />
+        </svg>
+      </div>
+    </div>
+    <div class="calendar-content" *ngIf="!pg.end">
+      <small class="fw-semibold text-small" [innerText]="pg.label"> </small>
+      <div class="calendar-bars" [style.background-color]="pg.color"></div>
+    </div>
+  </div>
+</div>
+
+<div class="row d-md-none" *ngIf="programation.length">
+  <div class="col-4 mb-3 text-center" *ngFor="let pg of programation">
+    <div
+      class="text-center rounded-1 py-2 text-white mobile position-relative"
+      [style.background-color]="pg.color"
+      [style.border-color]="pg.color"
+    >
+      <span class="days fs-5" [innerText]="pg.days | padding : 2"></span> <br />
+
+      <span class="month" [innerText]="pg.month | slice : 0 : 3"> </span>
+      <span class="triangle-down" [style.color]="pg.color">
+        <i class="bi bi-caret-down-fill mb-0"></i
+      ></span>
+    </div>
+
+    <div class="ms-0 ps-0">
+      <small class="fw-semibold" style="font-size: 10px" [innerText]="pg.label">
+      </small>
+
+      <span *ngIf="pg.details" class="d-inline-block" style="font-size: 10px">
+        {{ pg.details }}
+      </span>
+    </div>
+  </div>
+</div>

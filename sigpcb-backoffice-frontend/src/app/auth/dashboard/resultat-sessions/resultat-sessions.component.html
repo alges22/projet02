@@ -1,0 +1,304 @@
+<h4 class="my-3">Résultats des sessions</h4>
+<div class="card">
+  <div class="form-group">
+    <div class="col-sm-4">
+      <select
+        class="form-select border-0 fw-semibold fs-5 bg-transparent text-primary"
+        name="annexe_anatt"
+        id="annexes-anatt"
+        (change)="annexeSelected($event)"
+        [(ngModel)]="filter.annexe_id"
+      >
+        <option selected [value]="null">Toutes les annexes</option>
+        <option [value]="item.id" *ngFor="let item of annexes">
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <tab>
+    <tab-header>
+      <button
+        class="btn btn-tab"
+        [class.active]="activeTab === 'admis-conduite'"
+        (click)="setActiveTab('admis-conduite')"
+      >
+        <span class="btn-tab-text">
+          <app-icon icon="sign-stop" classe="text-dark"></app-icon>
+          Admis à la conduite
+        </span>
+      </button>
+      <button
+        class="btn btn-tab"
+        [class.active]="activeTab === 'admis-code'"
+        (click)="setActiveTab('admis-code')"
+      >
+        <span class="btn-tab-text">
+          <app-icon icon="bus-front" classe="text-dark"></app-icon>
+          Admis au code
+        </span>
+      </button>
+    </tab-header>
+    <tab-body>
+      <ng-container *ngIf="filter.annexe_id">
+        <ng-container *ngIf="!ready">
+          <div class="alert alert-light text-center" role="alert">
+            Chargement ...
+          </div>
+        </ng-container>
+        <ng-container *ngIf="ready">
+          <!-- Conduite tab-->
+          <div *ngIf="statConduite && activeTab === 'admis-conduite'">
+            <ng-container *ngIf="examen.conduite_state">
+              <div class="start-card p-2 mt-2">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <p>
+                      <span class="fw-semibold me-3">Session</span> :
+                      {{ examen.session }}
+                    </p>
+
+                    <p>
+                      <span class="fw-semibold me-3">Admins</span> :
+                      {{ statConduite.admis | padding }}
+                    </p>
+
+                    <p>
+                      <span class="fw-semibold me-3">Recalés</span> :
+                      {{ statConduite.recales | padding }}
+                    </p>
+
+                    <p>
+                      <span class="fw-semibold me-3">Recalés</span> :
+                      {{ statConduite.abscents | padding }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row align-items-center justify-content-between">
+                      <div class="col-6">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            name="result_type"
+                            type="radio"
+                            id="all-result"
+                            [value]="null"
+                            [(ngModel)]="filter.resultat_conduite"
+                            (change)="conduites()"
+                            checked
+                          />
+                          <label class="form-check-label" for="all-result">
+                            Tous les admis
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            name="result_type"
+                            type="radio"
+                            [value]="'success'"
+                            [(ngModel)]="filter.resultat_conduite"
+                            (change)="conduites()"
+                            id="all-admis"
+                          />
+                          <label class="form-check-label" for="all-admis">
+                            Les admis
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            name="result_type"
+                            type="radio"
+                            [value]="'failed'"
+                            [(ngModel)]="filter.resultat_conduite"
+                            id="all-rejected"
+                            (change)="conduites()"
+                          />
+                          <label class="form-check-label" for="all-rejected">
+                            Les récalés
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <button
+                          class="btn btn-primary text-end"
+                          (click)="conduites()"
+                          [disabled]="!resultats.length"
+                        >
+                          <app-icon icon="eye"></app-icon> Voir la liste
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--- Résultat--->
+              <div class="row mt-2">
+                <ng-container *ngIf="!resultats.length">
+                  <div class="text-center">
+                    <strong>Aucun résultat </strong>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="resultats.length">
+                  <div
+                    class="card my-3"
+                    style="max-height: 500px; overflow: auto"
+                  >
+                    <div class="card-body">
+                      <resultat-list [resultats]="resultats"></resultat-list>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <!---Fin résultat-->
+            </ng-container>
+
+            <ng-container *ngIf="examen.conduite_state == null">
+              <div class="alert alert-warning m-3 text-center" role="alert">
+                Les résultats de conduite pour cet examen ne sont pas encore
+                disponibles
+              </div>
+            </ng-container>
+          </div>
+
+          <!--Code tab-->
+          <div *ngIf="statCode && activeTab === 'admis-code'">
+            <ng-container *ngIf="false">
+              <div class="alert alert-warning" role="alert">
+                Les résultats de compositions pour cet examen ne sont pas encore
+                disponibles.
+              </div>
+            </ng-container>
+            <ng-container>
+              <div class="start-card p-2 mt-2">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <p>
+                      <span class="fw-semibold me-3">Session</span> :
+                      {{ examen.session }}
+                    </p>
+
+                    <p>
+                      <span class="fw-semibold me-3">Admins</span> :
+                      {{ statCode.admis | padding }}
+                    </p>
+                    <p>
+                      <span class="fw-semibold me-3">Présentés</span> :
+                      {{ statCode.presentes | padding }}
+                    </p>
+
+                    <p>
+                      <span class="fw-semibold me-3">Recalés</span> :
+                      {{ statCode.recales | padding }}
+                    </p>
+
+                    <p>
+                      <span class="fw-semibold me-3">Abscents</span> :
+                      {{ statCode.abscents | padding }}
+                    </p>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <div class="row align-items-center justify-content-between">
+                      <div class="col-6">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            name="result_type"
+                            type="radio"
+                            id="all-result"
+                            [value]="null"
+                            [(ngModel)]="filter.resultat_code"
+                            (change)="codes()"
+                            checked
+                          />
+                          <label class="form-check-label" for="all-result">
+                            Tous les admis
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            name="result_type"
+                            type="radio"
+                            [value]="'success'"
+                            [(ngModel)]="filter.resultat_code"
+                            (change)="codes()"
+                            id="all-admis"
+                          />
+                          <label class="form-check-label" for="all-admis">
+                            Les admis
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            name="result_type"
+                            type="radio"
+                            [value]="'failed'"
+                            [(ngModel)]="filter.resultat_code"
+                            id="all-rejected-code"
+                            (change)="codes()"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="all-rejected-code"
+                          >
+                            Les récalés
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <button
+                          class="btn btn-primary text-end"
+                          (click)="codes()"
+                          [disabled]="!resultats.length"
+                        >
+                          <app-icon icon="eye"></app-icon> Voir la liste
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--- Résultat--->
+              <div class="row mt-2">
+                <ng-container *ngIf="!resultats.length">
+                  <div class="text-center">
+                    <strong>Aucun résultat </strong>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="resultats.length">
+                  <div
+                    class="card my-3"
+                    style="max-height: 500px; overflow: auto"
+                  >
+                    <div class="card-body">
+                      <resultat-list
+                        [resultats]="resultats"
+                        [meta]="{ agenda: examen, annexe: annexe }"
+                      ></resultat-list>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <!---Fin résultat-->
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!filter.annexe_id">
+        <div class="alert alert-light text-center m-3" role="alert">
+          <strong
+            >Veuillez sélectionner une annexe pour voir les résultats</strong
+          >
+        </div>
+      </ng-container>
+    </tab-body>
+  </tab>
+</div>

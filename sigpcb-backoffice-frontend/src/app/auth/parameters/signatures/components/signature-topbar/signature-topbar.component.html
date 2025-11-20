@@ -1,0 +1,8 @@
+<div class="topbar">
+  <span *ngFor="let menu of menus" (click)="onSelectMenu($event, menu.menuId)">
+    <a [routerLink]="menu.href" class="btn" [ngClass]="menu.menuId === menuSelected ? 'active' : ''">
+      <app-icon [icon]="menu.icon"></app-icon>
+      {{ menu.label }}
+    </a>
+  </span>
+</div>

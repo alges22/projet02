@@ -1,0 +1,56 @@
+<div class="m-2">
+  <div class="row">
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <div class="h6">
+          <div class="col-sm-12">
+            <select class="form-select border-0 bg-transparent text-primary" name="annexe_anatt" id="annexes-anatt"
+              (change)="sessionSelected($event)">
+              <option selected [value]="0">Sélectionner une session</option>
+              <option [value]="session.id" *ngFor="let session of sessions">
+                Session de {{
+                session.date_compo | date : "dd MMMM yyyy" : "" : "fr"
+                }} | {{session.entreprise?.name}}
+              </option>
+            </select>
+          </div>
+          <div>
+            <span class="text-primary fw-semibold">Nombre de candidats total</span>
+            :
+            {{ candidats.length | padding }}
+            candidat(s)
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" [disabled]="!candidats.length" (click)="sendConvocation()">
+          Envoyer les convocations
+        </button>
+        <button type="button" class="btn btn-primary" [disabled]="!candidats.length" (click)="startCompo()">
+          Lancer la composition
+        </button>
+      </div>
+    <div class="col-12">
+      <div class="table-responsive" *ngIf="candidats.length">
+        <table class="table">
+          <thead>
+            <tr class="bg-table-primary">
+              <th scope="col">NPI</th>
+              <th scope="col">Nom</th>
+              <th scope="col">Prénoms</th>
+              <th scope="col">Numéro</th>
+            </tr>
+          </thead>
+
+          <tbody *ngFor="let item of candidats; let i = index">
+                <tr>
+                  <td>
+                    {{item.candidat_info?.npi}}
+                  </td>
+                  <td>{{ item.candidat_info?.nom | uppercase }}</td>
+                  <td>{{ item.candidat_info?.prenoms }}</td>
+                  <td>{{ item.candidat_info?.telephone }}</td>
+                </tr>
+              </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

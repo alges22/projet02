@@ -1,0 +1,842 @@
+<div class="service-details" *ngIf="!paiement_success">
+  <h3 class="title">Mes demandes</h3>
+
+  <div *ngIf="services.length == 0">Aucune demande</div>
+  <div *ngIf="services.length > 0">
+    <div
+      class="bg-white border rounded mb-2"
+      *ngFor="let service of services; let i = index"
+    >
+      <div
+        class="card-header p-2 rounded bg-light d-flex justify-content-between align-items-center"
+      >
+        <div>
+          <h6 class="text-primary" *ngIf="service.slug == 'dossier'">
+            Permis {{ service.nom_permis }}
+          </h6>
+          <h6 class="text-primary" *ngIf="service.slug == 'permisnum'">
+            Demande de permis de conduire numérique {{ service.nom_permis }}
+          </h6>
+          <span class="text-muted small">{{
+            service.created_at | date : "dd MMMM yyyy" : "" : "fr"
+          }}</span>
+          <div
+            *ngIf="
+              slugDuBouton(service.parcourssuivi[0].bouton) == 'Rejet' &&
+              service.slug == 'dossier'
+            "
+          >
+            <span class="text-danger small text-uppercase fw-bold"
+              >Dossier de candidat rejeté</span
+            >
+          </div>
+        </div>
+
+        <button
+          type="button"
+          *ngIf="
+            !statusButtonPaiement(service.parcourssuivi[0].bouton) &&
+            slugDuBouton(service.parcourssuivi[0].bouton) == 'Paiement' &&
+            service.slug == 'dossier'
+          "
+          (click)="
+            sessionPaymentModal(
+              service.id,
+              service.montant_paiement,
+              statusButtonPaiement(service.bouton_paiement)
+            )
+          "
+          class="btn btn-outline-primary ms-3"
+        >
+          Choisir ma session et payer
+        </button>
+        <button
+          type="button"
+          *ngIf="
+            !statusButtonPaiement(service.parcourssuivi[0].bouton) &&
+            slugDuBouton(service.parcourssuivi[0].bouton) == 'Rejet' &&
+            service.slug == 'dossier'
+          "
+          (click)="
+            updateDossierCandidat(service.parcourssuivi[0].dossier_session_id)
+          "
+          class="btn btn-outline-danger ms-3"
+        >
+          Modifier votre dossier
+        </button>
+        <div
+          class=""
+          *ngIf="
+            service.parcourssuivi[0].slug == 'correction-rejet' &&
+            service.slug == 'dossier'
+          "
+        >
+          <!-- <button
+            type="button"
+            (click)="
+              closeDossier(
+                service?.id,
+                statusDuBouton(service.parcourssuivi[0].bouton)
+              )
+            "
+            class="btn btn-secondary ms-3"
+          >
+            Fermer ce dossier
+          </button> -->
+          <button
+            type="button"
+            (click)="
+              sessionPaymentModal(
+                service.id,
+                service.montant_paiement,
+                statusDuBouton(service.parcourssuivi[0].bouton),
+                service?.parcourssuivi[0]?.dossier_session_id,
+                'paymentExpire'
+              )
+            "
+            class="btn btn-primary ms-3"
+          >
+            Choisir une autre session
+          </button>
+        </div>
+        <a
+          *ngIf="
+            !statusDuBouton(service.parcourssuivi[0].bouton) &&
+            slugDuBouton(service.parcourssuivi[0].bouton) == 'Convocation' &&
+            service.slug == 'dossier'
+          "
+          type="button"
+          href="{{ service.parcourssuivi[0].url }}"
+          class="btn btn-outline-primary ms-3"
+          target="_blank"
+          >Télécharger votre convocation</a
+        >
+        <a
+          *ngIf="
+            service.slug == 'dossier' &&
+            service.parcourssuivi[0]?.slug == 'attestation'
+          "
+          type="button"
+          href="{{ service.parcourssuivi[0].url }}"
+          class="btn btn-outline-primary ms-3"
+          target="_blank"
+          >Télécharger votre Attestation</a
+        >
+        <div
+          class="d-flex justify-content-between align-items-center"
+          role="button"
+          (click)="openCard(i)"
+        >
+          <span
+            *ngIf="service.slug == 'permisnum' && service.status == 'approved'"
+            [class]="'badge p-2 ' + 'bg-success'"
+          >
+            Terminé
+          </span>
+          <span
+            *ngIf="service.state == 'success'"
+            [class]="'badge p-2 ' + 'bg-success'"
+          >
+            Réussi
+          </span>
+          <span
+            *ngIf="service.state == 'pending'"
+            [class]="'badge p-2 ' + 'bg-warning'"
+          >
+            En cours
+          </span>
+          <span
+            *ngIf="service.state == 'failed'"
+            [class]="'badge p-2 ' + 'bg-danger'"
+          >
+            Fermé
+          </span>
+          <span
+            *ngIf="service.state == 'closed'"
+            [class]="'badge p-2 ' + 'bg-danger'"
+          >
+            Fermé
+          </span>
+          <app-icon
+            icon="chevron-right"
+            *ngIf="cardOpendedIndex !== i"
+            classe="fw-bolder ms-3"
+          ></app-icon>
+          <app-icon
+            icon="chevron-down"
+            *ngIf="cardOpendedIndex === i"
+            classe="fw-bolder ms-3"
+          ></app-icon>
+        </div>
+      </div>
+      <div class="m-3 small text-small" *ngIf="cardOpendedIndex === i">
+        <div
+          class="card-body"
+          *ngFor="let notification of service.parcourssuivi"
+        >
+          <div *ngIf="notification.slug == 'attestation'" class="form-check">
+            <input class="form-check-input" type="radio" checked />
+            <label
+              class="form-check-label text-primary fw-semibold"
+              [innerHTML]="notification.message"
+            >
+            </label>
+            <div class="bg-light p-3 rounded col-sm-11 ms-auto mb-3">
+              Votre attestation est disponible. Vous pouvez la télécharger en
+              cliquant sur le lien ci-dessous:
+              <p>
+                <a
+                  href="{{ notification.url }}"
+                  target="_blank"
+                  class="btn btn-primary mt-3"
+                >
+                  Télécharger votre attestation
+                </a>
+              </p>
+            </div>
+            <br />
+            <small class="text-muted small">{{
+              notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+            }}</small>
+          </div>
+          <div *ngIf="notification.slug == 'preinscription'" class="form-check">
+            <input class="form-check-input" type="radio" checked />
+            <label
+              class="form-check-label text-primary fw-semibold"
+              [innerHTML]="notification.message"
+            >
+            </label>
+            <br />
+            <small class="text-muted small">{{
+              notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+            }}</small>
+          </div>
+          <!-- paiement frais a anatt -->
+          <div
+            *ngIf="notification.slug == 'monitoring'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <button
+                type="button"
+                [disabled]="statusDuBouton(notification.bouton)"
+                (click)="
+                  sessionPaymentModal(
+                    service.id,
+                    service.montant_paiement,
+                    statusDuBouton(notification.bouton)
+                  )
+                "
+                class="btn btn-primary ms-3"
+              >
+                Choisir ma session et payer
+              </button>
+            </div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- notification pour après paiement -->
+          <div
+            *ngIf="notification.slug == 'inscription'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <a
+                type="button"
+                href="{{ notification.url }}"
+                class="btn btn-primary ms-3"
+                target="_blank"
+                >Télécharger votre facture</a
+              >
+            </div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- validation failed par anatt -->
+          <div
+            *ngIf="notification.slug == 'validation-anatt-failed'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <button
+                type="button"
+                [disabled]="
+                  statusDuBouton(notification.bouton) ||
+                  service.state == 'closed'
+                "
+                (click)="updateDossierCandidat(notification.dossier_session_id)"
+                class="btn btn-primary ms-3"
+              >
+                Modifier
+              </button>
+            </div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+
+          <!-- convocation-code-telechargement -->
+          <div
+            *ngIf="notification.slug == 'convocation-code'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <a
+                type="button"
+                href="{{ notification.url }}"
+                class="btn btn-primary ms-3"
+                target="_blank"
+                >Télécharger votre convocation</a
+              >
+            </div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+
+          <!-- absent composition code -->
+          <div
+            *ngIf="notification.slug == 'resultat-absent-code'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+
+          <!-- validation success par anatt -->
+          <!-- <div *ngIf="notification.slug=='validation-anatt-success'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3">
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{ notification.date_action | date:'dd MMMM yyyy':'':'fr' }}</span>
+            </div>
+          </div> -->
+          <!-- Correction  rejet par candidat -->
+          <!-- <div *ngIf="notification.slug=='correction-rejet'" class="bg-light p-3 rounded col-sm-11 ms-auto mb-3">
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{ notification.date_action | date:'dd MMMM yyyy':'':'fr' }}</span>
+            </div>
+          </div> -->
+
+          <!-- Correction  rejet par candidat -->
+          <div
+            *ngIf="notification.slug == 'correction-rejet'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <!-- <button
+                type="button"
+                [disabled]="statusDuBouton(notification.bouton)"
+                (click)="
+                  closeDossier(service?.id, statusDuBouton(notification.bouton))
+                "
+                class="btn btn-secondary ms-3"
+                *ngIf="false"
+              >
+                Fermer ce dossier
+              </button> -->
+              <!-- <button
+                type="button"
+                [disabled]="statusDuBouton(notification.bouton)"
+                (click)="
+                  sessionPaymentModal(
+                    service.id,
+                    service.montant_paiement,
+                    statusDuBouton(notification.bouton),
+                    service?.parcourssuivi[0]?.dossier_session_id,
+                    'paymentExpire'
+                  )
+                "
+                class="btn btn-primary ms-3"
+              >
+                Choisir une autre session
+              </button> -->
+            </div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+
+          <!-- Correction  rejet par candidat mais avant lheure -->
+          <div
+            *ngIf="notification.slug == 'correction-rejet-succes'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+            </div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- Demande justification absence conduite par candidat -->
+          <div
+            *ngIf="notification.slug == 'justif-absence-conduite'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- Demande justification absence code-conduite par candidat -->
+          <div
+            *ngIf="notification.slug == 'justif-absence-code-conduite'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- Validation justification demande par anatt -->
+          <div
+            *ngIf="notification.slug == 'validation-justif-success'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <button
+                type="button"
+                [disabled]="statusDuBouton(notification.bouton)"
+                (click)="
+                  sessionModal(
+                    service?.parcourssuivi[0]?.dossier_candidat_id,
+                    service?.parcourssuivi[0]?.dossier_session_id,
+                    statusDuBouton(notification.bouton)
+                  )
+                "
+                class="btn btn-primary ms-3"
+              >
+                Je choisis une session
+              </button>
+            </div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- Choix session par candidat -->
+          <div
+            *ngIf="notification.slug == 'choix-session'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- Rejet justification demande par anatt -->
+          <div
+            *ngIf="notification.slug == 'validation-justif-failed'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+             <div class="mt-2">
+             <!-- <button
+                type="button"
+                [disabled]="statusDuBouton(notification.bouton)"
+                (click)="
+                  closeDossier(service?.id, statusDuBouton(notification.bouton))
+                "
+                class="btn btn-secondary ms-3"
+              >
+                Fermer ce dossier
+              </button> -->
+              <button
+                type="button"
+                [disabled]="statusDuBouton(notification.bouton)"
+                (click)="
+                  sessionPaymentModal(
+                    service.id,
+                    service.montant_paiement,
+                    statusDuBouton(notification.bouton),
+                    service?.parcourssuivi[0]?.dossier_session_id,
+                    'paymentJustif'
+                  )
+                "
+                class="btn btn-primary ms-3"
+              >
+                Oui je poursuis avec ce dossier
+              </button>
+            </div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- Reouvrir dossier par candidat -->
+          <div
+            *ngIf="notification.slug == 'notification-ouverture'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- Reouvrir dossier par candidat -->
+          <div
+            *ngIf="notification.slug == 'new-ds'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- Fermeture dossier par candidat -->
+          <div
+            *ngIf="notification.slug == 'notification-fermeture'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- resultat code -->
+          <div
+            *ngIf="notification.slug == 'resultat-code'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+
+          <!-- convocation-conduite-telechargement -->
+          <div
+            *ngIf="notification.slug == 'convocation-conduite'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <a
+                type="button"
+                href="{{ notification.url }}"
+                class="btn btn-primary ms-3"
+                target="_blank"
+                >Télécharger votre convocation</a
+              >
+            </div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+
+          <!-- absent composition conduite -->
+          <div
+            *ngIf="notification.slug == 'resultat-absent-conduite'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+
+          <!-- resultat conduite -->
+          <div
+            *ngIf="notification.slug == 'resultat-conduite'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- reconduire conduite par candidat -->
+          <div
+            *ngIf="notification.slug == 'reconduit-conduite'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+          <!-- notification pour service de permis numérique -->
+          <div
+            *ngIf="service.slug == 'permisnum'"
+            class="bg-light p-3 rounded col-sm-11 ms-auto mb-3"
+          >
+            <div [innerHTML]="notification.message"></div>
+            <div class="mt-2">
+              <a
+                type="button"
+                href="{{ notification.url }}"
+                class="btn btn-primary ms-3"
+                target="_blank"
+                >Télécharger votre permis</a
+              >
+            </div>
+            <div class="mt-2">
+              <span class="text-muted small">{{
+                notification.date_action | date : "dd MMMM yyyy" : "" : "fr"
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="service-details" *ngIf="paiement_success">
+  <h3 class="title text-center">
+    Inscription à l'examen du permis de conduire
+  </h3>
+
+  <div class="card border mb-3 alert alert-primary">
+    <div class="card-body p-2">
+      <div class="row h-100">
+        <div class="col h-100">
+          <h4 class="mt-3">Paiement effectué avec succès</h4>
+          <div class="border rounded-3 p-2">
+            <div class="row">
+              <div class="col">
+                <div class="mb-3">
+                  <div class="fw-semibold">NPI</div>
+                  <span class="text-uppercase">
+                    {{ candidat?.npi }}
+                  </span>
+                </div>
+                <div class="mb-3">
+                  <div class="fw-semibold">Nom</div>
+                  <span class="text-uppercase">
+                    {{ candidat?.nom }}
+                  </span>
+                </div>
+                <div class="mb-3">
+                  <div class="fw-semibold">Prénoms</div>
+                  <span class="text-uppercase">
+                    {{ candidat?.prenoms }}
+                  </span>
+                </div>
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <div class="fw-semibold">Montant payé</div>
+                  <span class="text-uppercase">
+                    {{ montant_payer }}
+                  </span>
+                </div>
+
+                <div class="mb-3">
+                  <div class="fw-semibold">Numéro de paiement</div>
+                  <span class="text-uppercase">
+                    {{ phone_payment }}
+                  </span>
+                </div>
+                <div class="mb-3">
+                  <div class="fw-semibold">Date de paiement</div>
+                  <span class="text-uppercase">
+                    {{ date_payment | date : "dd MMMM yyyy" : "" : "fr" }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="my-3">
+            <a
+              type="button"
+              href="{{ download_url }}"
+              class="btn btn-outline-primary w-100"
+              target="_blank"
+              >Télécharger la facture</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body text-center col-md-10 mx-auto">
+    <strong>Votre dossier est en cours d'étude pour validation. </strong>
+    <div class="my-3">
+      <button class="btn btn-primary" (click)="reloadPage()">
+        Revenir sur suivi de mes dossiers
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="payment">
+  <app-fedapay-box
+    [transaction]="payment"
+    (onCompleted)="getTransaction($event)"
+  />
+</ng-container>
+<app-modal [action]="modalId" size="modal-md">
+  <div heading class="fw-semibold text-primary text-center">
+    Choisissez votre session
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="mb-3">
+        <div class="input-styled">
+          <select
+            class="form-select"
+            name="session"
+            [(ngModel)]="session"
+            qv-rules="required"
+          >
+            <option value="" selected>Cliquer pour choisir une session</option>
+            <option *ngFor="let session of sessions" value="{{ session.id }}">
+              {{ session.session_long }}
+            </option>
+            <!-- [disabled]="isSessionDisabled(session)" -->
+          </select>
+        </div>
+        <div qv-feedback="session"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-sm">
+      <button
+        class="btn btn-primary w-100 justify-content-center"
+        [disabled]="!session || isloading"
+        (click)="isSessionPayement ? payNow() : choiceSession()"
+      >
+        {{ shouldPay ? "Payer mon inscription" : "Choisir" }}
+        <span
+          *ngIf="isloading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal [action]="modalAbandonnerDossier" size="modal-md">
+  <div heading class="fw-semibold text-danger text-center">
+    Fermeture du dossier
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="mb-3">Voulez-vous vraiment abandonner ce dossier?</div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-sm">
+      <button
+        class="btn btn-outline-secondary w-100 justify-content-center"
+        (click)="noCloseDossier()"
+      >
+        Non
+      </button>
+    </div>
+    <div class="col-sm">
+      <button
+        class="btn btn-primary w-100 justify-content-center"
+        (click)="yesCloseDossier()"
+        [disabled]="isloadingclosedossier"
+      >
+        Oui
+        <span
+          *ngIf="isloadingclosedossier"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal [action]="modalOpenDossier" size="modal-md">
+  <div heading class="fw-semibold text-success text-center">
+    Réouverture du dossier
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="mb-3">Voulez-vous vraiment réouvrir ce dossier?</div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-sm">
+      <button
+        class="btn btn-outline-secondary w-100 justify-content-center"
+        (click)="noOpenDossier()"
+      >
+        Non
+      </button>
+    </div>
+    <div class="col-sm">
+      <button
+        class="btn btn-primary w-100 justify-content-center"
+        (click)="yesOpenDossier()"
+        [disabled]="isloadingopendossier"
+      >
+        Oui
+        <span
+          *ngIf="isloadingopendossier"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </div>
+  </div>
+</app-modal>
+
+<app-suivre-eservice></app-suivre-eservice>

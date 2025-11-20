@@ -1,0 +1,218 @@
+<div class="m-3">
+  <div class="row filter-box">
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="ftype" class="form-label">Option</label>
+        <select
+          class="form-select"
+          name="ftype"
+          id="ftype"
+          [(ngModel)]="filter.type"
+          (change)="get()"
+        >
+          <option selected [value]="null">Toutes les options</option>
+          <option value="autoecole">Auto-école</option>
+          <option value="candidat">Candidat</option>
+        </select>
+      </div>
+    </div>
+    <div class="col">
+      <div class="pb-3 text-end">
+        <button class="btn btn-primary" (click)="openModal()">Ajouter</button>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="faqs.length">
+    <div class="row">
+      <div class="col-md-6">
+        <div
+          class="mb-4"
+          *ngFor="let faq of faqLeft | paginate : paginateArgs()"
+        >
+          <div
+            class="border p-3 rounded-1 faq"
+            [class.active]="faq.id === currentFaqId"
+          >
+            <div
+              class="d-flex align-items-center"
+              (click)="onFaqueSelected(faq.id)"
+              role="button"
+            >
+              <button
+                class="btn btn-sm btn-primary"
+                *ngIf="faq.id !== currentFaqId"
+              >
+                <app-icon icon="plus"></app-icon>
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                *ngIf="faq.id === currentFaqId"
+              >
+                <app-icon icon="x"></app-icon>
+              </button>
+              <span class="faq-title ms-2">{{ faq.question }}</span>
+            </div>
+            <ng-container *ngIf="currentFaqId === faq.id">
+              <div class="faq-body bg-white p-3 mt-3 mb-1 rounded-1">
+                {{ faq.response }}
+              </div>
+
+              <div class="btn-actions my-3">
+                <button class="btn btn-primary" (click)="openModal(faq)">
+                  Modifier
+                  <app-icon
+                    icon="pencil"
+                    [size]="16"
+                    classe="text-light"
+                  ></app-icon>
+                </button>
+                <button class="btn btn-danger ms-2" (click)="destroy(faq)">
+                  Supprimer
+                  <app-icon
+                    icon="trash3"
+                    [size]="16"
+                    classe="text-light"
+                  ></app-icon>
+                </button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div
+          class="mb-4"
+          *ngFor="let faq of faqRight | paginate : paginateArgs()"
+        >
+          <div
+            class="border p-3 rounded-1 faq"
+            [class.active]="faq.id === currentFaqId"
+          >
+            <div
+              class="d-flex align-items-center"
+              (click)="onFaqueSelected(faq.id)"
+              role="button"
+            >
+              <button
+                class="btn btn-sm btn-primary"
+                *ngIf="faq.id !== currentFaqId"
+              >
+                <app-icon icon="plus"></app-icon>
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                *ngIf="faq.id === currentFaqId"
+              >
+                <app-icon icon="x"></app-icon>
+              </button>
+              <span class="faq-title ms-2">{{ faq.question }}</span>
+            </div>
+            <ng-container *ngIf="currentFaqId === faq.id">
+              <div class="faq-body bg-white p-3 mt-3 mb-1 rounded-1">
+                {{ faq.response }}
+              </div>
+
+              <div class="btn-actions my-3">
+                <button class="btn btn-primary" (click)="openModal(faq)">
+                  Modifier
+                  <app-icon
+                    icon="pencil"
+                    [size]="16"
+                    classe="text-light"
+                  ></app-icon>
+                </button>
+                <button class="btn btn-danger ms-2" (click)="destroy(faq)">
+                  Supprimer
+                  <app-icon
+                    icon="trash3"
+                    [size]="16"
+                    classe="text-light"
+                  ></app-icon>
+                </button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-pagination
+      *ngIf="paginate_data.total > 10"
+      [total]="paginate_data.total"
+      (pageChange)="paginate($event)"
+      [pageNumber]="pageNumber"
+    ></app-pagination>
+  </ng-container>
+  <ng-container *ngIf="!faqs.length">
+    <div class="text-center">FAQs vide</div>
+  </ng-container>
+</div>
+
+<div
+  class="modal fade"
+  id="faq-modal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">Edition de FAQs</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="type" class="form-label">Option</label>
+          <select
+            class="form-select"
+            name="type"
+            id="type"
+            [(ngModel)]="faq.type"
+          >
+            <option selected value="autoecole">Auto-école</option>
+            <option value="candidat">Candidat</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="question" class="form-label">Question</label>
+          <input
+            type="text"
+            name="question"
+            id="question"
+            class="form-control"
+            [(ngModel)]="faq.question"
+            placeholder=""
+            aria-describedby="helpId"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="response" class="form-label">Réponse</label>
+          <textarea
+            class="form-control"
+            name="response"
+            id="response"
+            [(ngModel)]="faq.response"
+            rows="10"
+          ></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="save()">
+          Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

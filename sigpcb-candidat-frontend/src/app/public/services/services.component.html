@@ -1,0 +1,80 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div
+      class="login-desc h4 text-center my-3"
+      *ngIf="serviceSlug === 'suivre-dossier'"
+    >
+      Suivi de dossiers candidat
+    </div>
+    <div
+      class="login-desc h4 text-center my-3"
+      *ngIf="serviceSlug === 'demande-permis-numerique'"
+    >
+      Demande de permis de conduire numérique
+    </div>
+    <div
+      class="login-desc h4 text-center my-3"
+      *ngIf="serviceSlug === 'renouvellement-permis'"
+    >
+      Prorogation de permis de conduire
+    </div>
+    <div
+      class="login-desc h4 text-center my-3"
+      *ngIf="serviceSlug === 'authenticite-permis'"
+    >
+      Authenticité de permis de conduire
+    </div>
+    <div
+      class="login-desc h4 text-center my-3"
+      *ngIf="serviceSlug === 'permis-international'"
+    >
+      Permis international
+    </div>
+    <div
+      class="login-desc h4 text-center my-3"
+      *ngIf="serviceSlug === 'echange-permis'"
+    >
+      Echange de permis de conduire
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="-md-10">
+    <app-inscription-examen
+      *ngIf="serviceSlug === 'inscription-examen'"
+    ></app-inscription-examen>
+    <app-permis-numerique
+      *ngIf="serviceSlug === 'demande-permis-numerique'"
+    ></app-permis-numerique>
+    <app-prorogation-permis
+      [rejetId]="rejetId"
+      *ngIf="serviceSlug === 'renouvellement-permis'"
+    ></app-prorogation-permis>
+    <app-authenticite-permis
+      [rejetId]="rejetId"
+      *ngIf="serviceSlug === 'authenticite-du-permis'"
+    ></app-authenticite-permis>
+    <app-permis-international
+      [rejetId]="rejetId"
+      *ngIf="serviceSlug === 'permis-international'"
+    ></app-permis-international>
+    <app-echange-permis
+      [rejetId]="rejetId"
+      *ngIf="serviceSlug === 'echange-permis'"
+    ></app-echange-permis>
+    <app-suivre-mon-dossier
+      *ngIf="serviceSlug === 'suivre-dossier'"
+    ></app-suivre-mon-dossier>
+
+    <app-duplicata-permis
+      [rejetId]="rejetId"
+      *ngIf="serviceSlug === 'duplicata-remplacement'"
+    >
+    </app-duplicata-permis>
+
+    <app-attestation-success
+      *ngIf="serviceSlug === 'attestation-de-succes'"
+    ></app-attestation-success>
+  </app-blue-aside-right>
+</app-blue-aside>

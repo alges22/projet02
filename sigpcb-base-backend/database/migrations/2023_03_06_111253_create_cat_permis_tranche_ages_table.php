@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('cat_permis_tranche_ages', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('categorie_permis_id')->on('categorie_permis');
+            $table->foreignId('tranche_age_id')->on('tranche_ages');
+            $table->integer('validite')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('cat_permis_tranche_ages');
+    }
+};

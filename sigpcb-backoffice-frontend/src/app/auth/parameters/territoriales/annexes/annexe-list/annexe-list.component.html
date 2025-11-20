@@ -1,0 +1,70 @@
+<div class="row align-items-center">
+  <div class="col-sm-4">
+    <div class="d-flex">
+      <button class="btn" (click)="refresh()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 12px">Actualiser</span>
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <app-search
+      [url]="searchUrl"
+      message="Taper le nom de l'annexe"
+      (results)="onSearches($event)"
+    >
+    </app-search>
+  </div>
+  <div class="col-sm-2 text-end">
+    <button class="btn border btn-icons btn-primary" (click)="add()">
+      <app-icon icon="plus"></app-icon>
+      Annexe
+    </button>
+  </div>
+</div>
+<table class="table mt-0">
+  <thead>
+    <tr>
+      <th scope="col">Nom</th>
+      <th scope="col" width="10%">Statut</th>
+      <th scope="col" width="10%">Actions</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="annexeanatts.length > 0">
+    <tr *ngFor="let annexeanatt of annexeanatts; let i = index">
+      <td>
+        {{ annexeanatt.name }}
+      </td>
+      <td class="text-center">
+        <app-switch
+          [checked]="annexeanatt.status"
+          (statusChangeEvent)="confirmSwitch($event)"
+          [activateId]="annexeanatt.id"
+        ></app-switch>
+      </td>
+      <td>
+        <div class="btn-actions">
+          <app-icon
+            (click)="edit(annexeanatt.id)"
+            icon="pencil"
+            [size]="16"
+            classe="text-success"
+          ></app-icon>
+
+          <app-delete
+            (canDelete)="destroy($event)"
+            [activateId]="annexeanatt.id"
+          ></app-delete>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  <tbody class="text-center" *ngIf="annexeanatts.length < 1">
+    <tr>
+      <td colspan="12" *ngIf="loadingForList">Chargement en cours ...</td>
+      <td colspan="12" *ngIf="!loadingForList">
+        {{ noResults }}
+      </td>
+    </tr>
+  </tbody>
+</table>

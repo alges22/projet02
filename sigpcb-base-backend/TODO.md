@@ -1,0 +1,2 @@
+- Ajouter uuid au table convocation_code
+- Retirer poids de bareme conduite

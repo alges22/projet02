@@ -1,0 +1,250 @@
+<div class="row p-2 justify-content-between align-items-center">
+  <div class="col-lg-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <button class="btn btn-refresh" (click)="getResultats()">
+        <app-icon icon="arrow-clockwise" classe="text-dark"></app-icon>
+        <span class="text-muted" style="font-size: 10px">Actualiser</span>
+      </button>
+      <div class="input-group ms-1">
+        <span class="input-group-text" role="button" (click)="getResultats()">
+          <app-icon icon="search"></app-icon>
+        </span>
+        <input
+          type="text"
+          name="search"
+          class="form-control"
+          placeholder="Taper un NPI ..."
+          [(ngModel)]="filters.search"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 text-end">
+    <div class="row filter-box">
+      <div class="col-sm-6">
+        <select
+          class="form-select"
+          name="permisSelected"
+          [(ngModel)]="filters.categorie_permis_id"
+          (change)="getResultats()"
+        >
+          <option [value]="null">Tous les permis</option>
+          <option [value]="item.id" *ngFor="let item of categories">
+            {{ item.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="annexe && examen">
+    <ng-container *ngIf="resultatsReady">
+      <div class="row mb-2 justify-content-between align-items-center">
+        <div class="col-6 col-sm-3 mt-3">
+          <select
+            class="form-select fw-semibold text-primary border-primary"
+            name="resultat"
+            (change)="filter($event.target)"
+            [(ngModel)]="list"
+          >
+            <option value="all" selected>Tous les résultats</option>
+            <option value="admis">Tous les admis</option>
+            <option value="admis-code">Admis au code</option>
+            <option value="recales-code">Récalés au code</option>
+            <option value="recales">Tous les récalés</option>
+            <option value="absents-code">Absents au code</option>
+            <option value="absents-conduite">Absents à la conduite</option>
+            <option value="recales-conduite">Recalés à la conduite</option>
+          </select>
+        </div>
+        <div class="col-sm-2 col-6 text-end">
+          <button class="btn btn-primary" (click)="downloadAsPdf()">
+            Télécharger
+            <app-icon icon="download"></app-icon>
+          </button>
+        </div>
+      </div>
+      <!--Si les résultats sont prêts-->
+      <ng-container *ngIf="resultats !== -1">
+        <div class="resultat-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">N°</th>
+                  <th scope="col">Photos</th>
+                  <th scope="col">Nom & Prénoms</th>
+                  <th scope="col">NPI</th>
+                  <th scope="col">Permis</th>
+                  <th scope="col">Auto-école</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let ds of resultats; let i = index">
+                  <tr>
+                    <td scope="row">{{ i + 1 }}</td>
+                    <td>
+                      <img [src]="ds.candidat.avatar" width="30" alt="" />
+                    </td>
+                    <td>
+                      <p class="pt-2">
+                        {{ ds.candidat.nom }} {{ ds.candidat.prenoms }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="pt-2">{{ ds.candidat.npi }}</p>
+                    </td>
+                    <td>
+                      <p class="pt-2">{{ ds.categorie_permis?.name }}</p>
+                    </td>
+                    <td>
+                      <p class="pt-2">{{ ds.auto_ecole?.name }}</p>
+                    </td>
+                    <td>
+                      {{ getResultatLabel(ds) }}
+                    </td>
+                    <td>
+                      <button
+                        [class.btn-primary]="openedIndex != i"
+                        [class.btn-outline-primary]="openedIndex == i"
+                        class="btn btn-sm"
+                        (click)="open(i)"
+                      >
+                        Ouvrir
+                      </button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="openedIndex == i">
+                    <td colspan="12">
+                      <div class="bg-modal p-3 rounded">
+                        <div class="row">
+                          <div class="col-4 col-sm-3">
+                            <div class="border rounded p-3">
+                              <span class="fw-semibold">Présence code</span>
+                              <p>
+                                <ng-container *ngIf="ds.presence == 'present'">
+                                  {{
+                                    ds.candidat.sexe == "M"
+                                      ? "Présent"
+                                      : " Présente"
+                                  }}
+                                </ng-container>
+                                <ng-container *ngIf="ds.presence == 'abscent'">
+                                  {{
+                                    ds.candidat.sexe == "M"
+                                      ? "Absent"
+                                      : "Absente"
+                                  }}
+                                </ng-container>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-4 col-sm-3">
+                            <div class="border rounded p-3">
+                              <span class="fw-semibold"
+                                >Admissibilité code</span
+                              >
+                              <p>
+                                <ng-container
+                                  *ngIf="ds.resultat_code == 'success'"
+                                >
+                                  {{
+                                    ds.candidat.sexe == "M" ? "Admis" : "Admise"
+                                  }}
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="ds.resultat_code == 'failed'"
+                                >
+                                  {{
+                                    ds.candidat.sexe == "M"
+                                      ? "Récalé"
+                                      : "Récalée"
+                                  }}
+                                </ng-container>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-4 col-sm-3">
+                            <div class="border rounded p-3">
+                              <span class="fw-semibold">Présence conduite</span>
+                              <p>
+                                <ng-container
+                                  *ngIf="ds.presence_conduite == 'present'"
+                                >
+                                  {{
+                                    ds.candidat.sexe == "M"
+                                      ? "Présent"
+                                      : " Présente"
+                                  }}
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="ds.presence_conduite == 'absent'"
+                                >
+                                  {{
+                                    ds.candidat.sexe == "M"
+                                      ? "Absent"
+                                      : "Absente"
+                                  }}
+                                </ng-container>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-4 col-sm-3">
+                            <div class="border rounded p-3">
+                              <span class="fw-semibold">Résultat conduite</span>
+                              <p>
+                                <ng-container
+                                  *ngIf="ds.resultat_conduite == 'success'"
+                                >
+                                  {{
+                                    ds.candidat.sexe == "M" ? "Admis" : "Admise"
+                                  }}
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="ds.resultat_conduite == 'failed'"
+                                >
+                                  {{
+                                    ds.candidat.sexe == "M"
+                                      ? "Récalé"
+                                      : "Récalée"
+                                  }}
+                                </ng-container>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="!resultats.length">
+                  <tr>
+                    <td colspan="12" class="text-center">Aucune résultat</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+
+      <!--Si les résultats ne sont pas encore prets-->
+      <ng-container *ngIf="resultats == -1">
+        <div class="alert text-center fw-bold alert-primary m-2" role="alert">
+          Les résultats ne sont pas encores disponibles
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!resultatsReady">
+      <div class="text-center p-3 fw-bolder">Chargement des résultats ...</div>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="!annexe || !examen">
+    <div class="alert alert-primary m-2" role="alert">
+      Veuillez sélectionner une annexe et une session pour voir les résultats.
+    </div>
+  </ng-container>
+</div>

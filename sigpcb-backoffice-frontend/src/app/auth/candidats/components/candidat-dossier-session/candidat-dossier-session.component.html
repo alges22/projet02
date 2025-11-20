@@ -1,0 +1,219 @@
+<div class="bg-light py-3 p-3">
+  <h6 class="fw-semibold text-primary">
+    Date. {{ created_at | hdate : true }}
+  </h6>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="border p-3 rounded">
+        <strong>Status</strong>
+        <p>
+          <span class="badge bg-dark">{{ status }}</span>
+        </p>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="border p-3 rounded">
+        <strong>Abandonné</strong>
+        <p>{{ abandon }}</p>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="border p-3 rounded">
+        <strong>Etat</strong>
+        <p>{{ closed }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive my-3">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Auto-école</th>
+          <th scope="col">Annexe</th>
+          <th scope="col">Langue</th>
+          <th scope="col">Examen</th>
+          <th scope="col">Fiche médical</th>
+          <th scope="col">Restrictions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ data.auto_ecole?.name }}</td>
+          <td>{{ data.annexe?.name }}</td>
+          <td>{{ data.langue?.name }}</td>
+          <td>{{ data.examen?.session_long }}</td>
+          <td>
+            <button (click)="showFicheMedical()" class="btn text-primary">
+              Voir
+            </button>
+          </td>
+          <td>
+            <span class="d-block" *ngFor="let restriction of restrictions">
+              {{ restriction.name }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-responsive my-3">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Permis extension</th>
+          <th scope="col">Permis préalable</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="">
+          <td>
+            {{ data.extension?.name ?? "--" }}
+          </td>
+          <td>
+            {{ data.prealable?.name ?? "--" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-responsive my-3">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Date paiement</th>
+          <th scope="col">Frais permis</th>
+          <th scope="col">Statut payment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <ng-container *ngIf="data.date_payment">
+              {{ data.date_payment | hdate : true }}
+            </ng-container>
+          </td>
+          <td>
+            {{ data.montant_paiement ?? "--" }}
+          </td>
+          <td>
+            {{ data.date_payment ? "Payé" : "Non payé" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-container *ngIf="data.state == 'validate'">
+    <div class="table-responsive my-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Programmé code</th>
+            <th scope="col">Date de compo</th>
+            <th scope="col">Salle</th>
+            <th scope="col">Vague</th>
+            <th scope="col">Table</th>
+            <th scope="col">Note au code</th>
+            <th scope="col">Admis au code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-responsive mb-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Programmé conduite</th>
+            <th scope="col">Date d'examination</th>
+            <th scope="col">Jurie</th>
+            <th scope="col">Présence conduite</th>
+            <th scope="col">Note conduite</th>
+            <th scope="col">Admis conduite</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">N° Permis</th>
+            <th scope="col">Délivré le</th>
+            <th scope="col">Expire le</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="">
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+</div>
+
+<div
+  class="modal fade"
+  [id]="'fiche' + data.id"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Fiche médicale</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <img [src]="asset(data.fiche_medical)" class="img-fluid rounded-top" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Fermer
+        </button>
+        <a
+          type="button"
+          class="btn btn-primary"
+          [href]="asset(data.fiche_medical)"
+          target="_blank"
+        >
+          Télécharger
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

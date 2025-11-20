@@ -1,0 +1,208 @@
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 2;
+  font-size: small;
+}
+
+main {
+  height: 100%;
+}
+
+$sidebar-w-md:70%;
+$sidebar-w:20%;
+$bgcolor: #DDF0F0;
+
+.auth-app {
+  height: 100vh;
+  background-color: $bgcolor;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+
+}
+
+.auth-sidebar {
+  background-color: var(--bs-primary);
+  height: 100%;
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  width: $sidebar-w-md;
+  display: none;
+  z-index: 1500;
+}
+
+
+.sidebar-item {
+  border-radius: 10px;
+  width: 90%;
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+
+  .nav-link {
+    display: flex;
+    padding-left: 5px;
+    padding-right: 5px;
+    align-items: center;
+    color: var(--bs-dark);
+
+    span {
+      display: inline-block;
+      font-weight: 500;
+      font-size: 12px;
+
+      &.nav-icon {
+        margin-right: 8px;
+      }
+    }
+
+    &.active,
+    &:hover {
+      background-color: var(--bs-primary);
+      border-radius: 8px;
+      color: white;
+      transition: all 0.3s ease-in-out;
+    }
+
+  }
+}
+
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  /* Définit la largeur de la barre de défilement */
+  scrollbar-color: rgba(155, 153, 153, 0.742) transparent;
+  /* Définit la couleur de la barre de défilement */
+}
+
+.sidebar-content::-webkit-scrollbar {
+  width: 6px;
+  /* Définit la largeur de la barre de défilement pour les navigateurs basés sur WebKit */
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.89);
+  /* Définit la couleur de la poignée de la barre de défilement pour les navigateurs basés sur WebKit */
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background-color: transparent;
+  /* Définit la couleur de la piste de la barre de défilement pour les navigateurs basés sur WebKit */
+}
+
+.btn-logout {
+  padding: 12px 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.auth-main {
+
+  height: 100vh;
+
+  overflow: auto;
+
+  .top-search-input {
+    background-color: #fff;
+    border: 1px solid var(--bs-primary);
+    border-radius: 3px;
+  }
+
+  .top-search-button {
+    border-radius: 3px;
+  }
+
+  .top-alert {
+    border: 1px solid var(--bs-warning);
+    height: 100%;
+    padding: 2px;
+    border-radius: var(--bs-border-radius-sm);
+
+    .top-alert-content {
+      background-color: var(--bs-warning);
+      padding: 3px;
+      color: #fff;
+      font-size: small;
+    }
+  }
+
+  header {
+    background-color: $bgcolor;
+  }
+}
+
+
+// X-Small devices (portrait phones, less than 576px)
+// No media query for `xs` since this is the default in Bootstrap
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+  .auth-sidebar {
+    width: $sidebar-w;
+    display: block;
+  }
+
+  .auth-main {
+    width: 100% - $sidebar-w;
+    margin-left: $sidebar-w;
+  }
+}
+
+
+
+.list-group {
+
+  .list-group-item {
+    background: var(--bs-white);
+  }
+
+  .active {
+    background-color: #DDF0F0;
+    border-radius: var(--bs-border-radius-sm);
+    color: var(--bs-primary);
+    font-size: small;
+    margin-top: 10px;
+  }
+
+  .list-group-item:hover {
+    background-color: #DDF0F0;
+    color: var(--bs-primary);
+  }
+}
+
+.has-children {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+
+.hide {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.show {
+  max-height: 500px;
+  transition: all 0.7s ease-in-out;
+}

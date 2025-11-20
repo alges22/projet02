@@ -1,0 +1,51 @@
+<ng-container *ngIf="prestation">
+  <div
+    class="service-card d-none d-md-block"
+    *ngIf="prestation.users.includes(user)"
+  >
+    <div class="img-box mb-3">
+      <img [src]="prestation.image" [routerLink]="link" role="button" alt="" />
+    </div>
+    <div class="service-title" [innerHTML]="prestation.title"></div>
+
+    <p class="mt-3">
+      <a
+        href=""
+        *ngIf="false"
+        [routerLink]="'/services/' + prestation.slug"
+        class="btn btn-more d-block rounded-0"
+      >
+        En savoir plus</a
+      >
+      <ng-content select=".d-md-block"></ng-content>
+    </p>
+  </div>
+
+  <div
+    class="mobile-card d-md-none align-item-center border border-primary rounded"
+    *ngIf="prestation.users.includes(user)"
+  >
+    <div class="row align-items-center justify-content-between h-100">
+      <div class="col-2 h-100">
+        <div class="py-2 p-2 w-100">
+          <div class="img-box mb-3">
+            <img
+              [src]="prestation.image"
+              [routerLink]="link"
+              role="button"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+      <div class="col-8 h-100">
+        <div class="py-2 w-100">
+          <div class="service-title" [innerHTML]="prestation.title"></div>
+        </div>
+      </div>
+      <div class="col-2 h-100">
+        <ng-content select=".d-md-none "></ng-content>
+      </div>
+    </div>
+  </div>
+</ng-container>

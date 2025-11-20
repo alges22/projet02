@@ -1,0 +1,200 @@
+body {
+  background-color: #DDF0F0;
+  font-size: 12px;
+}
+
+[data-qv-feedback] {
+  color: rgba(255, 0, 0, 0.849);
+  font-size: 12px;
+}
+
+input,
+select,
+.form-select,
+.form-control {
+  font-size: 12px;
+  color: rgb(116, 116, 116);
+  border-radius: 2px;
+
+  &::placeholder {
+    font-size: 12px;
+    color: rgb(116, 116, 116);
+  }
+}
+
+select,
+.form-select {
+  font-size: 12px;
+}
+
+[role=switch] {
+  cursor: pointer;
+}
+
+.topbar {
+  border-bottom: 1px solid var(--bs-primary);
+}
+
+.topbar {
+  border-bottom: 1px solid var(--bs-primary);
+
+  .btn {
+    min-width: 20% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    border-bottom: 1px solid var(--bs-primary);
+
+    .btn {
+      font-size: 12px !important;
+      min-width: 50% !important;
+    }
+  }
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+}
+
+.window-btn {
+  text-transform: uppercase;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  font-size: 15px;
+  line-height: 110%;
+  font-weight: 400;
+
+  .bi {
+    color: black;
+  }
+
+  &.current {
+    color: var(--bs-primary);
+    font-weight: 500;
+    font-variant: small-caps;
+    border-bottom: 3px solid var(--bs-primary);
+    border-radius: 0;
+  }
+}
+
+.btn:disabled,
+.btn.disabled,
+button[disabled] {
+  cursor: not-allowed !important;
+}
+
+.app-footer {
+  background-color: var(--bs-primary);
+}
+
+.btn-icons {
+  margin: 10px 0;
+}
+
+.anatt-doc {
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #D6CFD1;
+  border-radius: 10px;
+
+  .top-header {
+    display: flex;
+    justify-content: space-between;
+
+    .logo {
+      max-width: 350px;
+
+      img {
+        max-width: 100%;
+      }
+    }
+
+    .references {
+      text-align: right;
+      font-size: 12px;
+    }
+  }
+
+  .sub-header {
+    display: flex;
+    justify-content: space-between;
+
+    .unite {
+      font-weight: 600;
+    }
+
+    .numero {
+      font-weight: 500;
+      margin-top: 10px;
+    }
+
+    .doc-title {
+      margin-top: 10px;
+    }
+
+    .date {
+      font-size: 12px;
+    }
+  }
+
+  .line {
+    height: 2px;
+    width: 100%;
+    background-color: var(--bs-primary);
+    margin: 10px 0;
+  }
+
+  .note {
+    padding: 20px 0;
+
+    .note-title {
+      text-align: center;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .note-description {
+      font-weight: 600;
+      font-size: 12px;
+      text-align: center;
+    }
+  }
+
+  .tab {
+    margin-top: 20px;
+
+    .tab-date {
+      color: var(--bs-primary);
+      font-weight: 600;
+    }
+
+    .tab-caption {
+      background-color: var(--bs-primary);
+      padding: 10px;
+      color: #fff;
+      margin-top: 5px;
+    }
+
+    td,
+    th {
+      border: 1px solid #D6CFD1;
+    }
+
+    td {
+      padding: 20px 10px;
+    }
+  }
+
+  .anatt-doc-footer {
+    margin-top: 10px;
+
+    .signataire {
+      text-align: right;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+}

@@ -1,0 +1,190 @@
+<div class="m-2 mb-5">
+  <h4 class="mb-2">Enregistrer un parcours de formation</h4>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-6">
+            <h6 class="mb-2">Permis</h6>
+            <div class="mb-3">
+              <div class="input-styled">
+                <select
+                  class="form-select"
+                  (change)="onPermisSelected($event)"
+                  name="categorie_permis_id"
+                >
+                  <option [value]="null" selected>Tous les permis</option>
+                  <option [value]="permis.id" *ngFor="let permis of permis">
+                    {{ permis.name }}
+                  </option>
+                </select>
+              </div>
+              <div qv-feedback="categorie_permis_id"></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <h6 class="mb-2">Langue</h6>
+            <div class="mb-3">
+              <div class="input-styled">
+                <select
+                  class="form-select"
+                  (change)="onLangueSelected($event)"
+                  name="langue_id"
+                >
+                  <option [value]="null" selected>Toutes les langues</option>
+                  <option [value]="langue.id" *ngFor="let langue of langues">
+                    {{ langue.name }}
+                  </option>
+                </select>
+              </div>
+              <div qv-feedback="langue_id"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card border border-2 border-light">
+        <div
+          class="alert alert-warning alert-dismissible fade show"
+          role="alert"
+        >
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+
+          <b
+            >Les candidats dont les dossiers ne sont pas au complet, ne pourront
+            pas être enregistrés.</b
+          >
+        </div>
+        <div class="card-body">
+          <div class="d-flex">
+            <input
+              type="text"
+              name="search"
+              [(ngModel)]="searchInput"
+              class="form-control rounded-1 border-primary border-2"
+              placeholder="Rechercher par NPI"
+              (keyup)="searchOnKeyup()"
+            />
+            <button
+              class="btn btn-primary rounded-1 ms-1"
+              [disabled]="searchInput.length < 3"
+              (click)="get()"
+            >
+              <app-icon icon="search"></app-icon>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="list-group" *ngIf="!onLoading">
+            <div
+              *ngFor="let dc of dossiersCandidats | paginate : paginateArgs()"
+            >
+              <label class="list-group-item rounded-0" *ngIf="dc.candidat">
+                <input
+                  class="form-check-input me-1"
+                  type="checkbox"
+                  [value]="dc.id"
+                  (click)="onSelectDossier($event)"
+                  [disabled]="!dc.canMonitored"
+                />
+                {{ dc.candidat.nom }}
+                {{ dc.candidat.prenoms }}
+
+                <div class="text-muted mb-1" style="font-size: 12px">
+                  <strong>Permis</strong> : {{ dc.categorie_permis.name }} |
+                  <strong> Langue</strong> {{ dc.langue.name }}
+                </div>
+                <ng-container *ngIf="!dc.canMonitored">
+                  <span class="badge bg-danger">Dossier incomplet</span>
+                </ng-container>
+              </label>
+            </div>
+
+            <div class="p-3" *ngIf="paginate_data">
+              <app-pagination
+                *ngIf="paginate_data.total > per_page"
+                [total]="paginate_data.total"
+                (pageChange)="paginate($event)"
+                [pageNumber]="pageNumber"
+                [perPage]="per_page"
+              ></app-pagination>
+            </div>
+          </div>
+          <div
+            class="text-center"
+            *ngIf="!dossiersCandidats.length && !onLoading"
+          >
+            Aucun nouveau dossier
+          </div>
+          <div class="text-center" *ngIf="onLoading">Chargement ...</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h6 class="mb-2">Chapitres de cours</h6>
+      <div class="list-group">
+        <label class="list-group-item border-0">
+          <input
+            class="form-check-input me-1"
+            type="checkbox"
+            (click)="toggleAllChapitres($event)"
+            [checked]="allSelected"
+          />
+
+          <span class="fw-semibold"> Tous les chapitres</span>
+        </label>
+        <label
+          class="list-group-item text-uppercase mb-1 border-0"
+          *ngFor="let chap of chapitres"
+        >
+          <input
+            class="form-check-input me-1"
+            type="checkbox"
+            [value]="chap.id"
+            (click)="appendChapitre($event)"
+            [checked]="inputChecked(chap.id)"
+          />
+          <strong class="ms-2">Chapitre</strong>: {{ chap.name }}
+        </label>
+      </div>
+
+      <div class="form-check" *ngIf="auth">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value="true"
+          id="accepted"
+          [checked]="certified"
+          (click)="onCertficed($event)"
+        />
+        <label class="form-check-label" for="accepted" *ngIf="currentAe">
+          <strong
+            >Je soussigné {{ auth.nom }} {{ auth.prenoms }} moniteur à
+            l’auto-école {{ currentAe.name }} certifie que tous ces chapitres
+            ont été abordé avec les candidats.</strong
+          >
+        </label>
+      </div>
+      <p class="mt-3">
+        <button
+          (click)="save($event)"
+          class="btn btn-primary"
+          [disabled]="!canProcced()"
+        >
+          Enregistrer
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            *ngIf="isLoading"
+          >
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+      </p>
+    </div>
+  </div>
+</div>

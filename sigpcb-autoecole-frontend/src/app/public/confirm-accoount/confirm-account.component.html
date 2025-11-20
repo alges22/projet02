@@ -1,0 +1,54 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h3 my-3">
+      Votre espace de gestion <br />
+      des procédures liées au permis <br />
+      de conduire et titres dérivés
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-lg-6">
+    <div class="col-md mx-auto">
+      <div class="text-center" *ngIf="verified === null">
+        Confirmation de compte en cours ...
+      </div>
+
+      <div
+        class="alert alert-success alert-dismissible fade show"
+        role="alert"
+        *ngIf="verified === true"
+      >
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+
+        <strong>Félicitations!</strong> Votre compte a été créé avec succès,
+        veuillez renseigner votre mot de passe et votre adresse e-mail pour vous
+        connecter.
+      </div>
+
+      <div
+        class="alert alert-danger fade show"
+        role="alert"
+        *ngIf="verified === false"
+      >
+        <strong>Oups désolé!</strong>
+        <div class="my-2" [innerHTML]="errorMessage"></div>
+        <span class="fw-semibold">
+          Vous pouvez essayer de vous connecter avec vos informations de
+          connexion pour valider votre compte
+        </span>
+        <div class="mt-2">
+          <button class="btn btn-primary" routerLink="/connexion">
+            Me connecter
+          </button>
+        </div>
+      </div>
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

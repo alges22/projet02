@@ -1,0 +1,142 @@
+<div class="auth-app" *ngIf="user">
+  <!--Sidebar-->
+  <div class="auth-sidebar" [class.d-block]="openSidebar">
+    <div class="sidebar-content" id="sidebar-content">
+      <div class="sidebar-item bg-white">
+        <a href="/dashboard"
+          ><img src="assets/images/logo.png" alt="" class="img-fluid"
+        /></a>
+      </div>
+      <div class="sidebar-item bg-white p-2 sidebar-item-main">
+        <ul class="nav flex-column">
+          <div *ngFor="let link of links; let i = index">
+            <li class="nav-item" *ngIf="link.show">
+              <ng-container *ngIf="!(link.subs && link.subs.length)">
+                <a
+                  class="nav-link"
+                  [routerLink]="link.href"
+                  (click)="onPress(i, $event)"
+                  [class.active]="link.active"
+                >
+                  <span>
+                    <span class="nav-icon"
+                      ><app-icon [icon]="link.icon" [size]="18"></app-icon
+                    ></span>
+                    <span class="nav-text"> {{ link.label }} </span>
+                  </span>
+                  <ng-container *ngIf="link.subs && link.subs.length">
+                    <span>
+                      <app-icon icon="chevron-compact-right"> </app-icon>
+                    </span>
+                  </ng-container>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="link.subs && link.subs.length">
+                <a
+                  class="nav-link has-children"
+                  href="javascript:void(0);"
+                  (click)="onPress(i, $event)"
+                  [class.active]="link.active"
+                >
+                  <span>
+                    <span class="nav-icon"
+                      ><app-icon [icon]="link.icon" [size]="18"></app-icon
+                    ></span>
+                    <span class="nav-text"> {{ link.label }} </span>
+                  </span>
+                  <ng-container *ngIf="link.subs && link.subs.length">
+                    <span *ngIf="!link.open">
+                      <app-icon icon="chevron-down"> </app-icon>
+                    </span>
+                    <span *ngIf="link.open">
+                      <app-icon icon="chevron-up"> </app-icon>
+                    </span>
+                  </ng-container>
+                </a>
+                <div
+                  class="position-relative"
+                  [class.show]="link.open"
+                  [class.hide]="!link.open"
+                >
+                  <ul class="list-group w-100">
+                    <ng-container *ngFor="let child of link.subs">
+                      <a
+                        class="list-group-item border-0"
+                        [routerLink]="child.href"
+                        [class.active]="child.active"
+                        *ngIf="child.show"
+                      >
+                        {{ child.label }}
+                      </a>
+                    </ng-container>
+                  </ul>
+                </div>
+              </ng-container>
+            </li>
+          </div>
+        </ul>
+      </div>
+
+      <div class="sidebar-item text-center">
+        <div class="bg-white rounded p-3">
+          <h6 class="fw-semibold mb-0">
+            {{ user.first_name }}
+            {{ user.last_name }}
+          </h6>
+          <div class="text-muted small mb-3">
+            <span *ngFor="let role of roles"> {{ role.nom_complet }} </span>
+          </div>
+
+          <a routerLink="/logout" class="btn btn-logout btn-light"
+            >Se déconnecter</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Sidebar fin-->
+  <div class="auth-main">
+    <!--Header-->
+    <header class="sticky-top px-3 py-4">
+      <div class="col">
+        <!--Mobile navbar-->
+        <div
+          class="d-flex d-md-none justify-content-between align-items-center border-bottom mb-2"
+        >
+          <a href=""><img src="assets/images/logo.png" width="250" /></a>
+          <!-- -->
+          <button class="btn" (click)="toggleSidebar()" id="mobile-sidebar">
+            <app-icon [icon]="!openSidebar ? 'list' : 'x'"></app-icon>
+          </button>
+        </div>
+        <!--Mobile navbar fin-->
+        <div class="row">
+          <div class="col-md-6">
+            <app-breadcrumb></app-breadcrumb>
+          </div>
+          <!--<div class="col-md-6" >
+            <div class="row justify-content-end align-items-center">
+              <div class="col-md-5 order-0 order-md-1 mt-1 mt-md-0">
+                <div class="h-100 bg-white top-alert" role="alert">
+                  <div class="top-alert-content">
+                    <span class="fw-normal">
+                      <app-icon icon="bell"></app-icon> 00 alertes non lues
+                    </span>
+                    <br />
+                    <small style="font-size: 12px" class="fw-lighter ms-4"
+                      >00 Dossiers mis à jour</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>-->
+        </div>
+      </div>
+    </header>
+    <!--Header FIN-->
+    <div class="m-3 mb-3">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

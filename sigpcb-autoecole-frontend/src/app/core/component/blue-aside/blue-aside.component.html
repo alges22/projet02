@@ -1,0 +1,74 @@
+<div class="blue-side-container">
+  <div class="row h-100 m-0">
+    <div class="col-lg-5 bg-primary px-5 order-1 order-lg-0 d-none d-lg-block">
+      <ng-content select="app-blue-aside-left"></ng-content>
+    </div>
+    <div class="col-lg-7 scrollable-content">
+      <div class="d-flex flex-column h-100 justify-content-between">
+        <div
+          class="row header justify-content-between align-items-center bg-light py-2"
+        >
+          <div class="col-7 col-md-4">
+            <a href="/"
+              ><img
+                src="assets/images/logo.png"
+                class="img-fluid"
+                alt="Logo ANaTT"
+            /></a>
+          </div>
+
+          <div class="col-5 col-sm-6 text-end">
+            <div class="d-flex align-items-center justify-content-end">
+              <app-auto-ecole />
+              <a
+                class="btn btn-outline-primary mx-2 px-2"
+                routerLink="/dashboard/historiques"
+                *ngIf="auth"
+              >
+                <span class="d-none d-md-inline">Notifications</span>
+                <span class="d-md-none"
+                  ><app-icon
+                    icon="bell"
+                    [size]="30"
+                    classe="fw-bolder"
+                  ></app-icon
+                ></span>
+              </a>
+
+              <div
+                class="d-flex justify-content-end align-items-center mt-lg-0"
+              >
+                <div class="d-flex justify-content-end flex-column">
+                  <button
+                    class="btn btn-outline-primary fw-bolder border-2 rounded-3"
+                    (click)="toggleSidebar()"
+                  >
+                    <app-icon
+                      icon="list"
+                      [size]="20"
+                      classe="fw-bolder"
+                    ></app-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="py-3">
+          <ng-content></ng-content>
+        </div>
+
+        <div class="row footer bg-light text-center py-2">
+          <h6>République du Bénin</h6>
+          <p>
+            Ministère du Cadre de Vie et des Transports Chargé du Développement
+            Durable
+          </p>
+          <p>© Tous Droits Réservés 2023.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-sidebar [auth]="auth" [toggle]="_toggleSidebar"></app-sidebar>

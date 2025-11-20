@@ -1,0 +1,48 @@
+<div class="m-2">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Agent</th>
+          <th scope="col">Url</th>
+          <th scope="col">Méthode</th>
+          <th scope="col">IP</th>
+          <th scope="col">Navigateur</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngFor="let item of logs | paginate : paginateArgs(); let i = index"
+        >
+          <tr class="">
+            <td scope="row">{{ item.created_at | hdate : true }}</td>
+            <td>
+              {{ item.user?.last_name }}
+              {{ item.user?.first_name }}
+            </td>
+            <td>
+              {{ item.request_url }}
+            </td>
+            <td>
+              {{ item.action }}
+            </td>
+            <td>
+              {{ item.ip }}
+            </td>
+            <td>
+              {{ item.user_agent }}
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-pagination
+  *ngIf="paginate_data.total > 20"
+  [total]="paginate_data.total"
+  (pageChange)="paginate($event)"
+  [pageNumber]="filters.page"
+></app-pagination>

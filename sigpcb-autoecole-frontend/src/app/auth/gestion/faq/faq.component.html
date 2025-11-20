@@ -1,0 +1,78 @@
+<div class="m-3">
+  <h6 class="mb-3">Trouvez les réponses à vos interrogations ici</h6>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-4" *ngFor="let faq of faqLeft">
+        <div
+          class="border p-3 rounded-1 faq"
+          [class.active]="faq.id === currentFaqId"
+        >
+          <div
+            class="d-flex align-items-center"
+            (click)="onFaqueSelected(faq.id)"
+            role="button"
+          >
+            <button
+              class="btn btn-sm btn-secondary"
+              *ngIf="faq.id !== currentFaqId"
+            >
+              <app-icon icon="plus"></app-icon>
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              *ngIf="faq.id === currentFaqId"
+            >
+              <app-icon icon="x"></app-icon>
+            </button>
+            <span class="faq-title ms-2">{{ faq.question }} </span>
+          </div>
+          <div
+            class="faq-body bg-white p-3 mt-3 mb-1 rounded-1"
+            *ngIf="currentFaqId === faq.id"
+          >
+            {{ faq.response }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-4" *ngFor="let faq of faqRight">
+        <div
+          class="border p-3 rounded-1 faq"
+          [class.active]="faq.id === currentFaqId"
+        >
+          <div
+            class="d-flex align-items-center"
+            (click)="onFaqueSelected(faq.id)"
+            role="button"
+          >
+            <button
+              class="btn btn-sm btn-secondary"
+              *ngIf="faq.id !== currentFaqId"
+            >
+              <app-icon icon="plus"></app-icon>
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              *ngIf="faq.id === currentFaqId"
+            >
+              <app-icon icon="x"></app-icon>
+            </button>
+            <span class="faq-title ms-2">{{ faq.question }}</span>
+          </div>
+          <div
+            class="faq-body bg-white p-3 mt-3 mb-1 rounded-1"
+            *ngIf="currentFaqId === faq.id"
+          >
+            {{ faq.response }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h6 class="text-center mb-3">
+    Si vous n'avez pas trouvé la réponse à votre préoccupation <br />
+    écrivez-nous via notre whatsapp.
+  </h6>
+</div>

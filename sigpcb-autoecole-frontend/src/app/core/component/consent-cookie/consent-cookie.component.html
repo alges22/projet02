@@ -1,0 +1,23 @@
+<div id="cookie-consent" *ngIf="!consentGiven">
+  <div class="cookie-content-body p-4">
+    <h3>L'ANaTT respecte vos données</h3>
+    Ce site web utilise exclusivement des cookies nécessaires au fonctionnement
+    du site et des cookies de mesure d'audience. Ils sont anonymisés et ne
+    contiennent aucune de vos données personnelles.
+
+    <a
+      href=""
+      class="d-block mt-2 fw-semibold"
+      style="text-decoration: underline"
+      >Lire notre politique de confidentialité</a
+    >
+    <div class="text-end mt-3">
+      <a href="" class="btn btn-outline-primary me-3"
+        >Consulter le détail de ces cookies</a
+      >
+      <button type="button" class="btn btn-primary" (click)="giveConsent()">
+        J'ai compris
+      </button>
+    </div>
+  </div>
+</div>

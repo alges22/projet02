@@ -1,0 +1,104 @@
+.anatt-doc {
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #D6CFD1;
+  border-radius: 10px;
+
+  .top-header {
+    display: flex;
+    justify-content: space-between;
+
+    .logo {
+      max-width: 350px;
+
+      img {
+        max-width: 100%;
+      }
+    }
+
+    .references {
+      text-align: right;
+      font-size: 12px;
+    }
+  }
+
+  .sub-header {
+    display: flex;
+    justify-content: space-between;
+
+    .unite {
+      font-weight: 600;
+    }
+
+    .numero {
+      font-weight: 500;
+      margin-top: 10px;
+    }
+
+    .doc-title {
+      margin-top: 10px;
+    }
+
+    .date {
+      font-size: 12px;
+    }
+  }
+
+  .line {
+    height: 2px;
+    width: 100%;
+    background-color: var(--bs-primary);
+    margin: 10px 0;
+  }
+
+  .note {
+    padding: 20px 0;
+
+    .note-title {
+      text-align: center;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .note-description {
+      font-weight: 600;
+      font-size: 12px;
+      text-align: center;
+    }
+  }
+
+  .tab {
+    margin-top: 20px;
+
+    .tab-date {
+      color: var(--bs-primary);
+      font-weight: 600;
+    }
+
+    .tab-caption {
+      background-color: var(--bs-primary);
+      padding: 10px;
+      color: #fff;
+      margin-top: 5px;
+    }
+
+    td,
+    th {
+      border: 1px solid #D6CFD1;
+    }
+
+    td {
+      padding: 20px 10px;
+    }
+  }
+
+  .anatt-doc-footer {
+    margin-top: 10px;
+
+    .signataire {
+      text-align: right;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+}

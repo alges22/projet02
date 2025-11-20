@@ -1,0 +1,54 @@
+ .badge-customer {
+   display: inline-block;
+   padding: 0.35em 0.65em;
+   font-size: 0.975em;
+   font-weight: 500;
+   line-height: 1;
+   text-align: center;
+   white-space: nowrap;
+   vertical-align: baseline;
+   border-radius: 20px;
+   transition: all 0.2s ease;
+   margin: 5px;
+   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+ }
+
+ .badge-customer:hover {
+   transform: translateY(-1px);
+   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
+ }
+
+ /* Primary badge-customer */
+ .badge-customer-primary {
+   color: #6e8aec;
+   background-color: #f0f3ff;
+   border: 1px solid #e6ebff;
+ }
+
+ /* Warning badge-customer */
+ .badge-customer-warning {
+   color: #e6a23c;
+   background-color: #fdf6ec;
+   border: 1px solid #faecd8;
+ }
+
+ /* Danger badge-customer */
+ .badge-customer-danger {
+   color: #f56c6c;
+   background-color: #fef0f0;
+   border: 1px solid #fde2e2;
+ }
+
+ /* Info badge-customer */
+ .badge-customer-info {
+   color: #47818b;
+   background-color: #f0f9fb;
+   border: 1px solid #e6f4f7;
+ }
+
+ /* Success badge-customer */
+ .badge-customer-success {
+   color: #67c23a;
+   background-color: #f0f9eb;
+   border: 1px solid #e7f4e0;
+ }

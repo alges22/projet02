@@ -1,0 +1,103 @@
+<div class="container my-3" *ngIf="user">
+  <div class="my-4">
+    <h3 class="text-primary fw-semibold">Mon profil</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mx-auto">
+        <div class="card-header bg-white fw-semibold">Mes informations</div>
+        <div class="card-body">
+          <table class="table">
+            <tbody>
+              <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                  <p><span>E-mail : </span> <br /></p>
+                </div>
+                <div class="col-sm-4">
+                  <p class="text-capitalize">
+                    <span>N° de téléphone :</span> <br />
+                  </p>
+                </div>
+              </div>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-white fw-semibold">
+          Modifier le mot de passe
+        </div>
+        <div class="card-body">
+          <form
+            action=""
+            method="post"
+            id="reset-password-form"
+            (submit)="resetPassword($event)"
+          >
+            <div class="mb-3">
+              <label for="" class="form-label">Ancien mot de passe</label>
+              <input
+                type="password"
+                name="old_password"
+                qv-rules="required|minlength:8|maxlength:32"
+                qv-messages="L'ancien mot de passe est requis|Mot de passe trop court|Mot de passe trop long"
+                class="form-control"
+                [(ngModel)]="passwords.old_password"
+              />
+              <div qv-feedback="old_password"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="new_password" class="form-label"
+                >Nouveau mot de passe</label
+              >
+              <input
+                qv-rules="required|minlength:8|maxlength:32"
+                qv-messages="Le nouveau mot de passe est requis|Mot de passe trop court|Mot de passe trop long"
+                type="password"
+                name="new_password"
+                class="form-control"
+                [(ngModel)]="passwords.new_password"
+              />
+              <div qv-feedback="new_password"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="" class="form-label">Confirmer mot de passe</label>
+              <input
+                qv-rules="required|same:new_password"
+                qv-messages="{0,1}Veuillez confirmer votre mot de passe svp"
+                type="password"
+                name="confirm_password"
+                class="form-control"
+                [(ngModel)]="passwords.confirm_password"
+              />
+              <div qv-feedback="confirm_password"></div>
+            </div>
+
+            <p>
+              <button
+                type="submit"
+                class="btn btn-lg btn-primary"
+                [disabled]="onLoading"
+              >
+                Modifier
+                <span *ngIf="onLoading">
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Loading...</span>
+                </span>
+              </button>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

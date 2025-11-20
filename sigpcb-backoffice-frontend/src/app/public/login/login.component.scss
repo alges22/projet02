@@ -1,0 +1,45 @@
+p {
+  font-size: 12px;
+}
+
+h6 {
+  font-size: 14px;
+}
+
+label {
+  font-weight: 400;
+}
+
+.form-control {
+  border: none;
+  padding-top: .6em;
+  padding-bottom: .6em;
+  font-weight: 400;
+
+  &::placeholder {
+    font-size: 12px;
+  }
+}
+
+.gradient-box {
+  background: linear-gradient(to top right, #006F6F 0%, #074646 100%);
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
+  h6 {
+    font-size: 14px;
+  }
+
+  p {
+    font-size: 12px;
+  }
+}

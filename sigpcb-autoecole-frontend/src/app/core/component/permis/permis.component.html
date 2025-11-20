@@ -1,0 +1,20 @@
+<div
+  class="permis-box d-flex flex-column border"
+  role="button"
+  *ngIf="permis"
+  (click)="check()"
+>
+  <img
+    [src]="'assets/images/permis/' + generateImage() + '.png'"
+    class="img-fluid"
+  />
+  <div class="permis-content" [ngClass]="{ active: checked }">{{ permis }}</div>
+  <span class="check-button">
+    <app-icon icon="circle" *ngIf="!checked"></app-icon>
+    <app-icon
+      icon="check-circle-fill"
+      classe="text-primary"
+      *ngIf="checked"
+    ></app-icon>
+  </span>
+</div>
