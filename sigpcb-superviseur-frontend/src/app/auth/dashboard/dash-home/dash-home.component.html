@@ -1,0 +1,503 @@
+<div class="h-100">
+  <div class="bg-primary p-3">
+    <div class="container-fluid">
+      <h6 class="text-white">Examen du permis de conduire</h6>
+      <p class="small text-white">Épreuve du code de la route</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="currentSession">
+    <div class="container-fluid my-3" *ngIf="!presenceDone">
+      <app-presence (signature)="onPresence()" />
+    </div>
+    <ng-container *ngIf="!onLoadRecapts && !onLoadAgendas">
+      <div class="container-fluid mt-3">
+        <h6 role="button" (click)="showStatistics = !showStatistics">
+          Statistique
+          <app-icon
+            [icon]="showStatistics ? 'chevron-up' : 'chevron-down'"
+            classe="ms-3"
+          />
+        </h6>
+        <ng-container *ngIf="showStatistics">
+          <div class="bg-light p-3 rounded-sm my-3">
+            <div class="row">
+              <div class="col-6 col-sm-4">
+                <h6 class="fw-semibold text-primary">
+                  Informations de la session
+                </h6>
+                <div
+                  class="my-2 border rounded-sm border-primary p-3 bg-white"
+                  *ngIf="recapts.session"
+                >
+                  <p>
+                    <span class="fw-semibold">Session</span> :
+                    {{ recapts.session.label }}
+                  </p>
+                  <p>
+                    <span class="fw-semibold">Epreuve</span> :
+                    {{ recapts.epreuve }}
+                  </p>
+                  <p>
+                    <span class="fw-semibold">Salle</span> :
+                    {{ recapts.salle.name }}
+                  </p>
+
+                  <p *ngIf="recapts.salle.annexe">
+                    <span class="fw-semibold">Annexe </span> :
+                    {{ recapts.salle.annexe.name }}
+                  </p>
+                  <p>
+                    <span class="fw-semibold">Surveillant (e) </span> :
+                    {{ recapts.inspecteur }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-6 col-sm-4">
+                <h6 class="fw-semibold text-primary">Vue d’ensemble</h6>
+                <div class="card my-2 border border-primary bg-white">
+                  <div class="card-body">
+                    <p>
+                      <span class="fw-semibold">Nbre de candidats : </span>
+                      {{ stats.candidat_total | padding }}
+                    </p>
+                    <p class="mb-2">
+                      <span class="fw-semibold">Absents </span> :
+                      {{ stats.absents | padding }}
+                    </p>
+                    <p class="mb-1">
+                      <span class="fw-semibold">Présents </span> :
+                      {{ stats.candidat_emages | padding }}
+                    </p>
+                    <p class="mb-2">
+                      <span class="fw-semibold">Vagues </span> :
+                      {{ stats.vague_total | padding }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="!recapts.session">Chargement en cours ....</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!onLoadVagues">
+          <div class="bg-light p-3 rounded-sm my-3">
+            <div class="my-2" *ngIf="page == 'all'">
+              <span class="bg-light d-inline-block border p-3 rounded">
+                <ng-container *ngIf="vagues.length">
+                  <button
+                    class="btn btn-outline-primary btn-lg"
+                    type="button"
+                    [disabled]="onStartingCompo"
+                    (click)="startComp()"
+                  >
+                    <ng-container *ngIf="status == 'new'">
+                      Lancer la composition
+                    </ng-container>
+                    <ng-container *ngIf="status == 'pending'">
+                      Mettre en pause
+                    </ng-container>
+                    <ng-container *ngIf="status == 'paused'">
+                      Relancer
+                    </ng-container>
+                    <ng-container *ngIf="onStartingCompo">
+                      <span
+                        class="spinner-border text-primary spinner-border-sm"
+                        role="status"
+                      >
+                      </span>
+                    </ng-container>
+                  </button>
+
+                  <button
+                    class="btn btn-warning btn-lg ms-2"
+                    type="button"
+                    [disabled]="onStartingCompo || onResetting"
+                    (click)="openResetModal()"
+                  >
+                    Réinitialiser la composition
+                  </button>
+                </ng-container>
+              </span>
+            </div>
+
+            <tab>
+              <tab-header>
+                <button
+                  class="btn btn-tab p-3"
+                  [class.active]="page == 'all'"
+                  (click)="setPage('all')"
+                >
+                  <span class="btn-tab-text"> En attente </span>
+                </button>
+                <button
+                  class="btn btn-tab p-3"
+                  [class.active]="page == 'emargement'"
+                  (click)="setPage('emargement')"
+                >
+                  <span class="btn-tab-text"> Liste de présence </span>
+                </button>
+              </tab-header>
+              <tab-body>
+                <ng-container *ngIf="page == 'all'">
+                  <div class="table-responsive">
+                    <table class="table bg-white">
+                      <thead>
+                        <tr>
+                          <th scope="col">Vagues</th>
+                          <th scope="col">Nbr de candidats</th>
+                          <th scope="col">Catégorie permis</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <ng-container *ngIf="vagues.length">
+                        <tbody *ngFor="let item of vagues; let i = index">
+                          <tr>
+                            <td>
+                              Vague N° {{ item.vague.numero }} <br />
+                              <small class="text-primary">{{
+                                item.date_compo
+                              }}</small>
+                            </td>
+                            <td>{{ item.candidats_count }}</td>
+                            <td>{{ item.categorie_permis.name }}</td>
+
+                            <td>
+                              <button
+                                class="btn btn-sm btn-outline-primary"
+                                (click)="openVague(i)"
+                              >
+                                <app-icon
+                                  [icon]="
+                                    selectedIndex !== i
+                                      ? 'chevron-right'
+                                      : 'chevron-down'
+                                  "
+                                >
+                                </app-icon>
+                              </button>
+                            </td>
+                          </tr>
+                          <ng-container *ngIf="body">
+                            <tr *ngIf="selectedIndex === i">
+                              <td colspan="12" col="12">
+                                <app-candidat-info
+                                  [data]="item"
+                                  (refresh)="refresh()"
+                                  [candidats]="item.candidats"
+                                  [body]="body"
+                                  (signature)="onSignature()"
+                                  [page]="page"
+                                  [ready]="presenceDone"
+                                  [status]="status"
+                                ></app-candidat-info>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+                      </ng-container>
+
+                      <ng-container *ngIf="!vagues.length">
+                        <tbody>
+                          <tr>
+                            <td colspan="12" class="text-center">
+                              Aucune vague disponible encore
+                            </td>
+                          </tr>
+                        </tbody>
+                      </ng-container>
+                    </table>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="page == 'emargement'">
+                  <div class="table-responsive">
+                    <table class="table bg-white">
+                      <thead>
+                        <tr>
+                          <th scope="col">Vagues</th>
+                          <th scope="col">Nbr de candidats</th>
+                          <th scope="col">Catégorie permis</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <ng-container *ngIf="vagues.length">
+                        <tbody *ngFor="let item of vagues; let i = index">
+                          <tr>
+                            <td>
+                              Vague N° {{ item.vague.numero }} <br />
+                              <small class="text-primary">{{
+                                item.date_compo
+                              }}</small>
+                            </td>
+                            <td>{{ item.candidats_count }}</td>
+                            <td>{{ item.categorie_permis.name }}</td>
+                            <td>
+                              <button
+                                class="btn btn-sm btn-outline-primary"
+                                (click)="openVague(i)"
+                              >
+                                <app-icon
+                                  [icon]="
+                                    selectedIndex !== i
+                                      ? 'chevron-right'
+                                      : 'chevron-down'
+                                  "
+                                >
+                                </app-icon>
+                              </button>
+                            </td>
+                          </tr>
+                          <ng-container *ngIf="body">
+                            <tr *ngIf="selectedIndex === i">
+                              <td colspan="12" col="12">
+                                <app-candidat-info
+                                  [data]="item"
+                                  (refresh)="refresh()"
+                                  [candidats]="item.candidats"
+                                  [body]="body"
+                                  (signature)="onSignature()"
+                                  [page]="page"
+                                  [ready]="presenceDone"
+                                  [status]="status"
+                                ></app-candidat-info>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+                      </ng-container>
+
+                      <ng-container *ngIf="!vagues.length">
+                        <tbody>
+                          <tr>
+                            <td colspan="12" class="text-center">
+                              Aucune vague disponible encore
+                            </td>
+                          </tr>
+                        </tbody>
+                      </ng-container>
+                    </table>
+                  </div>
+                </ng-container>
+              </tab-body>
+            </tab>
+          </div>
+        </ng-container>
+
+        <hr class="my-3" />
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!(!onLoadRecapts && !onLoadAgendas && !onLoadVagues)">
+      <div class="card p-5">
+        <div class="card-body text-center">Chargement en cours</div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="!currentSession">
+    <div class="container py-5">
+      <div
+        class="alert col-sm-6 mx-auto alert-primary text-center"
+        role="alert"
+      >
+        <h3>Aucune session</h3>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div
+  class="modal fade"
+  id="setup-modal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">Surveillance de salle</h5>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="examen_id" class="form-label"
+            >Sélectionner une session</label
+          >
+          <select
+            class="form-select form-select-lg"
+            name="examen_id"
+            id="examen_id"
+            (change)="selectExamen($event.target)"
+          >
+            <option selected [value]="0">Sélectionner ...</option>
+            <ng-container *ngFor="let exm of examens">
+              <option [value]="exm.id">{{ exm.session_long }}</option>
+            </ng-container>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="salle_compo_id" class="form-label"
+            >Sélectionner une salle</label
+          >
+          <select
+            class="form-select form-select-lg"
+            name="salle_compo_id"
+            id="salle_compo_id"
+            (change)="selectSalle($event.target)"
+          >
+            <option selected [value]="0">Sélectionner ...</option>
+            <ng-container *ngFor="let salle of salles">
+              <option [value]="salle.id">{{ salle.name }}</option>
+            </ng-container>
+          </select>
+        </div>
+        <p>
+          <button
+            class="btn btn-primary"
+            (click)="setup()"
+            [disabled]="!currentSession || !salle"
+          >
+            Continuer
+          </button>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="deconnecter-candidat"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="deconnecter-candidat-modal"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deconnecter-candidat-modal">
+          Arrêter une composition
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="deconnexionNPI" class="form-label"
+            >Le NPI du candiat</label
+          >
+          <input
+            type="text"
+            name="deconnexionNPI"
+            id="deconnexionNPI"
+            class="form-control"
+            [(ngModel)]="deconnexionData.npi"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="deconnexionMotif" class="form-label">Motif</label>
+          <textarea
+            class="form-control"
+            [(ngModel)]="deconnexionData.motif"
+            name="deconnexionMotif"
+            id="deconnexionMotif"
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            (change)="confirmDeconnection($event.target)"
+            name="confirmed"
+            id="confirmed"
+            [checked]=""
+          />
+          <label class="form-check-label" for="confirmed"
+            >Confirmer la déconnexion du candidat</label
+          >
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!canDeconnectCandidat()"
+          (click)="stopCandidatCompo()"
+        >
+          Déconnecter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="reset-compo-modal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="reset-compo-modal-title"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reset-compo-modal-title">
+          Confirmer la réinitialisation
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p class="alert alert-warning">
+          Attention! Cette action va réinitialiser la composition en cours. Les
+          candidats seront déconnectés et devront recommencer leur composition
+          depuis le début. Êtes-vous sûr de vouloir continuer?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Annuler
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          [disabled]="onResetting"
+          (click)="resetCompo()"
+        >
+          <span
+            *ngIf="onResetting"
+            class="spinner-border spinner-border-sm me-2"
+          ></span>
+          Réinitialiser la composition
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

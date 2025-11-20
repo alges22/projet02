@@ -1,0 +1,25 @@
+footer {
+  color: #484848;
+  z-index: 2;
+  background-color: #DDF0F0;
+
+  h6 {
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+
+
+  a,
+  .nav-item .nav-link {
+    color: #484848 !important;
+    font-size: 14px !important;
+    font-weight: 400;
+  }
+
+  .footer-copyright {
+
+    p {
+      font-size: 12px;
+    }
+  }
+}

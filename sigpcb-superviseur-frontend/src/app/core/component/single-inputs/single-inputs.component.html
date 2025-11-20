@@ -1,0 +1,15 @@
+<div class="single-inputs">
+  <input
+    type="number"
+    maxlength="1"
+    min="0"
+    max="0"
+    *ngFor="let ip of inputs"
+    [name]="ip.name"
+    [style.width]="width"
+    [style.height]="height"
+    (input)="validate($event)"
+    (keyup)="onKeyPress($event)"
+    [value]="ip.value"
+  />
+</div>

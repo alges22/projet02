@@ -1,0 +1,56 @@
+<ng-container *ngFor="let item of candidats">
+  <ng-container *ngIf="!hide(item)">
+    <div class="bg-light p-3 border-bottom">
+      <div class="row align-items-center">
+        <div class="col-6">
+          <div class="d-flex">
+            <div style="width: 100px">
+              <img
+                [src]="item.candidat.avatar"
+                class="img-fluid rounded-top"
+                alt="Avatar"
+              />
+            </div>
+            <div class="ms-3">
+              <h6 class="fw-semibold">Table n° {{ item.num_table }}</h6>
+              <h6 class="text-uppercase mt-2">
+                {{ item.candidat.nom }} {{ item.candidat.prenoms }}
+              </h6>
+              <h6 class="text-muted my-2">NPI n°: {{ item.npi }}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <h6 class="mb-2">Progression du QCM</h6>
+          <ng-container *ngIf="item.questions_count > 0">
+            <div class="progress">
+              <div
+                class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                role="progressbar"
+                [style.width]="getProgression(item) + '%'"
+                [attr.aria-valuenow]="getProgression(item)"
+                [attr.aria-valuemax]="100"
+              >
+                {{ item.reponses_count }} / {{ item.questions_count }}
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="item.questions_count === 0">
+            En attente ...
+          </ng-container>
+        </div>
+        <div class="col-3 text-end">
+          <candidat-status [data]="item" />
+          <div class="mt-2" *ngIf="item.connected">
+            <button
+              class="btn btn-danger btn-sm rounded-3"
+              (click)="openSession(item)"
+            >
+              Déconnecter
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

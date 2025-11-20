@@ -1,0 +1,42 @@
+<div class="blue-side-container">
+  <div class="h-100">
+    <div class="header">
+      <div class="container-fluid">
+        <div class="row justify-content-between align-items-center">
+          <div class="col-5 col-md-4">
+            <a href=""
+              ><img src="assets/images/logo.png" class="img-fluid"
+            /></a>
+          </div>
+
+          <div class="col-2 text-end">
+            <a
+              class="btn btn-outline-primary ms-auto"
+              href="/logout"
+              *ngIf="auth"
+            >
+              <app-icon icon="power"></app-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white h-100">
+      <ng-content></ng-content>
+    </div>
+
+    <div class="footer text-center py-2">
+      <div class="container-fluid">
+        <div class="row">
+          <h6>République du Bénin</h6>
+          <p>
+            Ministère du Cadre de Vie et des Transports Chargé du Développement
+            Durable
+          </p>
+          <p>© Tous Droits Réservés 2023</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="col-sm-6 col-md-3 text-center">
+  <button class="btn w-100 btn-primary px-2 py-3 btn-lg" (click)="scan()">
+    <app-icon icon="qr-code-scan" /> Présence
+  </button>
+</div>
+
+<!-- Modal Body -->
+<!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+<div
+  class="modal fade"
+  id="presence"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" [id]="'presence-modalTitleId'">Présence</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="cancel()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <app-scanner
+          *ngIf="canScan && !result"
+          (scanned)="verifyCandidat($event)"
+          [stop]="stopScan"
+        ></app-scanner>
+
+        <ng-container *ngIf="result">
+          <div class="card">
+            <img class="card-img-top" [src]="result.avatar" alt="Title" />
+            <div class="card-body">
+              <h4 class="card-title">{{ result.prenoms }} {{ result.nom }}</h4>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!result"
+          (click)="validate()"
+        >
+          Présent
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

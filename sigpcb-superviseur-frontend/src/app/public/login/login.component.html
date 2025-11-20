@@ -1,0 +1,102 @@
+<app-blue-aside>
+  <div class="bg-primary p-3">
+    <div class="container-fluid">
+      <h6 class="text-white">Examen du permis de conduire</h6>
+      <p class="small text-white">épreuve du code de la route</p>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="mx-auto col-lg-6">
+      <form
+        class="d-flex flex-column justify-content-between mt-5"
+        *ngIf="page === 'login'"
+        id="login-form"
+      >
+        <h3 class="text-primary mb-4">Connexion</h3>
+
+        <div class="mb-3">
+          <label for="login-email" class="form-label">Identifiant</label>
+          <input
+            type="text"
+            name="email"
+            id="login-email"
+            placeholder="Saisissez votre adresse mail"
+            class="form-control"
+            [(ngModel)]="form.email"
+          />
+          <div qv-feedback="email"></div>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-lg btn-primary"
+            [disabled]="!canValidate()"
+            (click)="sendCode($event)"
+          >
+            <span *ngIf="isloading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+            Se connecter
+          </button>
+        </div>
+      </form>
+
+      <!--Otp code-->
+      <div
+        class="d-flex flex-column justify-content-between my-5 px-5"
+        *ngIf="page === 'otp'"
+      >
+        <h6 class="text-primary my-4">
+          Un code à 06 chiffres a été envoyé sur votre numéro de téléphone
+          {{ userServerData?.phone }}
+        </h6>
+        <h6 style="font-size: 18px; line-height: 25px" class="mb-3">
+          Tapez le code
+        </h6>
+        <app-single-inputs
+          [count]="6"
+          (isValid)="otpCodes($event)"
+          height="35px"
+        ></app-single-inputs>
+
+        <p class="my-3">
+          <button
+            class="btn btn-primary btn-lg w-100"
+            [disabled]="!isValidOtpCode || isloading"
+            (click)="connect($event)"
+          >
+            Continuer
+          </button>
+        </p>
+        <p class="my-3">
+          Si vous n'avez pas reçu de code après quelques minutes, cliquez sur le
+          bouton Renvoyer le code ci-dessous pour en demander un nouveau. <br />
+        </p>
+        <p>
+          <button
+            type="button"
+            class="btn btn-outline-dark ms-2"
+            [disabled]="isloading"
+            (click)="resendCode()"
+          >
+            Renvoyer le code
+          </button>
+          <br />
+          <span *ngIf="isloading">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</app-blue-aside>
