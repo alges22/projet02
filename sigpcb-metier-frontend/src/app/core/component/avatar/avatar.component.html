@@ -1,0 +1,9 @@
+<ng-container *ngIf="user">
+  <div class="avatar">
+    <img
+      [src]="user.avatar || 'assets/images/avatar.png'"
+      class="img-fluid rounded-3"
+      alt=""
+    />
+  </div>
+</ng-container>

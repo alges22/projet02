@@ -1,0 +1,23 @@
+.fs-16 {
+  font-size: 16px;
+}
+
+
+.starter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(65, 105, 225, 0.459);
+  z-index: 1100;
+
+  /* Appliquez l'animation à la classe .btn-text */
+  .btn-text {
+    animation: blink 2s infinite;
+    transition: all 0.4s ease-in-out;
+  }
+}

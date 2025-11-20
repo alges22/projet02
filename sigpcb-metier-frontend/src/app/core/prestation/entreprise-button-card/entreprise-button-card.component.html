@@ -1,0 +1,20 @@
+<div class="service-card" role="button" *ngIf="entrepriseButton">
+  <!-- <div class="img-box mb-3">
+    <ng-container *ngIf="entrepriseButton.slug === 'inscription-examen'; else otherImage">
+      <img [src]="entrepriseButton.image" alt="" (click)="demande(entrepriseButton.slug)" />
+    </ng-container>
+    <ng-template #otherImage>
+      <a *ngIf="userConnected()" [routerLink]="'/services/' + entrepriseButton.slug">
+        <img [src]="entrepriseButton.image" alt="" />
+      </a>
+      <a *ngIf="!userConnected()" [routerLink]="'connexion'">
+        <img [src]="entrepriseButton.image" alt="" />
+      </a>
+    </ng-template>
+  </div> -->
+  <div class="service-title" [innerHTML]="entrepriseButton.title"
+    [routerLink]="'/services/' + entrepriseButton.slug"></div>
+  <p class="mt-3">
+    <ng-content></ng-content>
+  </p>
+</div>

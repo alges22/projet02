@@ -1,0 +1,150 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #ddf0f0;
+  font-size: 16px;
+}
+a {
+  text-decoration: none;
+}
+.wrapper {
+  display: flex;
+  height: 100vh;
+  justify-content: space-between;
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .main {
+    width: 60%;
+    margin-left: auto;
+  }
+  .bg-primary-gradient {
+    width: 40%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    background: linear-gradient(to left, #074646 43.58%, #006f6f 89.51%);
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .service-card {
+    min-height: 250px;
+  }
+}
+
+p,
+h6 {
+  margin-bottom: 0;
+}
+
+.service-card:hover {
+  box-shadow: 10px 6px 4px rgba(1, 100, 188, 0.15);
+}
+
+.service-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 25px 16px;
+  text-align: center;
+  min-height: 160px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+}
+.icons {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  height: 30px;
+  width: 45px;
+}
+
+.img-box {
+  width: 100%;
+  overflow: hidden;
+}
+
+.bg-ae {
+  background-color: #735459;
+  border-color: #735459;
+}
+
+.bg-candidat {
+  background-color: #0a75d3;
+}
+
+.bg-backoffice {
+  background-color: #0f8996;
+}
+
+.bg-moniteur {
+  background-color: #0058a7;
+}
+
+.bg-recrutement {
+  background-color: #ed7d31;
+}
+
+.bg-enrollement {
+  background-color: #005e5e;
+}
+
+/*#005e5e*/
+.scrollabe {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+footer {
+  font-size: 12px;
+  height: 60px;
+}
+
+#cookie-consent {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: background-color 0.5s ease;
+  z-index: 10;
+}
+
+#cookie-consent.cookie-consent-visible {
+  z-index: 5000;
+  background-color: rgba(0, 0, 0, 0.142);
+}
+
+.cookie-content-body {
+  max-width: 600px;
+  margin: 0 0 -10px 0px;
+  position: absolute;
+  bottom: 1px;
+  left: 10px;
+  background-color: #fff9ea;
+  font-size: 14px;
+  transition: margin-bottom 0.7s ease;
+}
+
+#cookie-consent.cookie-consent-visible .cookie-content-body {
+  margin-bottom: 30px;
+}

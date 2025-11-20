@@ -1,0 +1,31 @@
+.result-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  color: white;
+  border-radius: 50%;
+}
+
+.card {
+  background-color: rgba($color: #313131, $alpha: .2);
+
+  th,
+  td,
+  tbody {
+    border-color: #313131;
+  }
+
+  .card-body {
+    height: 500px;
+    overflow: auto;
+
+  }
+}
+
+.fs-16 {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--bs-primary);
+}

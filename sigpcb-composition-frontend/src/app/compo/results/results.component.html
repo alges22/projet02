@@ -1,0 +1,152 @@
+<ng-container *ngIf="result && profileData">
+  <div class="container py-3">
+    <div class="fixed-top py-2 bg-primary">
+      <h6 class="text-white text-center text-uppercase">
+        {{ profileData.candidat.nom }} {{ profileData.candidat.prenoms }}
+      </h6>
+    </div>
+    <div class="row pt-5">
+      <div class="col" *ngIf="result !== 'no-result'">
+        <div class="row">
+          <div class="col-3">
+            <img
+              [src]="profileData.candidat.avatar"
+              class="img-fluid rounded"
+            />
+          </div>
+          <div class="col-9">
+            <h6 class="text-primary mb-2 text-uppercase fs-5">
+              {{ profileData.candidat.nom }}
+              {{ profileData.candidat.prenoms }}
+            </h6>
+            <p class="mb- 2 fs-3">
+              Permis {{ profileData.categorie_permis.name }}
+            </p>
+            <p>{{ profileData.examen.date_compo }}</p>
+
+            <p class="fs-5">
+              <ng-container *ngIf="result.success">
+                <span class="badge bg-success">Vous avez réussi</span>
+              </ng-container>
+              <ng-container *ngIf="!result.success">
+                <span class="badge bg-danger rounded-0">Récalé(e)</span>
+              </ng-container>
+            </p>
+          </div>
+        </div>
+        <hr />
+        <div class="card rounded">
+          <div
+            class="card-header bg-primary text-uppercase text-center text-white fw-bolder"
+          >
+            Résultat D’examen
+          </div>
+          <div class="card-body px-0">
+            <p class="text-center fs-16 my-3">
+              {{ result.correct_count | padding : 2 }}/
+              {{ result.count | padding : 2 }}
+            </p>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col" class="fw-normal">QCM</th>
+                    <th scope="col" class="fw-normal">Votre réponse</th>
+                    <th scope="col" class="fw-normal">Bonne réponse</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="!questions.length">
+                  <tr>
+                    <td colspan="12" class="text-center">
+                      Chargegment des résultats ... <br />
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody>
+                  <tr
+                    class=""
+                    *ngFor="let question of questions; let i = index"
+                  >
+                    <td scope="row" style="width: 18%" class="text-small">
+                      <strong>Q{{ i + 1 }}</strong
+                      ><ng-container *ngIf="question.code_illustration">
+                        : {{ question.code_illustration }}
+                      </ng-container>
+                    </td>
+                    <td style="width: 70%">
+                      <div class="row">
+                        <div class="col-9">
+                          <ng-container *ngFor="let resp of question.responses">
+                            <button
+                              class="btn btn-question"
+                              style="min-width: 55px"
+                              [style]="{ background: resp.color,  }"
+                              *ngIf="
+                                isChecked(resp.id, getAnswers(question.id))
+                              "
+                            >
+                              {{ resp.name }}
+                            </button>
+                          </ng-container>
+                        </div>
+                        <div class="col-3">
+                          <span
+                            class="result-btn text-primary"
+                            *ngIf="isCorrect(question.id)"
+                          >
+                            <app-icon
+                              icon="hand-thumbs-up-fill"
+                              [size]="22"
+                            ></app-icon>
+                          </span>
+                          <span
+                            class="result-btn text-danger"
+                            *ngIf="!isCorrect(question.id)"
+                          >
+                            <app-icon
+                              icon="hand-thumbs-down-fill"
+                              [size]="22"
+                            ></app-icon>
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <ng-container *ngFor="let rp of question.correctes">
+                        <button
+                          class="btn btn-question"
+                          style="width: 40px"
+                          [style]="{ background: rp.color }"
+                        >
+                          {{ rp.name }}
+                        </button>
+                      </ng-container>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 mb- pt-4">
+          <button class="btn btn-primary w-100" routerLink="">
+            Déconnexion
+          </button>
+          <small>Déconnexion dans : {{ time | timer }} </small>
+        </div>
+      </div>
+
+      <ng-container *ngIf="result == 'no-result'">
+        <div class="col">
+          <div class="alert alert-primary" role="alert">
+            Les résultats ne sont pas encore disponibles.
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!result">
+  <app-md-loader message="Chargement en cours ..."></app-md-loader>
+</ng-container>

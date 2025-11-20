@@ -1,0 +1,10 @@
+{
+    "poppins": {
+        "200": "C:\\workspace\\web\\anatt\\anatt-permis-candidat\\storage\\fonts\/poppins_200_0eec96f30d9c1b73637ec638fbe92403",
+        "300": "C:\\workspace\\web\\anatt\\anatt-permis-candidat\\storage\\fonts\/poppins_300_4a08cccbc2911e3077321a0298f4e093",
+        "normal": "C:\\workspace\\web\\anatt\\anatt-permis-candidat\\storage\\fonts\/poppins_normal_442dffd12abdf0df26c14405d3f49bfa",
+        "500": "C:\\workspace\\web\\anatt\\anatt-permis-candidat\\storage\\fonts\/poppins_500_6a6f5e017da7e062546fd806ab3b249c",
+        "600": "C:\\workspace\\web\\anatt\\anatt-permis-candidat\\storage\\fonts\/poppins_600_272b14b77a21dc5827f4570eff556c8f",
+        "bold": "poppins_bold_2d1c4b360c3ac297e98fc2cfd808a2cc"
+    }
+}

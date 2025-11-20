@@ -1,0 +1,46 @@
+<div class="input-styled input-file" role="button" (click)="openFileInput()">
+  <div class="form-control py-2" style="font-size: 12px">
+    <input
+      hidden
+      type="file"
+      [name]="name"
+      [accept]="accept"
+      [required]="required"
+      (change)="onChange($event)"
+    />
+    {{ placeholder }}
+  </div>
+  <a class="indicator">
+    <app-icon icon="file-earmark-image" classe="text-primary fw-bold">
+    </app-icon>
+  </a>
+</div>
+<div class="text-end mt-1" *ngIf="isSelected">
+  <app-icon icon="eye" (click)="openModal()"></app-icon>
+</div>
+
+<!-- <app-modal [action]="inputId" size="modal-md" *ngIf="file">
+  <div class="modal-body p-0">
+    <img [src]="selectedImage" alt="Aperçu de l'image" class="img-fluid">
+  </div>
+</app-modal> -->
+
+<div
+  class="modal fade"
+  [id]="inputId"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog bg-transparent modal-dialog-scrollable modal-dialog-centered modal-lg"
+    role="document"
+  >
+    <div class="modal-content rounded-0 p-0">
+      <div class="modal-body p-0">
+        <img [src]="selectedImage" alt="Aperçu de l'image" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>

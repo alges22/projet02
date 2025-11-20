@@ -1,0 +1,85 @@
+<div class="col-6 col-sm-5 col-md-4 mx-auto text-center pt-5">
+  <img [src]="profileData.candidat.avatar" width="150" class="rounded" alt="" />
+  <p class="my-1">
+    <strong>NPI : {{ profileData.candidat.npi }}</strong>
+  </p>
+</div>
+
+<ul class="list-group my-3">
+  <li class="list-group-item">
+    <div class="row justify-content-between">
+      <div class="col-6">Date de naissance</div>
+      <div class="col-6 text-muted small text-end">
+        {{ profileData.candidat.date_de_naissance | date }}
+      </div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row justify-content-between">
+      <div class="col-6">Téléphone</div>
+      <div class="col-6 text-muted small text-end">
+        {{ profileData.candidat.telephone }}
+      </div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row justify-content-between">
+      <div class="col-6">Auto - école</div>
+      <div class="col-6 text-muted small text-end">
+        {{ profileData.auto_ecole.name }}
+      </div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row justify-content-between">
+      <div class="col-6">Centre</div>
+      <div class="col-6 text-muted small text-end">
+        {{ profileData.annexe.name }}
+      </div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row justify-content-between">
+      <div class="col-5">Salle</div>
+      <div class="col-7 text-muted small text-end">
+        {{ profileData.salle.name }}
+      </div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row justify-content-between">
+      <div class="col-6">Catégorie</div>
+      <div class="col-6 text-muted small text-end">
+        {{ profileData.categorie_permis.name }}
+      </div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row justify-content-between">
+      <div class="col-6">Langue</div>
+      <div class="col-6 text-muted small text-end">
+        {{ profileData.langue.name }}
+      </div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row justify-content-between">
+      <div class="col-5">Date</div>
+      <div class="col-7 text-muted small text-end">
+        {{ profileData.vague.date_compo_complet }}
+      </div>
+    </div>
+  </li>
+</ul>
+
+<p>
+  <button
+    #nextbutton
+    class="d-flex justify-content-between btn btn-primary w-100"
+    (click)="onPress()"
+  >
+    Suivant
+
+    <app-icon icon="arrow-right"></app-icon>
+  </button>
+</p>

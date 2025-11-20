@@ -1,0 +1,12 @@
+<ng-container *ngIf="profileData">
+  <div class="fade-in">
+    <div class="container">
+      <app-top-bar [profileData]="profileData"></app-top-bar>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!profileData">
+  <app-md-loader message="Vérificatin de vos informations ..."></app-md-loader>
+</ng-container>

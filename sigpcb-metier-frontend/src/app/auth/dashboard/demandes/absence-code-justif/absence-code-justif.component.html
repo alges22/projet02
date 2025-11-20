@@ -1,0 +1,73 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      Votre espace de gestion des procédures liées au permis de conduire et
+      titres dérivés
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-md-10">
+    <h3 class="title mt-3">Demande de composition au code</h3>
+
+    <div *ngIf="currentPage == 'infos-sur-le-permis'">
+      <div class="card border">
+        <div class="bg-light p-3 m-2 rounded">
+          <div class="row">
+            <div class="col-6 col-md mb-3 mb-md-0">
+              <app-number-box [number]="1" [filled]="true">
+                Justification
+              </app-number-box>
+            </div>
+          </div>
+        </div>
+        <!--Infos sur le permis-->
+        <form method="post" id="infos-sur-le-permis">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <h6>Expliquez les raisons de votre absence</h6>
+                <div class="mb-3">
+                  <div class="input-styled">
+                    <div class="form-group">
+                      <textarea class="form-control" name="justification" [(ngModel)]="justification"
+                        qv-rules="required|startWithLetter|startWithUpper|min:80|max:1000" rows="3"></textarea>
+                    </div>
+                  </div>
+                  <div qv-feedback="justification"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h6>Ajouter une pièce justificative</h6>
+                <div class="mb-3">
+                  <app-input-file accept=".png,.jpg" (changeEvent)="onFileChange($event)"></app-input-file>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mt-2">
+              <button class="btn btn-between btn-primary" [disabled]="!justifFormIsValid() || isloadingSave"
+                (click)="goto('completed', $event)">
+                <span *ngIf="isloadingSave">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span class="visually-hidden">Loading...</span>
+                </span>
+                Suivant <app-icon icon="arrow-right"></app-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card-body text-center alert alert-primary col-md-10 mx-auto" *ngIf="currentPage == 'completed'">
+      <strong>Votre justification à l'examen du permis de conduire pour le code a été envoyée avec succès.
+      </strong>
+      <div class="my-3">
+        <button class="btn btn-primary" routerLink="/dashboard">
+          Revenir sur mon tableau de board
+        </button>
+      </div>
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

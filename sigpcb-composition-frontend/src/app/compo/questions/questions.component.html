@@ -1,0 +1,123 @@
+<ng-container *ngIf="profileData && data && currentQuestion">
+  <div class="container py-3 pt-5">
+    <div class="d-flex justify-content-between text-small fw-bold text-primary">
+      <span>Question</span>
+      <span>{{ currentIndex }} sur {{ data.total }}</span>
+    </div>
+    <div class="progress" style="height: 15px">
+      <div
+        class="progress-bar"
+        role="progressbar"
+        [style.width]="data.progression + '%'"
+        aria-valuenow="data.progression"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      ></div>
+    </div>
+  </div>
+  <div class="container">
+    <div
+      class="video-player card p-1 rounded-3 mb-5"
+      [style.display]="showVideo ? 'block' : 'none'"
+    >
+      <video #videoPlayer muted="true" [volume]="0" style="width: 100%"></video>
+    </div>
+  </div>
+  <ng-container *ngIf="currentQuestion">
+    <ng-container *ngIf="profileData.lostConnection">
+      <div class="starter" (click)="start(true)">
+        <div class="col-10 col-sm-4 bg-white p-3 rounded">
+          La composition a été interrompue en raison d'une déconnexion
+          momentanée.
+          <div class="py-3">
+            <button class="btn btn-danger w-100" style="font-size: 22px">
+              <span class="btn-text">
+                <app-icon icon="play-circle" [size]="25"></app-icon>
+                <ng-container *ngIf="profileData.lostConnection">
+                  Continuer
+                </ng-container>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="container">
+      <div class="col col-sm-8 mx-auto">
+        <ng-container *ngIf="currentQuestion.type_illustration == 'image'">
+          <small *ngIf="currentQuestion.code_illustration"
+            >Référence: {{ currentQuestion.code_illustration }}</small
+          >
+
+          <div
+            class="card p-1 rounded-3 border-primary border-2"
+            *ngIf="currentQuestion.illustration"
+            [class.bg-primary]="
+              currentQuestion.illustration.endsWith('default.gif')
+            "
+          >
+            <ng-container
+              *ngIf="currentQuestion.illustration.endsWith('default.gif')"
+            >
+              <div class="card-body text-center text-white">
+                <h6 class="text-anatt py-2">ANaTT</h6>
+                <p class="text-d py-2">
+                  Examen de permis de conduire - Épreuve de code
+                </p>
+              </div>
+            </ng-container>
+            <ng-container
+              *ngIf="currentQuestion.illustration.endsWith('default.gif')"
+            >
+              <img
+                class="card-img-bottom"
+                [src]="currentQuestion.illustration"
+              />
+            </ng-container>
+            <ng-container
+              *ngIf="!currentQuestion.illustration.endsWith('default.gif')"
+            >
+              <div class="w-100 h-100 text-center p-3">
+                <img class="img-fluid" [src]="currentQuestion.illustration" />
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+      <div class="rounded-3 border mt-3">
+        <p class="text-center mt-4 fw-bold" style="margin-bottom: -30px">
+          Compte à rebours
+        </p>
+        <div class="chrono">
+          <app-chrono
+            [square]="100"
+            [time]="chronoCount"
+            [border-color]="'rgb(185, 225, 255)'"
+            [bg]="'rgb(183, 225, 255)'"
+            (ended)="chronoEnded()"
+            [start]="start_chrono"
+          ></app-chrono>
+        </div>
+        <div class="bg-question p-3 py-4">
+          <div class="mt-2 fw-bold mt-5">Réponse</div>
+          <div class="my-2 rounded-3">
+            <app-question-check
+              [question]="currentQuestion"
+              [answers]="answers"
+            ></app-question-check>
+            <ng-container *ngIf="currentQuestion.isMultiple">
+              <small class="text-muted" [innerHTML]="currentQuestion.question">
+              </small>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <app-bottom-bar></app-bottom-bar>
+</ng-container>
+
+<ng-container *ngIf="!profileData && !data">
+  <app-md-loader message="Chargement en cours ..."></app-md-loader>
+</ng-container>

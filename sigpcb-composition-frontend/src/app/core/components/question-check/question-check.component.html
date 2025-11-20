@@ -1,0 +1,18 @@
+<div class="d-flex g-2">
+  <ng-container *ngFor="let item of responses">
+    <button
+      class="btn btn-question"
+      [style]="{ background: item.color,width:'75px', }"
+      (click)="select(item.id)"
+    >
+      <ng-container
+        ><app-icon
+          [icon]="!responseChecked(item.id) ? 'circle' : 'check-circle-fill'"
+          [size]="20"
+        ></app-icon
+      ></ng-container>
+
+      {{ item.name }}
+    </button>
+  </ng-container>
+</div>

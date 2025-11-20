@@ -1,0 +1,104 @@
+<app-blue-moniteur-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      Votre espace de recrutement moniteurs
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-lg-9">
+    <!--Login-->
+    <div class="d-flex flex-column justify-content-between my-5" *ngIf="page === 'login'">
+      <h3 class="title mb-4">{{'Authentification' | translate}}</h3>
+      <div class="text-primary mb-3">
+        <h6 style="font-size: 18px">Saisissez votre numéro NPI</h6>
+        <p class="text-primary" style="font-size: 16px">
+          {{"View on your CIP or your biometric card" | translate}}
+        </p>
+      </div>
+      <app-single-inputs [count]="10" (isValid)="onInputValid($event)"></app-single-inputs>
+      <div class="my-3 row justify-content-between">
+      </div>
+      <div>
+        <button type="button" class="btn btn-lg btn-primary w-100" [disabled]="!canValidate() || isloading"
+          (click)="handleButtonClick($event)">
+          <span *ngIf="isloading">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+          {{ selectedOption === 'connexion' ? 'Valider' : 'S\'inscrire'}}
+        </button>
+      </div>
+    </div>
+    <!--Double authentification-->
+    <div class="d-flex flex-column justify-content-between my-5" *ngIf="page === 'check-npi'">
+      <h3 class="title mb-4">{{"Authentification" | translate}}</h3>
+      <h6 style="font-size: 18px; line-height: 25px" class="mb-3">
+        {{codeMessage}}
+      </h6>
+      <div class="form-check mb-3">
+        <input class="form-check-input" name="hasPhone" type="radio" value="1" id="has-phone" [(ngModel)]="hasPhone" />
+        <label class="form-check-label" for="has-phone">
+          {{"Yes, this is my current phone number" | translate}}
+        </label>
+      </div>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="radio" value="0" name="hasPhone" [(ngModel)]="hasPhone" id="lost-phone" />
+        <label class="form-check-label" for="lost-phone">
+          {{"I no longer have access to this phone number" | translate}}
+        </label>
+        <p class="form-text text-danger" *ngIf="hasPhone == 0">
+          {{"Please contact ANIP to update your information in order to proceed with your registration process" |
+          translate}}
+        </p>
+      </div>
+
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="radio" value="-1" name="hasPhone" id="unkown-phone"
+          [(ngModel)]="hasPhone" />
+        <label class="form-check-label" for="unkown-phone">
+          {{"I don't recognize this phone number" | translate}}
+        </label>
+        <p class="form-text text-danger" *ngIf="hasPhone == -1">
+          <a class="text-danger" (click)="rewriteNPI($event)" href="">Cliquez ici pour ressaisir correctement votre
+            NPI.</a>
+        </p>
+      </div>
+
+      <div class="my-3" *ngIf="hasPhone == 1">
+        <button class="btn btn-primary btn-lg" (click)="handleSendCodeButton($event)" [disabled]="isloading">
+          {{"Receive the code" | translate}}
+        </button>
+        <br />
+        <span *ngIf="isloading">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </div>
+    </div>
+    <!--Otp code-->
+    <div class="d-flex flex-column justify-content-between my-5 px-5" *ngIf="page === 'otp'">
+      <h3 class="title mb-4">{{"Authentification" | translate}}</h3>
+      <h6 style="font-size: 18px; line-height: 25px" class="mb-3 text-primary">
+        {{"Enter code" | translate}}
+      </h6>
+      <app-single-inputs [count]="6" (isValid)="otpCodes($event)" height="35px"></app-single-inputs>
+
+      <p class="my-3">
+        <button class="btn btn-primary btn-lg w-100" [disabled]="!isValidOtpCode || isloading"
+          (click)="connect($event)">
+          <span *ngIf="isloading">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+          {{"Continue" | translate}}
+        </button>
+      </p>
+      <p>
+        {{"Did you not receive the code after one minute?" | translate}} <br />
+        <a href="" class="fw-semibold" (click)="resendCode($event)">{{"Resend the code" | translate}}</a>
+      </p>
+    </div>
+  </app-blue-aside-right>
+</app-blue-moniteur-aside>

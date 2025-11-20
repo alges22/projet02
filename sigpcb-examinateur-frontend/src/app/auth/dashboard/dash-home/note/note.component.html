@@ -1,0 +1,54 @@
+<div class="table-responsive">
+  <table class="table bg-white">
+    <thead>
+      <tr>
+        <th scope="col">Photo</th>
+        <th scope="col">Nom des candidats</th>
+        <th scope="col">Permis</th>
+        <th scope="col">Note </th>
+        <th scope="col">Résultat</th>
+        <th></th>
+      </tr>
+    </thead>
+    <ng-container *ngIf="candidats.length">
+      <tbody *ngFor="let item of candidats; let i = index">
+        <tr>
+          <td>
+            <div style="width: 50px">
+              <img
+                [src]="item.candidat.avatar"
+                class="img-fluid rounded-top"
+                alt=""
+              />
+            </div>
+          </td>
+          <td>{{ item.candidat.prenoms }} {{ item.candidat.nom }}</td>
+          <td>{{ item.categorie_permis.name }}</td>
+          <td>{{ item.notefinal}}/20</td>
+          <td>
+            <span
+              *ngIf="item.resultat_conduite == 'success'"
+              class="badge bg-success"
+              >Réussi</span
+            >
+            <span
+              *ngIf="item.resultat_conduite == 'failed'"
+              class="badge bg-danger"
+              >Echoué</span
+            >
+          </td>
+
+          <td></td>
+        </tr>
+      </tbody>
+    </ng-container>
+
+    <ng-container *ngIf="!candidats.length">
+      <tbody>
+        <tr>
+          <td colspan="12" class="text-center">Aucun candidat disponible</td>
+        </tr>
+      </tbody>
+    </ng-container>
+  </table>
+</div>

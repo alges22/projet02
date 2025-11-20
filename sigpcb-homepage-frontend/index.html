@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Système Intégré de Gestion du Permis de Conduire au Bénin</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link href="style.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+      integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="bg-primary-gradient px-5 d-none d-lg-block">
+        <div
+          class="d-flex align-items-center flex-column h-100 text-light justify-content-center"
+        >
+          <div class="col-sm-6 mb-3">
+            <img src="login-left.png" alt="Logo ANaTT" class="img-fluid" />
+          </div>
+          <div class="login-desc h4 text-center my-3">
+            Système Intégré de Gestion <br />
+            du Permis de Conduire au Bénin
+          </div>
+        </div>
+      </div>
+      <div class="main">
+        <div class="content">
+          <div class="p-1" style="height: 15%">
+            <div class="col-sm-5 col-5">
+              <img
+                src="https://monpermisdeconduire.anatt.bj/assets/images/logo.png"
+                class="img-fluid"
+                alt="ANaTT LOGO"
+              />
+            </div>
+          </div>
+          <div class="bg-white" style="height: 75%; overflow-y: auto">
+            <div
+              class="col-sm-12 h-100 col-lg-10 col-xxl-9 mx-auto"
+              style="margin-top: 1.5em"
+            >
+              <div
+                class="mx-3 d-flex flex-column justify-content-center h-100 mx-lg-0"
+              >
+                <div class="py-4">
+                  <h1 style="font-size: 20px" class="fw-light">
+                    Bienvenue sur SIGPCB, la plateforme de gestion du permis de
+                    conduire de l’Agence Nationale des Transports Terrestres.
+                  </h1>
+                  <h5 style="color: #006f6f" class="fw-semibold mt-3 mb-4">
+                    Vous êtes ...
+                  </h5>
+                  <div class="row">
+                    <div class="col-sm-6 col-lg-4 mb-3">
+                      <a href="https://monpermisdeconduire.anatt.bj">
+                        <div class="service-card bg-candidat" role="button">
+                          <div class="service-title">
+                            CANDIDATS <br />
+                            (inscription au permis de conduire, demandes de
+                            titres dérivés)
+                          </div>
+                          <span class="icons">
+                            <i class="bi bi-arrow-right"></i>
+                          </span>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 mb-3">
+                      <a href="https://autoecolesigpcb.anatt.bj">
+                        <div class="service-card bg-ae" role="button">
+                          <div class="service-title">
+                            AUTO-ECOLES <br />
+                            (agréments, licences, affiliations, certifications
+                            des formations)
+                          </div>
+                          <span class="icons">
+                            <i class="bi bi-arrow-right"></i>
+                          </span>
+                        </div>
+                      </a>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 mb-3">
+                      <a href="https://enrolementsigpcb.anatt.bj/moniteur">
+                        <div class="service-card bg-moniteur" role="button">
+                          <div class="service-title">
+                            MONITEURS <br />
+                            (Enrôlement)
+                          </div>
+                          <span class="icons">
+                            <i class="bi bi-arrow-right"></i>
+                          </span>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 mb-3">
+                      <a href="https://enrolementsigpcb.anatt.bj">
+                        <div class="service-card bg-enrollement" role="button">
+                          <div class="service-title">
+                            <span class="text-uppercase"
+                              >Examinateurs de l'épreuve pratique</span
+                            >
+                            <br />
+                            (Enrôlement)
+                          </div>
+                          <span class="icons">
+                            <i class="bi bi-arrow-right"></i>
+                          </span>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 mb-3">
+                      <a href="https://enrolementsigpcb.anatt.bj/entreprise">
+                        <div
+                          class="service-card bg-recrutement p-1"
+                          role="button"
+                        >
+                          <div class="service-title text-uppercase">
+                            Recruteurs de conducteurs professionnels
+                          </div>
+                          <span class="icons">
+                            <i class="bi bi-arrow-right"></i>
+                          </span>
+                        </div>
+                      </a>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 mb-3">
+                      <a href="https://adminsigpcb.anatt.bj">
+                        <div class="service-card bg-backoffice" role="button">
+                          <div class="service-title">AGENTS ANaTT</div>
+                          <span class="icons">
+                            <i class="bi bi-arrow-right"></i>
+                          </span>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer style="height: 10%">
+            <div class="footer text-center">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="py-2 ms-auto">
+                    <h6>République du Bénin</h6>
+                    <p>
+                      Ministère du Cadre de Vie et des Transports en Charge du
+                      Développement Durable
+                    </p>
+                    <p>© Tous Droits Réservés 2023</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <div id="cookie-consent" style="display: none">
+      <div class="cookie-content-body p-4">
+        <h3>L'ANaTT respecte vos données</h3>
+        Ce site web utilise exclusivement des cookies nécessaires au
+        fonctionnement du site et des cookies de mesure d'audience. Ils sont
+        anonymisés et ne contiennent aucune de vos données personnelles.
+
+        <a
+          href=""
+          class="d-block mt-2 fw-semibold"
+          style="text-decoration: underline"
+          >Lire notre politique de confidentialité</a
+        >
+        <div class="text-end mt-3">
+          <a href="" class="btn btn-outline-primary me-2"
+            >Consulter le détail de ces cookies</a
+          >
+          <button
+            type="button"
+            class="btn btn-primary mt-1"
+            id="consent-button"
+          >
+            J'ai compris
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const consentGiven = localStorage.getItem("consent.cookie") === "true";
+        const cookieConsentDiv = document.getElementById("cookie-consent");
+        const consentButton = document.getElementById("consent-button");
+        const delay = 2000; // Délai en millisecondes (par défaut 2000ms)
+
+        if (!consentGiven) {
+          setTimeout(() => {
+            // Afficher la boîte de consentement après le délai
+            cookieConsentDiv.style.display = "block";
+          }, delay);
+        }
+
+        consentButton.addEventListener("click", function () {
+          // Mettez à jour le consentement
+          localStorage.setItem("consent.cookie", "true");
+          // Masquez la boîte de consentement
+          cookieConsentDiv.style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+<div class="vh-100 w-100 d-flex flex-column pb-3">
+  <div class="hearder-rounded pb-3">
+    <div class="container">
+      <div class="col-md-6 mx-auto">
+        <img src="assets/images/logo.png" class="img-fluid" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-10 mx-auto col-sm-9">
+      <h3 class="text-primary fw-bolder text-uppercase">Identification</h3>
+      <p class="mb-4">
+        Scannez le code QR Ou saisissez <br />
+        le code d'accès sur votre convocation
+      </p>
+      <app-scanner (scanned)="scan($event)" [stop]="!scann"></app-scanner>
+    </div>
+
+    <div class="col-10 mx-auto col-sm-9 my-3">
+      <div class="my-3">
+        <label for="code" class="form-label h6"
+          >Code <span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          name="code"
+          id="code"
+          class="form-control py-3"
+          [attr.maxlength]="lengths.code"
+          [readOnly]="onVerification"
+          (input)="onInputCode($event)"
+        />
+        <small class="text-muted"
+          >Saisi: {{ data.code.length }} sur {{ lengths.code }}
+        </small>
+        <div class="text-small text-danger" *ngIf="codeErrorMessage">
+          {{ codeErrorMessage }}
+        </div>
+      </div>
+
+      <div class="alert alert-warning" role="alert" *ngIf="onVerification">
+        Vérification en cours ...
+      </div>
+    </div>
+  </div>
+</div>
+
+>
+
+<div #loginSuccess class="modal-alert hide-modal">
+  <div class="modal-alert-content p-4">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="80"
+      height="80"
+      viewBox="0 0 100 100"
+      fill="none"
+    >
+      <rect
+        x="2"
+        y="2"
+        width="96"
+        height="96"
+        rx="48"
+        stroke="#108757"
+        stroke-width="4"
+      />
+      <path
+        d="M22 48L36.6164 64.2052C40.9122 68.9679 48.5176 68.5123 52.2142 63.2709L78.5 26"
+        stroke="#108757"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <h6>Identification réussie</h6>
+  </div>
+</div>

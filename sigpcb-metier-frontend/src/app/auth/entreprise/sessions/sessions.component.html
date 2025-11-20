@@ -1,0 +1,224 @@
+<app-blue-aside-entreprise>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      Votre espace de gestion de recrutement de conducteurs
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-md-11">
+    <div class="row">
+      <div class="col-lg-6 offset-md-6">
+        <div class="d-flex justify-content-end">
+          <button class="btn border btn-icons btn-primary" (click)="openModal('store')">
+            <app-icon icon="plus"></app-icon>
+            Ajouter
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr class="bg-table-primary">
+            <th scope="col">Date</th>
+            <th scope="col">Date composition</th>
+            <th scope="col">Catégorie permis</th>
+            <th scope="col">Annexe</th>
+            <th scope="col">Statut</th>
+            <th scope="col text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="onLoadSession">
+              <tr>
+                <td colspan="12" class="py-3 text-center">
+                  <div class="p-3 bg-light text-dark rounded col-md-4 mx-auto">
+                    Chargement en cours
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+        <tbody *ngFor="let item of sessions | paginate
+            : {
+                itemsPerPage: 10,
+                currentPage: pageNumber,
+                totalItems: paginate_data?.total
+              }; let i = index">
+          <tr>
+            <td scope="row">
+              <small class="text-muted">{{ item.created_at | hdate : false }}</small>
+            </td>
+            <td><small class="text-muted">{{ item.date_compo | hdate : false }}</small></td>
+            <td>{{ item.categorie_permis?.name }}</td>
+
+            <td>{{ item.annexe?.name }}</td>
+            <td>
+              <span *ngIf="item.state=='init'" class="badge text-info">En cours de création</span>
+              <span *ngIf="item.state=='pending'"  class="badge text-warning">En cours de traitement</span>
+              <span *ngIf="item.state=='rejected'" class="badge text-danger">Rejetée</span>
+              <span *ngIf="item.state=='validate'" class="badge text-success">Validée</span>
+            </td>
+            <td>
+              <div class="d-flex justify-content-between">
+                <div class="btn-actions">
+                <app-icon icon="people" title="Voir les candidats" [size]="16" classe="text-primary" [routerLink]="'/entreprise/session/' + item.id"></app-icon>
+                <app-icon icon="pencil" title="Modifier" (click)="edit(item.id)" [size]="16" classe="text-warning"></app-icon>
+                <app-icon *ngIf="item.state==='rejected'" icon="info-circle" title="Information du rejet" [size]="16" classe="text-info" (click)="getRejetInfo(item.id)"></app-icon>
+
+                <app-soumission *ngIf="item.state==='init'" (canSoumission)="soumission($event)" [activateId]="item.id"></app-soumission>
+                <app-delete (canDelete)="destroy($event)"
+                  [activateId]="item.id"></app-delete>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="!onLoadSession && !sessions.length">
+              <tr>
+                <td colspan="12" class="py-3 text-center">Aucune nouveau recrutement</td>
+              </tr>
+            </tbody>
+      </table>
+
+      <div class="card-body">
+        <app-pagination *ngIf="paginate_data" [total]="paginate_data.total" (pageChange)="paginate($event)"
+          [pageNumber]="pageNumber"></app-pagination>
+      </div>
+    </div>
+
+
+  </app-blue-aside-right>
+</app-blue-aside-entreprise>
+
+<app-modal [action]="modalId" size="modal-md">
+  <div heading class="fw-semibold text-primary text-center">
+    <span [innerHTML]="titre_formulaire"></span>
+  </div>
+
+  <form action="" method="post" quickv id="session-form">
+    <div class="row mb-2">
+      <div class="col-sm">
+        <div class="mb-3">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <label class="col-10 required" for="categorie_permis_id">Catégorie permis</label>
+              <div class="col-2 text-end">
+                <span info="Sélectionner une catégorie">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="mb-3">
+            <select class="form-select" name="categorie_permis_id" qv-rules="min:1" required
+              qv-messages="La catégorie est requise" [(ngModel)]="session.categorie_permis_id">
+              <option value="0" selected>Sélectionner une catégorie</option>
+              <option [value]="categorie.id" *ngFor="let categorie of categories">
+                {{ categorie.name }}
+              </option>
+            </select>
+          </div>
+          <div qv-feedback="categorie_permis_id"></div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="mb-3">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-10 required">Date de composition</div>
+              <div class="col-2 text-end">
+                <span info="La date de composition">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input type="date" name="date_compo" class="form-control" qv-messages="La date de composition est requise" [(ngModel)]="session.date_compo" required
+              />
+          </div>
+          <div qv-feedback="date_compo"></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row mb-2">
+      <div class="col-sm">
+        <div class="mb-3">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <label class="col-10 required" for="annexe_id">Annexe ANaTT</label>
+              <div class="col-2 text-end">
+                <span info="Sélectionner une annexe">
+                  <app-icon icon="info" [size]="14"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="mb-3">
+            <select class="form-select" name="annexe_id" qv-rules="min:1" qv-messages="L'annexe est requise" required
+              [(ngModel)]="session.annexe_id">
+              <option value="0" selected>Sélectionner une annexe</option>
+              <option [value]="annexe.id" *ngFor="let annexe of annexes">
+                {{ annexe.name }}
+              </option>
+            </select>
+          </div>
+          <div qv-feedback="annexe_id"></div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <br>
+        <button class="btn btn-primary w-100 justify-content-center" qv-submit (click)="save($event)" [disabled]="isPostingSession">
+          Enregistrer
+
+          <span *ngIf="isPostingSession">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </form>
+</app-modal>
+
+<app-modal [action]="modalRejetId" size="modal-md">
+  <div heading class="fw-semibold text-primary text-center">
+    <span>{{titre_formulaire_rejet}} du {{
+    sessionRejet?.date_compo | date : "dd MMMM yyyy" : "" : "fr"
+    }}</span>
+  </div>
+
+  <form action="" method="post" quickv id="rejet-session-form">
+    <div class="row mb-2">
+      <div class="col-sm">
+        <p>Motif</p>
+        <p>
+          <strong>{{sessionRejet?.rejet[0].motif}}</strong>
+        </p>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-sm">
+        <p>Consigne</p>
+        <p>
+          <strong>{{sessionRejet?.rejet[0].consigne}}</strong>
+        </p>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-sm">
+        <br>
+        <button class="btn btn-primary w-100 justify-content-center" (click)="resoumettreSession()">
+          Resoumettre
+
+          <span *ngIf="isResendSession">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </form>
+</app-modal>

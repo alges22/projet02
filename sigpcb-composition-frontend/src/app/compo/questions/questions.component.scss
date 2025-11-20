@@ -1,0 +1,81 @@
+.bg-question {
+  background-color: rgb(183, 225, 255);
+  border-radius: 0 0 .5rem .5rem;
+}
+
+
+header {
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  right: 0;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+    /* Visible */
+  }
+
+  50% {
+    opacity: 0.5;
+    /* Invisible */
+  }
+}
+
+.starter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(65, 105, 225, 0.459);
+  z-index: 1100;
+
+  /* Appliquez l'animation à la classe .btn-text */
+  .btn-text {
+    animation: blink 2s infinite;
+    transition: all 0.4s ease-in-out;
+  }
+}
+
+
+
+.video-player {
+  border-radius: 25px;
+  margin: 5px;
+  min-height: 110px;
+
+  video {
+    width: 100%;
+    height: 100%;
+  }
+
+}
+
+.text-anatt {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.text-d {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+
+
+.chrono {
+  position: relative;
+  bottom: -50px;
+  z-index: 10;
+}

@@ -1,0 +1,55 @@
+<nav class="bg-light top-navbar sticky-top py-2 py-lg-0">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-4 col-md-3">
+        <a class="navbar-brand" routerLink="/">
+          <img src="assets/images/logo.png" class="img-fluid" alt="logo" />
+        </a>
+      </div>
+      <div class="col col-md">
+        <ul class="nav justify-content-end">
+          <li class="nav-item">
+            <a
+              class="btn border-0 d-lg-none btn btn-primary"
+              routerLink="/connexion"
+            >
+              <app-icon icon="person"></app-icon>
+            </a>
+          </li>
+          <li *ngIf="!userConnected()" class="nav-item d-none d-lg-block">
+            <a class="btn btn-outline-primary ms-3" routerLink="/connexion">{{
+              "Sign in" | translate
+            }}</a>
+          </li>
+
+          <li *ngIf="!userConnected()" class="nav-item">
+            <a class="btn btn-primary ms-3" routerLink="/devenir-examinateur">
+              Devenir examinateur
+            </a>
+          </li>
+
+          <li *ngIf="userConnected()" class="nav-item">
+            <a class="btn btn-outline-primary ms-3" routerLink="suivre-demande">
+              <span class="d-none d-md-inline">Suivre ma demande</span>
+              <span class="d-md-none">
+                <app-icon icon="folder2-open"></app-icon>
+              </span>
+            </a>
+          </li>
+          <li *ngIf="userConnected()" class="nav-item d-none d-lg-block">
+            <a class="btn btn-danger ms-3" routerLink="/logout">
+              <span class="d-none d-md-inline">Déconnexion</span>
+              <span class="d-md-none">
+                <app-icon icon="power"></app-icon>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<router-outlet> </router-outlet>
+
+<app-footer> </app-footer>

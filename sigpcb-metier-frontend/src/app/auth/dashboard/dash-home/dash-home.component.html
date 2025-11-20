@@ -1,0 +1,88 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      {{
+        "Your space for managing driving license and related procedures"
+          | translate
+      }}
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-md-11">
+    <div class="border p-1 rounded-3">
+      <div class="d-flex">
+        <app-avatar [user]="user"></app-avatar>
+        <div class="d-flex flex-column justify-content-between ms-2">
+          <h5
+            class="pt-2"
+            style="color: #313131; font-size: 22px; font-weight: 600"
+          >
+            {{ user?.prenoms }} {{ user?.nom }}
+          </h5>
+          <h6 class="pb-2" style="color: #575656; font-size: 16px">
+            NPI : {{ user?.npi }}
+          </h6>
+        </div>
+      </div>
+    </div>
+    <h3 class="title my-4">
+      {{ "What service would you like to request" | translate }}
+    </h3>
+    <div class="row">
+      <div class="col-6 col-md-4 mb-5" *ngFor="let ps of prestations">
+        <app-service-card [prestation]="ps">
+          <a
+            *ngIf="ps.slug === 'inscription-examen'"
+            type="button"
+            class="btn btn-primary"
+            (click)="demande(ps.slug)"
+          >
+            {{ "Submit my application" | translate }}
+          </a>
+          <button
+            *ngIf="ps.slug !== 'inscription-examen'"
+            href=""
+            [routerLink]="'/services/' + ps.slug"
+            type="button"
+            class="btn btn-primary"
+            [disabled]="ps.slug == 'demande-permis-numerique' && !permis?.has_permis"
+          >
+            {{ "Submit my application" | translate }}
+          </button>
+        </app-service-card>
+      </div>
+    </div>
+    <!--Prestation modal-->
+    <div
+      class="modal fade"
+      id="prestation-demande"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      role="dialog"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <!-- <h5 class="modal-title fs-6" [innerHTML]="prestation.title"></h5> -->
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <app-inscription-examen [page]="page"></app-inscription-examen>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

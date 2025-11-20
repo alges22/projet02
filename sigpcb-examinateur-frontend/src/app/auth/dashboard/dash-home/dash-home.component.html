@@ -1,0 +1,428 @@
+<div class="h-100" *ngIf="!onLoadRecapts && !onLoadAgendas && !onLoadVagues">
+  <div class="bg-primary p-3">
+    <div class="container">
+      <h6 class="text-white">Examen du permis de conduire</h6>
+      <p class="small text-white">Epreuve de conduite de la route</p>
+    </div>
+  </div>
+
+  <ng-container>
+    <div class="container mt-3">
+      <app-presence (signature)="onPresent($event)" *ngIf="!presenceDone" />
+      <h6 class="mt-3 d-flex">
+        Statistique
+        <app-icon
+          [icon]="openStat ? 'chevron-down' : 'chevron-up'"
+          classe="ms-2"
+          (click)="openStat = !openStat"
+        />
+      </h6>
+      <ng-container *ngIf="openStat">
+        <div class="bg-light p-3 rounded-sm my-3">
+          <h6 class="fw-semibold text-primary">Informations de la session</h6>
+
+          <div
+            class="my-2 border rounded-sm border-primary p-3 bg-white"
+            *ngIf="recapts.session"
+          >
+            <p>
+              <span class="fw-semibold">Session</span> :
+              {{ recapts.session.label }}
+            </p>
+            <p>
+              <span class="fw-semibold">Epreuve</span> : {{ recapts.epreuve }}
+            </p>
+            <p>
+              <span class="fw-semibold">Jury</span> :
+              {{ recapts.jury.name }}
+            </p>
+            <p>
+              <span class="fw-semibold">Nom de l'examinateur</span> :
+              {{ recapts.examinateur }}
+            </p>
+          </div>
+
+          <div *ngIf="!recapts.session">Chargement en cours ....</div>
+        </div>
+
+        <div class="bg-light p-3 rounded-sm my-3">
+          <h6 class="fw-semibold text-primary my-3">
+            Agenda et vue d'ensemble
+          </h6>
+
+          <div class="row">
+            <div class="col-md-8">
+              <h6>Agenda de la composition</h6>
+              <div class="row" *ngIf="vagues_agendas.length">
+                <div class="col" *ngFor="let item of vagues_agendas">
+                  <div class="card my-2 border border-primary bg-white">
+                    <div class="card-header bg-primary text-white">
+                      {{ item.date }}
+                    </div>
+                    <div class="card-body">
+                      <p class="text-primary">
+                        {{ item.candidats_count | padding }} candidat (s)
+                      </p>
+                      <p class="text-primary">
+                        {{ item.vagues_count | padding }} vague (s)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mt-3" *ngIf="!vagues_agendas.length">
+                <div class="card-body">Aucun agenda disponible encore</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h6 class="mt-3">Vue d’ensemble</h6>
+              <div class="card my-2 border border-primary bg-white">
+                <div class="card-body">
+                  <p
+                    class="text-primary text-small border-bottom border-primary pb-2"
+                  >
+                    Nombre de jours : {{ stats.jour_total | padding }}
+                  </p>
+
+                  <p class="text-primary pt-2 text-small">
+                    <span class="fw-semibold"
+                      >Nbre de candidats :
+                      {{ stats.candidat_total | padding }}</span
+                    >
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="bg-light p-3 rounded-sm my-3">
+        <div class="my-2">
+          <span class="bg-light d-inline-block border p-3 rounded">
+            <ng-container *ngIf="vagues.length">
+              <button
+                class="btn btn-outline-danger btn-lg"
+                type="button"
+                [disabled]="onStoppingCompo"
+                (click)="stopComp()"
+              >
+                Terminer la composition
+                <ng-container *ngIf="onStoppingCompo">
+                  <span
+                    class="spinner-border text-primary spinner-border-sm"
+                    role="status"
+                  >
+                  </span>
+                </ng-container>
+              </button>
+            </ng-container>
+          </span>
+        </div>
+        <tab>
+          <tab-header>
+            <button
+              class="btn btn-tab active border-0"
+              (click)="activeTab = 'listeEmargement'"
+              [class.active]="activeTab === 'listeEmargement'"
+            >
+              <span class="btn-tab-text"> Liste d'émargement </span>
+            </button>
+            <button
+              class="btn btn-tab border-0"
+              (click)="activeTab = 'noter'"
+              [class.active]="activeTab === 'noter'"
+            >
+              <span class="btn-tab-text">Candidats notés</span>
+            </button>
+          </tab-header>
+          <tab-body>
+            <ng-container *ngIf="activeTab === 'listeEmargement'">
+              <div class="table-responsive">
+                <table class="table bg-white">
+                  <thead>
+                    <tr>
+                      <th scope="col">Photo</th>
+                      <th scope="col">Nom des candidats</th>
+                      <th scope="col">Permis</th>
+                      <th scope="col">Emargement</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <ng-container *ngIf="candidats.length">
+                    <ng-container *ngFor="let group of cache">
+                      <tbody>
+                        <tr>
+                          <td colspan="12">
+                            <h6
+                              class="fw-bold text-uppercase text-primary fs-5 my-3"
+                            >
+                              <app-icon icon="dash-lg" />
+                              {{ group.name }}
+                            </h6>
+                          </td>
+                        </tr>
+                      </tbody>
+                      <tbody class="border bg-light">
+                        <ng-container
+                          *ngFor="let item of group.candidats; let i = index"
+                        >
+                          <ng-container *ngIf="!item.resultat_conduite">
+                            <tr>
+                              <td>
+                                <div style="width: 50px">
+                                  <img
+                                    [src]="item.candidat.avatar"
+                                    class="img-fluid rounded-top"
+                                    alt=""
+                                  />
+                                </div>
+                              </td>
+                              <td>
+                                {{ item.candidat.prenoms }}
+                                {{ item.candidat.nom }}
+                                <br />
+
+                                <span
+                                  *ngIf="
+                                    item.dossier_session.presence_conduite ==
+                                    'absent'
+                                  "
+                                  class="badge bg-warning"
+                                >
+                                  <ng-container
+                                    *ngIf="item.candidat.sexe == 'F'"
+                                  >
+                                    Abscente
+                                  </ng-container>
+                                  <ng-container
+                                    *ngIf="item['candidat']['sexe'] == 'M'"
+                                  >
+                                    Absent
+                                  </ng-container>
+                                </span>
+                                <span
+                                  *ngIf="
+                                    item.dossier_session.presence_conduite ==
+                                    'present'
+                                  "
+                                  class="badge bg-success"
+                                >
+                                  <ng-container
+                                    *ngIf="item['candidat']['sexe'] == 'F'"
+                                  >
+                                    Présente
+                                  </ng-container>
+                                  <ng-container
+                                    *ngIf="item['candidat']['sexe'] == 'M'"
+                                  >
+                                    Présent
+                                  </ng-container>
+                                </span>
+                              </td>
+                              <td>{{ item.categorie_permis.name }}</td>
+                              <td>
+                                <ng-container
+                                  *ngIf="
+                                    !item.dossier_session.presence_conduite
+                                  "
+                                >
+                                  <div
+                                    class="mb-1"
+                                    (click)="abscenceId = item.id"
+                                  >
+                                    <button class="btn btn-warning">
+                                      Marquer absent(e)
+                                    </button>
+                                  </div>
+
+                                  <div
+                                    class="mt-2 border shadow-sm p-2"
+                                    *ngIf="abscenceId == item.id"
+                                  >
+                                    <p>Confirmer l'action</p>
+                                    <button
+                                      class="btn btn-success me-2"
+                                      (click)="markAsAbscent(item)"
+                                    >
+                                      Oui
+                                    </button>
+                                    <button
+                                      class="btn btn-danger"
+                                      (click)="abscenceId = 0"
+                                    >
+                                      Non
+                                    </button>
+                                  </div>
+                                </ng-container>
+                              </td>
+
+                              <td>
+                                <ng-container
+                                  *ngIf="
+                                    !item.dossier_session.resultat_conduite
+                                  "
+                                >
+                                  <button
+                                    class="btn btn-sm btn-outline-primary"
+                                    (click)="openVague(i)"
+                                  >
+                                    <app-icon
+                                      [icon]="
+                                        selectedIndex !== i
+                                          ? 'chevron-right'
+                                          : 'chevron-down'
+                                      "
+                                    >
+                                    </app-icon>
+                                  </button>
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="item.dossier_session.resultat_conduite"
+                                >
+                                  <button class="btn btn-primary px-2" disabled>
+                                    Terminé
+                                  </button>
+                                </ng-container>
+                              </td>
+                            </tr>
+                            <tr *ngIf="selectedIndex === i">
+                              <td colspan="12" col="12">
+                                <app-annotation
+                                  [data]="item"
+                                  (onfinished)="onfinished()"
+                                ></app-annotation>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+                      </tbody>
+                    </ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="!candidats.length">
+                    <tbody>
+                      <tr>
+                        <td colspan="12" class="text-center">
+                          Aucun candidat disponible
+                        </td>
+                      </tr>
+                    </tbody>
+                  </ng-container>
+                </table>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="activeTab === 'noter'">
+              <app-note [session]="session" [jury]="jury"></app-note>
+            </ng-container>
+          </tab-body>
+        </tab>
+      </div>
+      <hr class="my-3" />
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!(!onLoadRecapts && !onLoadAgendas && !onLoadVagues)">
+    <div class="card p-5">
+      <div class="card-body text-center">Chargement en cours</div>
+    </div>
+  </ng-container>
+</div>
+
+<app-modal [action]="modalJury" size="">
+  <div>
+    <form action="" method="post" quickv id="salle-add-form">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="session"
+                  >Sélectionnez la session</label
+                >
+                <div class="col-6 text-end">
+                  <span info="Sélectionner une session">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="session"
+                [(ngModel)]="session"
+                qv-rules="required"
+                qv-messages="Ce champ est obligatoire"
+                (change)="selectSession(session)"
+              >
+                <option value="" selected>
+                  Cliquez pour choisir une session
+                </option>
+                <option
+                  *ngFor="let session of sessions"
+                  value="{{ session.id }}"
+                >
+                  {{ session.session_long }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="session"></div>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <div class="mb-3">
+            <label for="" class="mb-1 d-block">
+              <div class="row justify-content-between">
+                <label class="col-6 required" for="jury"
+                  >Sélectionnez le jury</label
+                >
+                <div class="col-6 text-end">
+                  <span info="Sélectionner le jury">
+                    <app-icon icon="info" [size]="14"></app-icon>
+                  </span>
+                </div>
+              </div>
+            </label>
+            <div class="mb-3">
+              <select
+                class="form-select"
+                name="jury"
+                [(ngModel)]="jury"
+                qv-rules="required"
+                qv-messages="Ce champ est obligatoire"
+              >
+                <option value="" selected>Cliquez pour choisir un jury</option>
+                <option *ngFor="let jury of jurys" value="{{ jury.id }}">
+                  {{ jury.name }}
+                </option>
+              </select>
+            </div>
+            <div qv-feedback="jury"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button
+            class="btn btn-primary w-100 justify-content-center"
+            [disabled]="onLoading"
+            qv-submit
+            (click)="continue($event)"
+          >
+            Continuer
+            <span *ngIf="onLoading">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-modal>

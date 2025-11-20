@@ -1,0 +1,1626 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Base",
+        "description": "Gestion des API du candidat",
+        "contact": {
+            "name": "Support client",
+            "email": "contact@exemple.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/anatt-candidat/agregateurs-base": {
+            "get": {
+                "tags": [
+                    "Base"
+                ],
+                "summary": "Récupérer la liste des agregateurs",
+                "description": "Récupère une liste de tous les agregateurs enregistrés dans la base de données",
+                "operationId": "getAllAgregateur",
+                "responses": {
+                    "200": {
+                        "description": "La liste des chapitres récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "photo": {
+                                            "description": "La photo",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de l'agregateur",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom de l'agregateur",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/langues-base": {
+            "get": {
+                "tags": [
+                    "Base"
+                ],
+                "summary": "Récupérer la liste des langues",
+                "description": "Récupère une liste de toutes les langues enregistrés dans la base de données",
+                "operationId": "getAllLangues",
+                "responses": {
+                    "200": {
+                        "description": "La liste des langues récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la langue",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom de la langue",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/categorie-permis-base": {
+            "get": {
+                "tags": [
+                    "Base"
+                ],
+                "summary": "Récupérer la liste des categories de permis",
+                "description": "Récupère une liste des categorie de permis enregistrés dans la base de données",
+                "operationId": "getAllCatPermis",
+                "responses": {
+                    "200": {
+                        "description": "La liste des categorie de permis récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID du categorie permis",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom du categorie permis",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/counts": {
+            "get": {
+                "tags": [
+                    "Compteurs"
+                ],
+                "summary": "Récupère les compteurs",
+                "operationId": "92b4f2f6ca21389259a693224b80bae1",
+                "parameters": [
+                    {
+                        "name": "counts",
+                        "in": "query",
+                        "description": "Liste des compteurs à récupérer, séparés par des virgules",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Compteurs récupérés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "monitoring_count": {
+                                            "type": "integer",
+                                            "example": 69
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requête invalide",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Les paramètres 'counts' sont obligatoires"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur s'est produite lors de la récupération des compteurs"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/examens": {
+            "get": {
+                "tags": [
+                    "Examen"
+                ],
+                "summary": "Récupérer la liste des examens",
+                "description": "Récupère une liste de tous les examens enregistrés dans la base de données",
+                "operationId": "getAllExamen",
+                "responses": {
+                    "200": {
+                        "description": "La liste des candidatq récupéré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de l'examen",
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/npi-candidat": {
+            "post": {
+                "tags": [
+                    "AnipCandidat"
+                ],
+                "summary": "Vérifie le numéro npi du candidat",
+                "description": "Vérifie le numéro npi du candidat.",
+                "operationId": "getNPI",
+                "requestBody": {
+                    "description": "Données pour vérifier le numéro npi du candidat",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "npi"
+                                ],
+                                "properties": {
+                                    "npi": {
+                                        "type": "integer",
+                                        "example": "12345467890"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "vefification éffectuée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "véfirication éffectuée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "vefification non éffectuée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": ""
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "vefification non éffectuée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la vérification"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/candidat/dossier-session": {
+            "get": {
+                "tags": [
+                    "AnipCandidat"
+                ],
+                "summary": "Obtenir les informations du dossier de session d'un candidat",
+                "description": "Obtenir les informations du dossier de session d'un candidat à partir de son numéro NPI.",
+                "operationId": "getUserDossierSession",
+                "responses": {
+                    "200": {
+                        "description": "Le dossier session du candidat a été récupéré avec succès"
+                    },
+                    "404": {
+                        "description": "Le dossier session du candidat n'a pas été trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/candidat-parcours": {
+            "get": {
+                "tags": [
+                    "CandidatParcours"
+                ],
+                "summary": "Obtient la liste des parcours des candidats",
+                "description": "Obtient la liste des parcours des candidats enregistrés dans la base de données",
+                "operationId": "getCandidatParcours",
+                "responses": {
+                    "200": {
+                        "description": "Liste des parcours des candidats",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "candidat_id": {
+                                                "description": "ID du candidat",
+                                                "type": "integer"
+                                            },
+                                            "auto_ecole_id": {
+                                                "description": "ID de l'auto école choisi",
+                                                "type": "integer"
+                                            },
+                                            "dossier_candidat_id": {
+                                                "description": "ID du dossier du candidat",
+                                                "type": "integer"
+                                            },
+                                            "categorie_permis_id": {
+                                                "description": "ID du catégorie de permis",
+                                                "type": "integer"
+                                            },
+                                            "examen_id": {
+                                                "description": "ID de l'examen",
+                                                "type": "integer"
+                                            },
+                                            "annexe_anatt_id": {
+                                                "description": "ID de l'annexe anatt choisi",
+                                                "type": "integer"
+                                            },
+                                            "npi": {
+                                                "description": "npi du candidat",
+                                                "type": "string"
+                                            },
+                                            "examen_type": {
+                                                "description": "Le type de l'examen du candidat (ecrit/conduite)",
+                                                "type": "string",
+                                                "enum": [
+                                                    "ecrit",
+                                                    "conduite"
+                                                ]
+                                            },
+                                            "candidat_ecrit_note": {
+                                                "description": "la note écrite du candidat",
+                                                "type": "string"
+                                            },
+                                            "candidat_conduite_note": {
+                                                "description": "la note de conduite du candidat",
+                                                "type": "string"
+                                            },
+                                            "candidat_presence": {
+                                                "description": "la présence du candidat",
+                                                "type": "boolean"
+                                            },
+                                            "is_close": {
+                                                "description": "la présence du candidat",
+                                                "type": "boolean"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CandidatParcours"
+                ],
+                "summary": "Enregistre le parcours d'un candidat",
+                "description": "Enregistre le parcours d'un candidat dans la base de données",
+                "operationId": "storeCandidatParcours",
+                "requestBody": {
+                    "description": "Données du parcours du candidat",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "auto_ecole_id": {
+                                        "description": "ID de l'auto école choisie",
+                                        "type": "integer"
+                                    },
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat",
+                                        "type": "integer"
+                                    },
+                                    "categorie_permis_id": {
+                                        "description": "ID de la catégorie de permis",
+                                        "type": "integer"
+                                    },
+                                    "examen_id": {
+                                        "description": "ID de l'examen",
+                                        "type": "integer"
+                                    },
+                                    "annexe_anatt_id": {
+                                        "description": "ID de l'annexe anatt choisie",
+                                        "type": "integer"
+                                    },
+                                    "examen_type": {
+                                        "description": "Le type de l'examen du candidat (ecrit/conduite)",
+                                        "type": "string",
+                                        "enum": [
+                                            "ecrit",
+                                            "conduite"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Parcours du candidat enregistré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Message de succès",
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "description": "Données du parcours enregistré",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "ID du parcours enregistré",
+                                                    "type": "integer"
+                                                },
+                                                "auto_ecole_id": {
+                                                    "description": "ID de l'auto école choisie",
+                                                    "type": "integer"
+                                                },
+                                                "dossier_candidat_id": {
+                                                    "description": "ID du dossier du candidat",
+                                                    "type": "integer"
+                                                },
+                                                "annexe_anatt_id": {
+                                                    "description": "ID de l'annexe anatt choisie",
+                                                    "type": "integer"
+                                                },
+                                                "examen_type": {
+                                                    "description": "Le type de l'examen du candidat (ecrit/conduite)",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Message d'erreur",
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "description": "Liste des erreurs de validation",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/parcours-suivis": {
+            "get": {
+                "tags": [
+                    "ParcoursSuivis"
+                ],
+                "summary": "Obtient la liste des parcours ",
+                "description": "Obtient la liste des parcours enregistrés dans la base de données",
+                "operationId": "getParcoursSuivis",
+                "responses": {
+                    "200": {
+                        "description": "Liste des parcours ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de du candidat",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "auto_ecole_id": {
+                                                "description": "ID de l'auto école",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "agent_id": {
+                                                "description": "ID de l'agent ayant fait l'action ",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "dossier_candidat_id": {
+                                                "description": "ID du dossier du candidat ",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "dossier_session_id": {
+                                                "description": "ID du dossier session du candidat ",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "categorie_permis_id": {
+                                                "description": "ID du catégorie de permis ",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "npi": {
+                                                "description": "npi du candidat ",
+                                                "type": "string",
+                                                "example": 1234567890
+                                            },
+                                            "slug": {
+                                                "description": "slug de l'action ",
+                                                "type": "string",
+                                                "example": "preinscription"
+                                            },
+                                            "message": {
+                                                "description": "le message de l'action ",
+                                                "type": "string"
+                                            },
+                                            "date_action": {
+                                                "description": "la date de l'enregs=istrement",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ParcoursSuivis"
+                ],
+                "summary": "Crée un nouvel parcours candidat",
+                "description": "Crée un nouvel parcours candidat enregistré dans la base de données",
+                "operationId": "createParcoursSuivis",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "candidat_id": {
+                                        "description": "ID de du candidat",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "service": {
+                                        "description": "Service de l'action",
+                                        "type": "string",
+                                        "example": "Inscription"
+                                    },
+                                    "auto_ecole_id": {
+                                        "description": "ID de l'auto école",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "agent_id": {
+                                        "description": "ID de l'agent ayant fait l'action ",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "dossier_candidat_id": {
+                                        "description": "ID du dossier du candidat ",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "dossier_session_id": {
+                                        "description": "ID du dossier session du candidat ",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "categorie_permis_id": {
+                                        "description": "ID du catégorie de permis ",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "npi": {
+                                        "description": "npi du candidat ",
+                                        "type": "string",
+                                        "example": 1234567890
+                                    },
+                                    "slug": {
+                                        "description": "slug de l'action ",
+                                        "type": "string",
+                                        "example": "preinscription"
+                                    },
+                                    "message": {
+                                        "description": "le message de l'action ",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvel parcours candidat créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouvel parcours candidat créé",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/parcours-suivis/all": {
+            "get": {
+                "tags": [
+                    "ParcoursSuivis"
+                ],
+                "summary": "Obtient la liste des parcours ",
+                "description": "Obtient la liste des parcours enregistrés dans la base de données",
+                "operationId": "getParcoursSuivisAll",
+                "responses": {
+                    "200": {
+                        "description": "Liste des parcours ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de du candidat",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "auto_ecole_id": {
+                                                "description": "ID de l'auto école",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "agent_id": {
+                                                "description": "ID de l'agent ayant fait l'action ",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "dossier_candidat_id": {
+                                                "description": "ID du dossier du candidat ",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "dossier_session_id": {
+                                                "description": "ID du dossier session du candidat ",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "categorie_permis_id": {
+                                                "description": "ID du catégorie de permis ",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "npi": {
+                                                "description": "npi du candidat ",
+                                                "type": "string",
+                                                "example": 1234567890
+                                            },
+                                            "slug": {
+                                                "description": "slug de l'action ",
+                                                "type": "string",
+                                                "example": "preinscription"
+                                            },
+                                            "message": {
+                                                "description": "le message de l'action ",
+                                                "type": "string"
+                                            },
+                                            "date_action": {
+                                                "description": "la date de l'enregs=istrement",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/parcours-suivis/{candidat_id}": {
+            "get": {
+                "tags": [
+                    "ParcoursSuivis"
+                ],
+                "summary": "Affiche les détails d'un parcours d'un candidat",
+                "description": "Affiche les détails d'un parcours d'un candidat enregistré dans la base de données",
+                "operationId": "getParcoursSuivisByCandidatId",
+                "parameters": [
+                    {
+                        "name": "candidat_id",
+                        "in": "path",
+                        "description": "ID du candidat dont on veut récupéré le parcours",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails du parcours candidat récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "candidat_id": {
+                                            "description": "ID de candidat",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "parcours candidat non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/parcours-suivis/absences": {
+            "post": {
+                "tags": [
+                    "ParcoursSuivis"
+                ],
+                "summary": "Crée un nouvel parcours candidat",
+                "description": "Crée un nouvel parcours candidat enregistré dans la base de données",
+                "operationId": "createParcoursSuivisTrairement",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "agent_id": {
+                                        "description": "ID de l'agent ayant fait l'action ",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "candidat_justif_absence_id": {
+                                        "description": "ID du candidat justif absence",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouvel parcours candidat créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du nouvel parcours candidat créé",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/parcours-suivis/convocation-codes": {
+            "post": {
+                "tags": [
+                    "ParcoursSuivis"
+                ],
+                "summary": "Crée un nouvel parcours pour la convocation code ducandidat",
+                "description": "Crée un nouvel parcours  pour la convocation code enregistré dans la base de données",
+                "operationId": "createParcoursSuivisConvocationCode",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "examen_id": {
+                                        "description": "ID de l'examen",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "annexe_id": {
+                                        "description": "ID de l'annexe",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Convocation candidat envoyé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID ",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/verify-npi": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Connexion",
+                "description": "Connectez-vous en utilisant votre npi.",
+                "operationId": "VerifyNpi",
+                "requestBody": {
+                    "description": "Données d'authentification",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "npi"
+                                ],
+                                "properties": {
+                                    "npi": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        },
+                                        "user": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Informations d'identification incorrectes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Informations de connexion incorrectes"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "npiincorrecte"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la connexion"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/login": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Connexion",
+                "description": "Connectez-vous en utilisant votre npi.",
+                "operationId": "login",
+                "requestBody": {
+                    "description": "Données d'authentification",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "npi",
+                                    "email",
+                                    "lang"
+                                ],
+                                "properties": {
+                                    "npi": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "62000001"
+                                    },
+                                    "lang": {
+                                        "type": "string",
+                                        "example": "fr"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        },
+                                        "user": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Informations d'identification incorrectes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Informations de connexion incorrectes"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "npiincorrecte"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la connexion"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/register": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Inscription",
+                "description": "Inscrivez-vous en utilisant votre adresse numéro npi.",
+                "operationId": "Register",
+                "requestBody": {
+                    "description": "Données d'authentification",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "npi",
+                                    "email",
+                                    "lang"
+                                ],
+                                "properties": {
+                                    "npi": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "62000001"
+                                    },
+                                    "lang": {
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "fr"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inscription réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        },
+                                        "user": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Informations d'identification incorrectes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Informations d'inscrisption incorrectes"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "Adresse e-mail ou mot de passe incorrecte"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la connexion"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/verify-otp": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Vérification du code OTP",
+                "description": "Vérifie le code OTP et connecte l'utilisateur en cas de succès.",
+                "operationId": "verifyOtp",
+                "requestBody": {
+                    "description": "Données de vérification du code OTP",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "code",
+                                    "action"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "123"
+                                    },
+                                    "code": {
+                                        "type": "integer",
+                                        "example": "123456"
+                                    },
+                                    "action": {
+                                        "type": "string",
+                                        "example": "login"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        },
+                                        "user": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Code OTP invalide ou expiré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Code de vérification invalide ou expiré"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la connexion"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/resend-code": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Renvoi le code OTP",
+                "description": "Renvoie un nouveau code OTP à l'utilisateur pour la vérification.",
+                "operationId": "resendCode",
+                "requestBody": {
+                    "description": "Données pour renvoyer le code OTP",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "action",
+                                    "email",
+                                    "lang"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "123"
+                                    },
+                                    "action": {
+                                        "type": "string",
+                                        "example": "login"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "login@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "62000001"
+                                    },
+                                    "lang": {
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "fr"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Code OTP envoyé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Un nouveau code de vérification a été envoyé à votre adresse e-mail"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Code OTP invalide ou expiré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Code de vérification invalide ou expiré"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "419": {
+                        "description": "Validation échouée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation échouée."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la connexion"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/restrictions": {
+            "get": {
+                "tags": [
+                    "Restrictions"
+                ],
+                "summary": "Récupérer la liste des restrictions",
+                "description": "Récupère une liste de toutes les restrictions enregistrées dans la base de données",
+                "operationId": "getAllRestrictions",
+                "responses": {
+                    "200": {
+                        "description": "La liste des restrictions récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la restriction",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom de la restriction",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/anatt-candidat/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Obtient la liste des candidats",
+                "description": "Obtient la liste des candidats enregistrés dans la base de données",
+                "operationId": "getCandidat",
+                "responses": {
+                    "200": {
+                        "description": "Liste des candidats",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID du candidats",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "npi": {
+                                                "description": "npi du candidat",
+                                                "type": "integer"
+                                            },
+                                            "has_dossier_permi": {
+                                                "description": "sil a deja un dossier candidat ",
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,29 @@
+.permis-box {
+  border-radius: 4px;
+  padding: 4px;
+  margin-right: 8px;
+  position: relative;
+  width: 100%;
+
+  .check-button {
+    position: absolute;
+    right: 0;
+  }
+}
+
+.permis-content {
+  background: rgba(49, 49, 49, 0.1);
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 45px;
+  text-align: center;
+  color: #313131;
+  text-transform: uppercase;
+  transition: all .4s ease;
+
+  &:hover,
+  &.active {
+    background-color: var(--bs-primary);
+    color: #fff;
+  }
+}

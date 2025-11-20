@@ -1,0 +1,40 @@
+.top-navbar {
+  .btn-outline-primary:hover {
+    color: white;
+  }
+}
+
+.input-group {
+
+  input,
+  .input-group-text {
+    background-color: #D9E3EC;
+    border: 0;
+
+  }
+}
+
+footer {
+  background-color: #757373;
+  color: #fff;
+
+  h5 {
+    font-size: 20px;
+  }
+
+
+  a,
+  .nav-item .nav-link {
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 400;
+  }
+
+  .footer-copyright {
+    background-color: #484848;
+
+    p {
+      font-size: 12px;
+    }
+  }
+}

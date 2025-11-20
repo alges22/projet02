@@ -1,0 +1,63 @@
+<nav class="navbar navbar-expand-md border-bottom pb-1 pt-3 bg-white">
+  <div class="container-fluid d-md-none">
+    <div class="row justify-content-between d-md-none align-items-center">
+      <div class="col-5">
+        <a href="" class="d-md-none">
+          <img src="assets/images/logo.png" alt="" class="img-fluid" />
+        </a>
+      </div>
+      <div class="col-4 text-center">
+        <a class="position-relative" href="">
+          <app-icon icon="bell"></app-icon>
+          <span
+            class="position-absolute start-100 translate-middle badge rounded-pill bg-primary"
+            >0
+          </span>
+        </a>
+      </div>
+      <div class="col-3 text-end">
+        <span role="button" class="text-muted" id="mobile-nav">
+          <app-icon icon="list"></app-icon>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item me-2">
+          <a class="nav-link position-relative" href="">
+            <app-icon icon="bell"></app-icon>
+            <span
+              class="position-absolute start-100 translate-middle p-1 badge rounded-pill bg-primary"
+              >0
+            </span>
+          </a>
+        </li>
+
+        <li class="nav-item dropdown" *ngIf="auth">
+          <div class="btn-group dropdown">
+            <a
+              href="#"
+              role="button"
+              class="nav-link"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{ auth.first_name }}
+              <app-icon icon="chevron-down"></app-icon>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" routerLink="/profiles"> Profil </a>
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/logout">Déconnexion</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

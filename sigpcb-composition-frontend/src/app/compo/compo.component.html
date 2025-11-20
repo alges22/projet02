@@ -1,0 +1,25 @@
+<app-compo-layout (onProfile)="setProfileData($event)">
+  <ng-container *ngIf="profileData">
+    <ng-container *ngIf="page">
+      <ng-container *ngIf="page === 'informations'">
+        <app-informations [profileData]="profileData"> </app-informations>
+      </ng-container>
+
+      <ng-container *ngIf="page === 'start-compo'">
+        <app-start-compo [profileData]="profileData"> </app-start-compo>
+      </ng-container>
+
+      <ng-container *ngIf="page === 'questions'">
+        <app-questions [profileData]="profileData"> </app-questions>
+      </ng-container>
+
+      <ng-container *ngIf="page === 'thanks'">
+        <app-thanks [profileData]="profileData"> </app-thanks>
+      </ng-container>
+
+      <ng-container *ngIf="page === 'results'">
+        <app-results [profileData]="profileData"> </app-results>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</app-compo-layout>

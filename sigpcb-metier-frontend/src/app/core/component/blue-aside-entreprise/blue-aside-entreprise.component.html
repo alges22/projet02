@@ -1,0 +1,43 @@
+<div class="blue-side-container">
+  <div class="row h-100 m-0">
+    <div class="col-md-5 d-none d-md-block bg-primary px-5 order-1 order-md-0">
+      <ng-content select="app-blue-aside-left"></ng-content>
+    </div>
+    <div class="col-md-7 scrollable-content">
+      <div class="d-flex flex-column h-100 justify-content-between">
+        <div class="row header justify-content-between align-items-center bg-light">
+          <div class="col-md-4 col-12">
+            <a href="entreprise/"><img src="assets/images/logo.png" alt="" class="img-fluid" /></a>
+          </div>
+          <div class="col-md-8 col-12 text-md-end mb-3 mb-md-0">
+            <div class="d-flex justify-content-end">
+              <a *ngIf="userConnected()" type="button" class="btn btn-outline-primary ms-3" (click)="goto('entreprise/suivre-demande')">
+                <span class="d-md-none">
+                  <app-icon icon="folder2-open"></app-icon>
+                </span>
+                <span class="d-md-inline">Suivre mes demandes</span>
+              </a>
+              <a *ngIf="userConnected()" class="btn btn-danger ms-3" (click)="goto('entreprise/logout')">
+                <span class="d-none d-md-inline">Déconnexion</span>
+                <span class="d-md-none">
+                  <app-icon icon="power"></app-icon>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="py-3">
+          <ng-content></ng-content>
+        </div>
+
+        <div class="row footer bg-light text-center py-2">
+          <h6>République du Bénin</h6>
+          <p>
+            Ministère du Cadre de Vie et des Transports Chargé du Développement Durable
+          </p>
+          <p>© Tous Droits Réservés 2023.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

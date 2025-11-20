@@ -1,0 +1,37 @@
+.hearder-rounded {
+  background-color: #fff;
+  border-radius: 16px;
+  width: 320px;
+  height: 90px;
+}
+
+.vh-100 {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../../../assets/images/plan.png);
+  //background: linear-gradient(0deg, rgba(0, 0, 0, 0.60) 0%, rgba(0, 0, 0, 0.60) 100%), url(../../../assets/images/plan.png), lightgray 50% / cover no-repeat;
+  background-position: center center, center center;
+  background-repeat: no-repeat, no-repeat;
+  background-size: cover, cover;
+
+}
+
+.text-shadow-1 {
+  text-shadow: 5px 4px 4px rgba(0, 0, 0, 0.65);
+  /* Title/24 */
+  font-family: Poppins;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.text-shadow-2 {
+  text-align: center;
+  text-shadow: 5px 4px 4px rgba(0, 0, 0, 0.65);
+
+  font-family: Poppins;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}

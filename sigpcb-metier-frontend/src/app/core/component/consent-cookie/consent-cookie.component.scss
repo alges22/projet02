@@ -1,0 +1,32 @@
+#cookie-consent {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: background-color 0.5s ease;
+  z-index: -1;
+}
+
+#cookie-consent.cookie-consent-visible {
+  z-index: 5000;
+  background-color: rgba(0, 0, 0, 0.142);
+}
+
+.cookie-content-body {
+  max-width: 600px;
+  margin: 50px 50px -999px 50px;
+
+  background-color: #FFF9EA;
+  font-size: 14px;
+  transition: margin-bottom 0.7s ease;
+}
+
+#cookie-consent.cookie-consent-visible .cookie-content-body {
+  margin-bottom: 30px;
+  ;
+}

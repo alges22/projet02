@@ -1,0 +1,34 @@
+<div
+  class="modal fade"
+  [id]="action"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="action-title"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+    role="document"
+    [ngClass]="size"
+    modal
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-tile" id="action-title">
+          <ng-content select="[heading]"></ng-content>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+</div>

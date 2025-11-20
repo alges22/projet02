@@ -1,0 +1,124 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      Suivi de demande examinateur
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-lg-9">
+    <ng-container>
+      <!--Chaque service-->
+      <ng-container *ngFor="let eservice of parcours; let i = index">
+
+        <!------------------- Recrutement ------------------->
+        <ng-container *ngIf="eservice.service == 'Examinateur'">
+          <!---------- Contenu principal ------------>
+          <div class="bg-white border rounded mb-2">
+            <!------- L'entête ------>
+            <ng-container *ngFor="let headParcours of latestParcours">
+              <div class="card-header p-2 rounded bg-light d-flex justify-content-between align-items-center"
+                *ngIf="headParcours.service == 'Examinateur'">
+                <div>
+                  <!-- Les titres-->
+                  <h6 class="text-primary">Examinateur</h6>
+
+                  <span class="text-muted small">{{
+                    headParcours.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                    }}</span>
+                </div>
+
+                <ng-container *ngIf="
+                        headParcours.slug == 'demande-examinateur-rejected' &&
+                        !!headParcours.model_info &&
+                        headParcours.model_info.date_correction == null
+                      ">
+                  <a [routerLink]="[
+                          '/devenir-examinateur/rejets',
+                          headParcours.model_info.id
+                        ]" type="button" class="btn btn-outline-primary ms-3">
+                    Corriger ma demande
+                  </a>
+                </ng-container>
+
+                <div class="d-flex justify-content-between align-items-center" role="button" (click)="openCard(i)">
+                  <ng-container *ngIf="headParcours.slug == 'demande-examinateur'">
+                    <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+                  </ng-container>
+                  <ng-container *ngIf="headParcours.slug == 'demande-examinateur-rejected'">
+                    <span [class]="'badge p-2 ' + 'bg-danger'"> Rejetée </span>
+                  </ng-container>
+
+                  <ng-container *ngIf="headParcours.slug == 'demande-examinateur-validate'">
+                    <span [class]="'badge p-2 ' + 'bg-success'"> Validée </span>
+                  </ng-container>
+                  <ng-container *ngIf="headParcours.slug == 'correction-demande'">
+                    <span [class]="'badge p-2 ' + 'bg-warning'"> En cours </span>
+                  </ng-container>
+                  <app-icon icon="chevron-right" *ngIf="cardOpendedIndex !== i" classe="fw-bolder ms-3"></app-icon>
+                  <app-icon icon="chevron-down" *ngIf="cardOpendedIndex === i" classe="fw-bolder ms-3"></app-icon>
+                </div>
+              </div>
+            </ng-container>
+            <!----- Fin L'entête ----->
+
+            <ng-container *ngIf="cardOpendedIndex === i">
+              <div class="m-3 small text-small" *ngFor="let item of eservice.liste; let authIndex = index">
+                <div class="card-body">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" checked />
+                    <label class="form-check-label text-primary fw-semibold">
+                      <ng-container *ngIf="item.slug == 'demande-examinateur'">
+                        Demande de devenir examinateur
+                      </ng-container>
+                      <ng-container *ngIf="item.slug == 'demande-examinateur-rejected'">
+                        Demande de devenir examinateur rejetée
+                      </ng-container>
+
+                      <ng-container *ngIf="item.slug == 'demande-examinateur-validate'">
+                        Demande de devenir examinateur validée
+                      </ng-container>
+                      <ng-container *ngIf="item.slug == 'correction-demande'">
+                        Correction soumise avec succès
+                      </ng-container>
+                    </label>
+                    <br />
+                    <small class="text-muted small">{{
+                      item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                      }}</small>
+                  </div>
+                  <!--Le contenu principal-->
+                  <div class="bg-light p-3 rounded col-sm-11 ms-auto mb-3">
+                    <div [innerHTML]="item.message"></div>
+                    <div class="mt-2">
+                      <ng-container *ngIf="
+                              item.slug == 'demande-examinateur-rejected' &&
+                              item.model_info &&
+                              item.model_info.date_correction == null
+                            ">
+                        <a type="button" [routerLink]="[
+                                '/devenir-examinateur/rejets',
+                                item.model_info.id
+                              ]" class="btn btn-primary ms-3">Corriger la demande
+                        </a>
+                      </ng-container>
+                    </div>
+                    <div class="mt-2">
+                      <small class="text-muted small">{{
+                        item.created_at | date : "dd MMMM yyyy" : "" : "fr"
+                        }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <!--------  Fin ----------->
+        </ng-container>
+        <!------------------- Fin Recrutement ------------------->
+      </ng-container>
+    </ng-container>
+
+  </app-blue-aside-right>
+</app-blue-aside>

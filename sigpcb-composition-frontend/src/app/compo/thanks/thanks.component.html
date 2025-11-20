@@ -1,0 +1,71 @@
+<div class="container py-5" *ngIf="data">
+  <ng-container *ngIf="profileData">
+    <div class="row pt-3">
+      <div class="col-9 col-md-6 mx-auto text-center py-2" *ngIf="data.success">
+        <h2 class="text-success text-center">Félicitations !</h2>
+        <h6 class="text-primary">Vous avez réussi.</h6>
+        <h6 class="text-primary my-3 fw-normal">VOTRE NOTE</h6>
+
+        <h2 class="fs-1 text-success py-3">
+          {{ data.correct_count | padding : 2 }} /
+          {{ data.count | padding : 2 }}
+        </h2>
+        <div class="col-sm-9">
+          <img src="assets/images/thanks-success.png" />
+          <p class="fw-semibold text-primary mt-4">
+            Bonne chance pour l’épreuve de conduite.
+          </p>
+          <p>Date de la conduite : {{ profileData.examen.date_de_conduite }}</p>
+        </div>
+      </div>
+
+      <div
+        class="col-9 col-md-6 mx-auto text-center py-3"
+        *ngIf="!data.success"
+      >
+        <h2 class="text-danger mb-4">Recalé !</h2>
+        <h6 class="text-primary my-3 fw-normal pt-3">VOTRE NOTE</h6>
+
+        <h2 class="fs-1 text-danger">
+          {{ data.correct_count | padding : 2 }} /
+          {{ data.count | padding : 2 }}
+        </h2>
+        <div class="col-sm-9">
+          <img src="assets/images/thanks-danger.png" />
+          <p class="fw-semibold text-primary py-2 mt-4">
+            Pas d’inquiétude, préparez-vous pour une autre session d’examen du
+            permis de conduire.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <button
+          class="d-flex justify-content-between btn btn-primary w-100"
+          (click)="onPress()"
+        >
+          Voir le corrigé
+
+          <app-icon icon="arrow-right"></app-icon>
+        </button>
+      </div></div
+  ></ng-container>
+</div>
+<ng-container *ngIf="!data">
+  <div
+    class="position-absolute d-flex flex-column justify-content-center align-items-center top-0 left-0 right-0 bottom-0"
+  >
+    <div
+      class="alert col-10 col-md-7 mx-auto text-center alert-primary py-5"
+      role="alert"
+    >
+      <h3 class="text-primary">En attente des résultats...</h3>
+      <p style="font-size: 16px" class="mt-3">
+        Veuillez patienter, les résultats seront disponibles quand tous les
+        candidats auront fini de composer.
+      </p>
+    </div>
+  </div>
+</ng-container>
+
+<app-bottom-bar></app-bottom-bar>

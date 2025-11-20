@@ -1,0 +1,134 @@
+<div *ngIf="data && candidat">
+  <div class="row align-items-center justify-content-center">
+    <div class="col-sm-8">
+      <h6 class="fw-semibold">{{ candidat.nom }} {{ candidat.prenoms }}</h6>
+      <div class="small text-muted mt-1">
+        <app-icon icon="calendar" [size]="14"></app-icon>
+        <span>{{ "2023-04-27T18:59:09.000000Z" | tdate }}</span>
+        <span class="ms-4">Permis : {{ data.categorie_permis.name }}</span>
+      </div>
+    </div>
+    <div class="col-sm-4 text-end">
+      <span *ngIf="fiche">
+        <button
+          class="btn rounded-1 ms-1"
+          [class.btn-outline-dark]="!openFiche"
+          [class.btn-secondary]="openFiche"
+          (click)="toggleFiche()"
+        >
+          <app-icon [icon]="!openFiche ? 'pen' : 'x'"></app-icon>
+        </button>
+      </span>
+      <button
+        class="btn btn-outline-dark rounded-1 ms-1"
+        [class.btn-outline-dark]="!openDetails"
+        [class.btn-secondary]="openDetails"
+        (click)="toggleDetails()"
+      >
+        <app-icon [icon]="!openDetails ? 'plus' : 'x'"></app-icon>
+      </button>
+    </div>
+  </div>
+  <div class="border border-secondary p-3 rounded-1 mt-2" *ngIf="openFiche">
+    <h6 class="mb-2 d-flex justify-content-between align-items-center">
+      <span class="fw-semibold">Télécharger la fiche du candidat</span>
+      <button class="btn btn-secondary rounded-1 ms-1">
+        <app-icon icon="download"></app-icon>
+      </button>
+    </h6>
+    <span class="text-secondary fw-semibold"> Parcours du candidat </span>
+    <ul class="list-group" *ngIf="chapites.length">
+      <li
+        class="list-group-item px-0 bg-transparent border-top-0 rounded-0"
+        *ngFor="let chapitre of chapites"
+      >
+        <span class="fw-semibold">Chapitres</span>:
+        <span class="text-uppercase">{{ chapitre.name }}</span>
+      </li>
+    </ul>
+    <div *ngIf="!chapites.length">Aucun chapire ou une erreur est survenue</div>
+  </div>
+  <div class="border border-secondary p-3 rounded-1 mt-2" *ngIf="openDetails">
+    <div>
+      <h6 class="mb-2 text-secondary">Informations personnelles</h6>
+      <div class="row mb-2">
+        <div class="col-sm-3">
+          <span class="fw-semibold">NPI</span>
+        </div>
+        <div class="col-sm-5">{{ candidat.npi }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3">
+          <span class="fw-semibold">Nom</span>
+        </div>
+        <div class="col-sm-5">{{ candidat.nom }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3">
+          <span class="fw-semibold">Prénoms</span>
+        </div>
+        <div class="col-sm-5">{{ candidat.prenoms }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3">
+          <span class="fw-semibold">Date de naissance</span>
+        </div>
+        <div class="col-sm-5">
+          {{ candidat.date_de_naissance | date : "dd-MM-YYYY" }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3">
+          <span class="fw-semibold">Sexe</span>
+        </div>
+        <div class="col-sm-5">{{ candidat.sexe }}</div>
+      </div>
+
+      <div *ngIf="restriction">
+        <h6 class="mt-3 mb-2 text-secondary">Informations médicales</h6>
+        <div class="row mb-2" ngi>
+          <div class="col-sm-3">
+            <span class="fw-semibold">Restriction médicales</span>
+          </div>
+          <div class="col-sm-5">{{ restriction.name }}</div>
+        </div>
+      </div>
+
+      <h6 class="mt-3 mb-2 text-secondary">Informations sur le permis</h6>
+      <div class="row mb-2">
+        <div class="col-sm-3">
+          <span class="fw-semibold">Catégorie de permis</span>
+        </div>
+        <div class="col-sm-5">Permis {{ data.categorie_permis.name }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3">
+          <span class="fw-semibold">Langue de composition</span>
+        </div>
+        <div class="col-sm-5">{{ data.langue.name }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3">
+          <span class="fw-semibold">Parcours</span>
+        </div>
+        <div class="col-sm-5">Code & Conduite</div>
+      </div>
+
+      <div class="row mb-2" *ngIf="false">
+        <div class="col-sm-3">
+          <span class="fw-semibold">Résultats</span>
+        </div>
+        <div class="col-sm-5">
+          Présenté à la session de juin 2022 par l'auto-école
+          <b>Le carrefour</b> au parcous code et conduite.
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3">
+          <span class="fw-semibold">Status</span>
+        </div>
+        <div class="col-sm-5 text-capitalize">{{ parcours_state }}</div>
+      </div>
+    </div>
+  </div>
+</div>

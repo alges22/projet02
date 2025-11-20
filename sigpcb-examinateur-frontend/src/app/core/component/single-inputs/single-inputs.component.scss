@@ -1,0 +1,39 @@
+.single-inputs {
+  display: flex;
+  gap: 5px;
+}
+
+@media (min-width: 768px) {
+  .single-inputs {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+input {
+  border: 2px solid rgba(49, 49, 49, 0.4);
+  border-radius: 8px;
+  outline: none;
+  text-align: center;
+  color: rgba(49, 49, 49, 0.4);
+
+  &:focus {
+    border: 2px solid rgba(49, 49, 49, 0.4);
+    border-radius: 8px;
+  }
+
+  &.is-invalid {
+    border: 1px solid var(--bs-danger);
+  }
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+}
+
+input[type=number] {
+  appearance: textfield;
+}

@@ -1,0 +1,133 @@
+<ng-container *ngFor="let item of epreuves; let i = index">
+  <ng-container *ngIf="!item.noted">
+    <div class="bg-light p-2 border-bottom">
+      <div class="row align-items-center">
+        <div class="col-11" (click)="openAnnotation(item, i + 1)" role="button">
+          <div class="d-flex">
+            <div class="ms-3">
+              <h6
+                class="text-muted my-2"
+                [class.fw-bolder]="epreuve === item"
+                [class.text-muted]="epreuve !== item"
+              >
+                {{ item.name }}
+                <span [style]="{ 'font-size': '16px' }"
+                  >(noté sur <b>{{ item.poids }}</b> )</span
+                >
+              </h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-1" *ngIf="epreuve !== item">
+          <button
+            class="btn btn-primary btn-icons border-0"
+            (click)="openAnnotation(item, i + 1)"
+          >
+            <app-icon icon="plus" classe="fw-bolder" [size]="24" />
+          </button>
+        </div>
+        <ng-container *ngIf="epreuve">
+          <ng-container *ngIf="epreuve.id == item.id">
+            <div class="col-12" *ngIf="item.sub_baremes.length">
+              <ng-container *ngIf="touched && noteParBareme != -1">
+                <div class="text-center">
+                  <h6 class="mb-2">
+                    <span class="text-primary"
+                      ><app-icon icon="stars"></app-icon> Note</span
+                    >
+                  </h6>
+                  <span
+                    class="border bgt-1 border-success p-2 fw-bold fs-5 rounded-3 d-inline-block"
+                  >
+                    {{ noteParBareme }} / {{ epreuve.poids }}
+                  </span>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!(touched && noteParBareme != -1)">
+                <div class="text-center">
+                  <h6 class="mb-2">
+                    <span class="text-primary"
+                      ><app-icon icon="stars"></app-icon> Note</span
+                    >
+                  </h6>
+                  <span
+                    [style]="{ 'font-size': '16px' }"
+                    class="border bgt-1 border-success p-2 fw-bold rounded-3 d-inline-block"
+                  >
+                    En attente ...
+                  </span>
+                </div>
+              </ng-container>
+              <div class="list-group mt-2 p-2">
+                <ng-container *ngFor="let sub of item.sub_baremes">
+                  <label
+                    class="list-group-item d-flex justify-content-between align-items-center"
+                    [class.text-danger]="sub.eliminatoire"
+                    [class.text-success]="subBaremeSelected.includes(sub)"
+                  >
+                    <span class="fw-semibold fs-6">
+                      <app-icon
+                        [icon]="
+                          sub.eliminatoire ? 'exclamation-triangle' : 'dot'
+                        "
+                      ></app-icon>
+                      {{ sub.name }}</span
+                    >
+                    <input
+                      class="form-check-input ms-1"
+                      (change)="onSelectSubBareme(sub)"
+                      type="checkbox"
+                      [checked]="subBaremeSelected.includes(sub)"
+                    />
+                  </label>
+                </ng-container>
+              </div>
+
+              <div class="mx-2">
+                <button
+                  class="btn btn-sm btn-primary fw-normal"
+                  (click)="validate()"
+                  [disabled]="onPosting"
+                >
+                  Enregistrer
+                </button>
+                <!--<ng-container *ngIf="onPosting">
+                  <div class="alert alert-warning mt-3" role="alert">
+                    <div class="mb-2">
+                      Cette action est irréversible, voulez-vous vraiment noter
+                      ?
+                      <p class="fw-bold mt-2">
+                        Nombre de Réponse: ({{ subBaremeSelected.length }})
+                      </p>
+                    </div>
+
+                    <button
+                      class="btn btn-sm btn-primary fw-normal"
+                      (click)="validate()"
+                    >
+                      Oui
+                    </button>
+
+                    <button
+                      class="btn btn-sm btn-danger fw-normal ms-2"
+                      (click)="onPosting = false"
+                    >
+                      Non
+                    </button>
+                  </div>
+                </ng-container>-->
+              </div>
+            </div>
+            <ng-container *ngIf="!item.sub_baremes.length">
+              <div class="col-12">
+                <div class="bg-white rounded-3 p-3 text-center">
+                  Aucun barème
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

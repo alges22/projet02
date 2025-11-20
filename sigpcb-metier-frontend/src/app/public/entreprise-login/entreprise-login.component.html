@@ -1,0 +1,99 @@
+<app-blue-aside>
+  <app-blue-aside-left>
+    <div class="col-md-8">
+      <img src="assets/images/login-left.png" alt="" class="img-fluid" />
+    </div>
+    <div class="login-desc h4 text-center my-3">
+      Votre espace de gestion de recrutement de conducteurs
+    </div>
+  </app-blue-aside-left>
+  <app-blue-aside-right col="col-lg-9">
+    <!--Login-->
+    <div class="d-flex flex-column justify-content-between my-5" *ngIf="page === 'login'">
+      <h3 class="title mb-4">{{'Authentification' | translate}}</h3>
+      <form quickv id="login">
+        <div class="mb-3">
+          <label for="" class="mb-1 d-block">
+            <div class="row justify-content-between">
+              <div class="col-6 required">E-mail</div>
+              <div class="col-6 text-end">
+                <span info="Renseignez-votre adresse  email de connexion">
+                  <app-icon icon="info" [size]="16"></app-icon>
+                </span>
+              </div>
+            </div>
+          </label>
+          <div class="input-grouped">
+            <input qv-rules="required|email|maxlength:100" [qv-messages]="emailErrors" required type="email" name="email"
+              placeholder="Tapez votre adresse e-mail" class="form-control" [(ngModel)]="form.email" />
+          </div>
+          <div qv-feedback="email"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="" class="mb-1 required">Mot de passe</label>
+          <div class="input-grouped bg-body">
+            <input qv-rules="required|minlength:8|maxlength:32" [type]="!hidepassword ? 'text' : 'password'" name="password"
+              placeholder="Tapez votre mot de passe" class="form-control" required [minLength]="8"
+              [(ngModel)]="form.password" />
+            <span (click)="togglePassword()" *ngIf="hidepassword"><app-icon icon="eye"></app-icon></span>
+            <span *ngIf="!hidepassword" (click)="togglePassword()">
+              <app-icon icon="eye-slash"></app-icon>
+            </span>
+          </div>
+        </div>
+
+        <p class="my-4">
+          <button type="button" class="btn btn-primary rounded w-100" qv-submit (click)="onSubmit($event)" type="button"
+            [disabled]="isloading">
+            <span *ngIf="isloading">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span class="visually-hidden">Loading...</span>
+            </span>
+            Se connecter
+          </button>
+        </p>
+        <p class="text-center mb-3">
+          <a routerLink="/forgot-password">Mot de passe oublié ?</a>
+        </p>
+      </form>
+    </div>
+
+    <!--Otp code-->
+    <div class="d-flex flex-column justify-content-between my-5 px-5" *ngIf="page === 'otp'">
+      <form quickv id="forgot-password">
+        <h4 class="text-center my-3">Code de confirmation</h4>
+        <p>
+          Un code de connexion vous a été envoyé par e-mail. <br />
+          Si vous ne trouvez pas l'e-mail dans votre boîte de réception,
+          veuillez vérifier vos spams ou patienter quelques minutes pour le
+          recevoir.
+        </p>
+        <p class="mt-3">
+          Si vous n'avez pas reçu de code après quelques minutes, cliquez
+          sur le bouton
+          <span class="text-dark">Renvoyer le code</span>
+          ci-dessous pour en demander un nouveau.
+        </p>
+        <div class="mb-3">
+          <input type="text" qv-rules="required|integer|len:6"
+            qv-messages="Le code est requis | Veuillez saisir le code à 6 chiffres|Le code doit contenir 6 chiffres exactement"
+            class="form-control" id="otp-code" name="code" placeholder="Entrez le code" [(ngModel)]="code"
+            autocomplete="off" />
+        </div>
+        <div qv-feedback="code" class="my-3"></div>
+        <button (click)="connect($event)" type="submit" qv-submit class="btn btn-primary btn-lg" [disabled]="isloading">
+          Valider
+        </button>
+        <button type="button" class="btn ms-2" [disabled]="isloading" (click)="resendCode()">
+          Renvoyer le code
+        </button>
+        <br />
+        <span *ngIf="isloading">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </form>
+    </div>
+  </app-blue-aside-right>
+</app-blue-aside>

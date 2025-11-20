@@ -1,0 +1,34 @@
+.form-check-input {
+  width: 1.3em !important;
+  height: 1.3em !important;
+  border-radius: 5px;
+  border-color: #00b953;
+  box-shadow: 0 2px 5px #00c2571e;
+
+  &:checked {
+    background-color: #00b953;
+    border-color: #00b953;
+  }
+}
+
+h6 {
+  font-size: 22px;
+}
+
+.btn-icons {
+  width: 1.5em !important;
+  height: 1.5em !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+}
+
+.form-check-label,
+.text-small {
+  font-size: 24px;
+}
+
+.bgt-1 {
+  background-color: #00b95325;
+}
