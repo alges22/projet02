@@ -24,6 +24,7 @@
         <th scope="col">Nom de l'auto-école</th>
         <th scope="col">Promoteur</th>
         <th scope="col">Emplacement</th>
+        <th scope="col">Motif du rejet</th>
         <th></th>
       </tr>
     </thead>
@@ -47,6 +48,10 @@
         <td>{{ item?.promoteur_info.nom }} {{ item?.promoteur_info.prenoms }}</td>
         <td>
           {{ item?.ilot }} {{ item?.quartier }} {{ item?.commune.name }}
+        </td>
+        <td>
+          <small class="text-danger" *ngIf="item?.rejet?.motif">{{ item?.rejet?.motif | slice:0:100 }}{{ item?.rejet?.motif?.length > 100 ? '...' : '' }}</small>
+          <small class="text-muted" *ngIf="!item?.rejet?.motif">-</small>
         </td>
         <td>
           <button class="btn" (click)="showDossier(i)" [class.btn-primary]="dossierIndex !== i"

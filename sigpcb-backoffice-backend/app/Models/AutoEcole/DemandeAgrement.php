@@ -41,6 +41,11 @@ class DemandeAgrement extends Model
         return $this->belongsTo(Commune::class,);
     }
 
+    public function rejet()
+    {
+        return $this->hasOne(DemandeAgrementRejet::class, 'demande_agrement_id');
+    }
+
     protected function vehicules(): Attribute
     {
         $get = function ($vehicule) {

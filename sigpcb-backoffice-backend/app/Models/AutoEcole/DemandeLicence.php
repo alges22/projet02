@@ -38,6 +38,11 @@ class DemandeLicence extends Model
         return $this->belongsTo(Promoteur::class, 'promoteur_id');
     }
 
+    public function rejet()
+    {
+        return $this->hasOne(DemandeLicenceRejet::class, 'demande_licence_id');
+    }
+
     /**
      * Renverra les véhicules sous forme  tableau
      * Enregistre les véhicules comme json

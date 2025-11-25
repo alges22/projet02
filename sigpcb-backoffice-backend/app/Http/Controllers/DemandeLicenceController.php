@@ -44,7 +44,7 @@ class DemandeLicenceController extends ApiController
     {
         $this->hasAnyPermission(["all", "read-licences-management","edit-licences-management"]);
 
-        $query = DemandeLicence::with(['autoecole', 'fiche', 'autoecole.commune', 'autoecole.departement']);
+        $query = DemandeLicence::with(['autoecole', 'fiche', 'autoecole.commune', 'autoecole.departement', 'rejet']);
         // Appliquer les filtres
         $query->orderByDesc('id');
         $query = $this->applyFilters($query);

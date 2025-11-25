@@ -57,7 +57,7 @@ class DemandeAgrementController extends ApiController
     {
         $this->hasAnyPermission(["all", "read-agreement-managemen","edit-agreement-management"]);
 
-        $query = DemandeAgrement::with(['promoteur', 'departement', 'commune', 'fiche']);
+        $query = DemandeAgrement::with(['promoteur', 'departement', 'commune', 'fiche', 'rejet']);
         // Appliquer les filtres
         $query->orderByDesc('id');
         $query = $this->applyFilters($query);
