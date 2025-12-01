@@ -1,0 +1,585 @@
+================================================================================
+SIGPCB - MESURES DAX POUR POWER BI
+================================================================================
+Ces mesures DAX doivent être créées dans Power BI Desktop pour calculer
+les métriques du tableau de bord de manière dynamique.
+================================================================================
+
+================================================================================
+SECTION 1: MESURES PRINCIPALES - COMPTEURS
+================================================================================
+
+-- ----------------------------------------------------------------------------
+-- 1.1 Total Candidats
+-- ----------------------------------------------------------------------------
+Total Candidats =
+COUNTROWS(Fait_DossiersSessions)
+
+-- ----------------------------------------------------------------------------
+-- 1.2 Total Inscrits Code
+-- ----------------------------------------------------------------------------
+Total Inscrits Code =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[type_examen] = "code-conduite"
+)
+
+-- ----------------------------------------------------------------------------
+-- 1.3 Total Reconduits
+-- ----------------------------------------------------------------------------
+Total Reconduits =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[type_examen] = "conduite"
+)
+
+-- ----------------------------------------------------------------------------
+-- 1.4 Total Admis Code
+-- ----------------------------------------------------------------------------
+Total Admis Code =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[resultat_code] = "success"
+)
+
+-- ----------------------------------------------------------------------------
+-- 1.5 Total Recalés Code
+-- ----------------------------------------------------------------------------
+Total Recalés Code =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[resultat_code] = "failed"
+)
+
+-- ----------------------------------------------------------------------------
+-- 1.6 Total Absents Code
+-- ----------------------------------------------------------------------------
+Total Absents Code =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[presence] = "abscent"
+)
+
+-- ----------------------------------------------------------------------------
+-- 1.7 Total Présents Code
+-- ----------------------------------------------------------------------------
+Total Présents Code =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[presence] = "present"
+)
+
+-- ----------------------------------------------------------------------------
+-- 1.8 Total Admis Conduite
+-- ----------------------------------------------------------------------------
+Total Admis Conduite =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[resultat_conduite] = "success"
+)
+
+-- ----------------------------------------------------------------------------
+-- 1.9 Total Recalés Conduite
+-- ----------------------------------------------------------------------------
+Total Recalés Conduite =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[resultat_conduite] = "failed"
+)
+
+-- ----------------------------------------------------------------------------
+-- 1.10 Total Admis Définitifs
+-- ----------------------------------------------------------------------------
+Total Admis Définitifs =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[resultat_code] = "success",
+    Fait_DossiersSessions[resultat_conduite] = "success"
+)
+
+================================================================================
+SECTION 2: MESURES DE TAUX ET POURCENTAGES
+================================================================================
+
+-- ----------------------------------------------------------------------------
+-- 2.1 Taux de Réussite Code
+-- ----------------------------------------------------------------------------
+Taux Réussite Code =
+DIVIDE(
+    [Total Admis Code],
+    [Total Présents Code],
+    0
+)
+
+-- Format: Clic droit > Format > Pourcentage
+
+-- ----------------------------------------------------------------------------
+-- 2.2 Taux de Réussite Conduite
+-- ----------------------------------------------------------------------------
+Taux Réussite Conduite =
+DIVIDE(
+    [Total Admis Conduite],
+    CALCULATE(
+        COUNTROWS(Fait_DossiersSessions),
+        Fait_DossiersSessions[presence_conduite] = "present"
+    ),
+    0
+)
+
+-- ----------------------------------------------------------------------------
+-- 2.3 Taux de Réussite Global (Admis Définitifs)
+-- ----------------------------------------------------------------------------
+Taux Réussite Global =
+DIVIDE(
+    [Total Admis Définitifs],
+    [Total Candidats],
+    0
+)
+
+-- ----------------------------------------------------------------------------
+-- 2.4 Taux de Présence Code
+-- ----------------------------------------------------------------------------
+Taux Présence Code =
+DIVIDE(
+    [Total Présents Code],
+    [Total Inscrits Code],
+    0
+)
+
+-- ----------------------------------------------------------------------------
+-- 2.5 Taux de Présence Conduite
+-- ----------------------------------------------------------------------------
+Taux Présence Conduite =
+DIVIDE(
+    CALCULATE(
+        COUNTROWS(Fait_DossiersSessions),
+        Fait_DossiersSessions[presence_conduite] = "present"
+    ),
+    CALCULATE(
+        COUNTROWS(Fait_DossiersSessions),
+        Fait_DossiersSessions[resultat_code] = "success"
+    ),
+    0
+)
+
+-- ----------------------------------------------------------------------------
+-- 2.6 Taux d'Abandon
+-- ----------------------------------------------------------------------------
+Taux Abandon =
+DIVIDE(
+    CALCULATE(
+        COUNTROWS(Fait_DossiersSessions),
+        Fait_DossiersSessions[abandoned] = TRUE
+    ),
+    COUNTROWS(Fait_DossiersSessions),
+    0
+)
+
+================================================================================
+SECTION 3: MESURES COMPARATIVES (ANNÉE N vs N-1)
+================================================================================
+
+-- ----------------------------------------------------------------------------
+-- 3.1 Total Candidats Année Précédente
+-- ----------------------------------------------------------------------------
+Total Candidats N-1 =
+CALCULATE(
+    [Total Candidats],
+    DATEADD(Dim_Calendrier[date], -1, YEAR)
+)
+
+-- ----------------------------------------------------------------------------
+-- 3.2 Variation Candidats (%)
+-- ----------------------------------------------------------------------------
+Variation Candidats % =
+DIVIDE(
+    [Total Candidats] - [Total Candidats N-1],
+    [Total Candidats N-1],
+    0
+)
+
+-- ----------------------------------------------------------------------------
+-- 3.3 Taux Réussite Année Précédente
+-- ----------------------------------------------------------------------------
+Taux Réussite Global N-1 =
+CALCULATE(
+    [Taux Réussite Global],
+    DATEADD(Dim_Calendrier[date], -1, YEAR)
+)
+
+-- ----------------------------------------------------------------------------
+-- 3.4 Variation Taux de Réussite (points)
+-- ----------------------------------------------------------------------------
+Variation Taux Réussite =
+[Taux Réussite Global] - [Taux Réussite Global N-1]
+
+================================================================================
+SECTION 4: MESURES POUR RAPPORT SYNTHÉTIQUE
+================================================================================
+
+-- ----------------------------------------------------------------------------
+-- 4.1 Catégorie 1 - Inscrits au Code
+-- ----------------------------------------------------------------------------
+RS_01_Inscrits Code =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[type_examen] = "code-conduite"
+)
+
+-- Pourcentage
+RS_01_Inscrits Code % =
+DIVIDE([RS_01_Inscrits Code], [Total Candidats], 0)
+
+-- ----------------------------------------------------------------------------
+-- 4.2 Catégorie 2 - Absents au Code
+-- ----------------------------------------------------------------------------
+RS_02_Absents Code =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[type_examen] = "code-conduite",
+    Fait_DossiersSessions[presence] = "abscent"
+)
+
+RS_02_Absents Code % =
+DIVIDE([RS_02_Absents Code], [Total Candidats], 0)
+
+-- ----------------------------------------------------------------------------
+-- 4.3 Catégorie 3 - Présents au Code
+-- ----------------------------------------------------------------------------
+RS_03_Présents Code = [Total Présents Code]
+
+RS_03_Présents Code % =
+DIVIDE([RS_03_Présents Code], [Total Candidats], 0)
+
+-- ----------------------------------------------------------------------------
+-- 4.4 Catégorie 4 - Échoués au Code
+-- ----------------------------------------------------------------------------
+RS_04_Échoués Code = [Total Recalés Code]
+
+RS_04_Échoués Code % =
+DIVIDE([RS_04_Échoués Code], [Total Candidats], 0)
+
+-- ----------------------------------------------------------------------------
+-- 4.5 Catégorie 5 - Admis au Code
+-- ----------------------------------------------------------------------------
+RS_05_Admis Code = [Total Admis Code]
+
+RS_05_Admis Code % =
+DIVIDE([RS_05_Admis Code], [Total Candidats], 0)
+
+-- ----------------------------------------------------------------------------
+-- 4.6 Catégorie 6 - Reconduits
+-- ----------------------------------------------------------------------------
+RS_06_Reconduits = [Total Reconduits]
+
+RS_06_Reconduits % =
+DIVIDE([RS_06_Reconduits], [Total Candidats], 0)
+
+-- ----------------------------------------------------------------------------
+-- 4.7 Catégorie 7 - Absents Conduite
+-- ----------------------------------------------------------------------------
+RS_07_Absents Conduite =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[resultat_conduite] = "failed",
+    Fait_DossiersSessions[presence_conduite] IN {"absent", "abscent"}
+)
+
+RS_07_Absents Conduite % =
+DIVIDE([RS_07_Absents Conduite], [Total Candidats], 0)
+
+-- ----------------------------------------------------------------------------
+-- 4.8 Catégorie 8 - Présents Conduite
+-- ----------------------------------------------------------------------------
+RS_08_Présents Conduite =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[presence_conduite] = "present"
+)
+
+RS_08_Présents Conduite % =
+DIVIDE([RS_08_Présents Conduite], [Total Candidats], 0)
+
+-- ----------------------------------------------------------------------------
+-- 4.9 Catégorie 9 - Échoués Conduite
+-- ----------------------------------------------------------------------------
+RS_09_Échoués Conduite =
+CALCULATE(
+    COUNTROWS(Fait_DossiersSessions),
+    Fait_DossiersSessions[resultat_conduite] = "failed",
+    Fait_DossiersSessions[resultat_code] = "success"
+)
+
+RS_09_Échoués Conduite % =
+DIVIDE([RS_09_Échoués Conduite], [Total Candidats], 0)
+
+-- ----------------------------------------------------------------------------
+-- 4.10 Catégorie 10 - Admis Définitifs
+-- ----------------------------------------------------------------------------
+RS_10_Admis Définitifs = [Total Admis Définitifs]
+
+RS_10_Admis Définitifs % =
+DIVIDE([RS_10_Admis Définitifs], [Total Candidats], 0)
+
+================================================================================
+SECTION 5: MESURES POUR GRAPHIQUES
+================================================================================
+
+-- ----------------------------------------------------------------------------
+-- 5.1 Taux de Réussite par Catégorie (pour graphique)
+-- ----------------------------------------------------------------------------
+Taux Réussite par Catégorie =
+DIVIDE(
+    CALCULATE(
+        COUNTROWS(Fait_DossiersSessions),
+        Fait_DossiersSessions[resultat_conduite] = "success"
+    ),
+    COUNTROWS(Fait_DossiersSessions),
+    0
+)
+
+-- ----------------------------------------------------------------------------
+-- 5.2 Couleur Conditionnelle (Taux de Réussite)
+-- ----------------------------------------------------------------------------
+-- Cette mesure peut être utilisée pour la mise en forme conditionnelle
+Couleur Taux Réussite =
+SWITCH(
+    TRUE(),
+    [Taux Réussite Global] >= 0.70, "#28a745", -- Vert (Bon)
+    [Taux Réussite Global] >= 0.50, "#ffc107", -- Orange (Moyen)
+    "#dc3545" -- Rouge (Faible)
+)
+
+-- ----------------------------------------------------------------------------
+-- 5.3 Évolution Mensuelle
+-- ----------------------------------------------------------------------------
+Évolution Mensuelle =
+VAR CurrentMonth = [Total Candidats]
+VAR PreviousMonth =
+    CALCULATE(
+        [Total Candidats],
+        DATEADD(Dim_Calendrier[date], -1, MONTH)
+    )
+RETURN
+    CurrentMonth - PreviousMonth
+
+-- ----------------------------------------------------------------------------
+-- 5.4 Tendance (Icône)
+-- ----------------------------------------------------------------------------
+Tendance Icône =
+IF(
+    [Évolution Mensuelle] > 0, "▲",
+    IF([Évolution Mensuelle] < 0, "▼", "●")
+)
+
+================================================================================
+SECTION 6: MESURES POUR ANALYSES AVANCÉES
+================================================================================
+
+-- ----------------------------------------------------------------------------
+-- 6.1 Moyenne Mobile (3 mois)
+-- ----------------------------------------------------------------------------
+Moyenne Mobile 3 Mois =
+AVERAGEX(
+    DATESINPERIOD(
+        Dim_Calendrier[date],
+        LASTDATE(Dim_Calendrier[date]),
+        -3,
+        MONTH
+    ),
+    [Total Candidats]
+)
+
+-- ----------------------------------------------------------------------------
+-- 6.2 Classement Auto-École
+-- ----------------------------------------------------------------------------
+Rang Auto-École =
+RANKX(
+    ALL(Dim_AutoEcoles[auto_ecole_name]),
+    [Taux Réussite Global],
+    ,
+    DESC,
+    DENSE
+)
+
+-- ----------------------------------------------------------------------------
+-- 6.3 Top 10 Auto-Écoles
+-- ----------------------------------------------------------------------------
+Top 10 Auto-Écoles =
+IF(
+    [Rang Auto-École] <= 10,
+    [Taux Réussite Global],
+    BLANK()
+)
+
+-- ----------------------------------------------------------------------------
+-- 6.4 Performance par Rapport à la Moyenne
+-- ----------------------------------------------------------------------------
+Performance vs Moyenne =
+VAR MoyenneGlobale =
+    CALCULATE(
+        [Taux Réussite Global],
+        ALL(Fait_DossiersSessions)
+    )
+RETURN
+    [Taux Réussite Global] - MoyenneGlobale
+
+-- ----------------------------------------------------------------------------
+-- 6.5 Part de Marché Auto-École (%)
+-- ----------------------------------------------------------------------------
+Part de Marché % =
+DIVIDE(
+    [Total Candidats],
+    CALCULATE(
+        [Total Candidats],
+        ALL(Dim_AutoEcoles)
+    ),
+    0
+)
+
+================================================================================
+SECTION 7: INDICATEURS CLÉS (KPI)
+================================================================================
+
+-- ----------------------------------------------------------------------------
+-- 7.1 Objectif Taux de Réussite (à définir selon vos objectifs)
+-- ----------------------------------------------------------------------------
+Objectif Taux Réussite = 0.70  -- 70%
+
+-- ----------------------------------------------------------------------------
+-- 7.2 Écart vs Objectif
+-- ----------------------------------------------------------------------------
+Écart vs Objectif =
+[Taux Réussite Global] - [Objectif Taux Réussite]
+
+-- ----------------------------------------------------------------------------
+-- 7.3 Statut Objectif
+-- ----------------------------------------------------------------------------
+Statut Objectif =
+SWITCH(
+    TRUE(),
+    [Taux Réussite Global] >= [Objectif Taux Réussite], "✓ Atteint",
+    [Taux Réussite Global] >= [Objectif Taux Réussite] * 0.9, "⚠ Proche",
+    "✗ Non atteint"
+)
+
+-- ----------------------------------------------------------------------------
+-- 7.4 Indicateur de Performance (Jauges)
+-- ----------------------------------------------------------------------------
+-- Cette mesure retourne une valeur entre 0 et 1 pour les visualisations de jauge
+Performance Normalisée =
+MIN([Taux Réussite Global] / [Objectif Taux Réussite], 1)
+
+================================================================================
+SECTION 8: MESURES POUR FILTRES CONTEXTUELS
+================================================================================
+
+-- ----------------------------------------------------------------------------
+-- 8.1 Texte Dynamique - Période Sélectionnée
+-- ----------------------------------------------------------------------------
+Période Sélectionnée =
+VAR MinDate = MIN(Dim_Calendrier[date])
+VAR MaxDate = MAX(Dim_Calendrier[date])
+RETURN
+    "Du " & FORMAT(MinDate, "DD/MM/YYYY") &
+    " au " & FORMAT(MaxDate, "DD/MM/YYYY")
+
+-- ----------------------------------------------------------------------------
+-- 8.2 Texte Dynamique - Examen Sélectionné
+-- ----------------------------------------------------------------------------
+Examen Sélectionné =
+IF(
+    HASONEVALUE(Dim_Examens[examen_libelle]),
+    SELECTEDVALUE(Dim_Examens[examen_libelle]),
+    "Tous les examens"
+)
+
+-- ----------------------------------------------------------------------------
+-- 8.3 Texte Dynamique - Annexe Sélectionnée
+-- ----------------------------------------------------------------------------
+Annexe Sélectionnée =
+IF(
+    HASONEVALUE(Dim_Annexes[annexe_name]),
+    SELECTEDVALUE(Dim_Annexes[annexe_name]),
+    "Toutes les annexes"
+)
+
+-- ----------------------------------------------------------------------------
+-- 8.4 Nombre de Filtres Actifs
+-- ----------------------------------------------------------------------------
+Nombre Filtres Actifs =
+VAR ExamenFiltre = IF(HASONEVALUE(Dim_Examens[examen_id]), 1, 0)
+VAR AnnexeFiltre = IF(HASONEVALUE(Dim_Annexes[annexe_id]), 1, 0)
+VAR LangueFiltre = IF(HASONEVALUE(Dim_Langues[langue_id]), 1, 0)
+VAR CategorieFiltre = IF(HASONEVALUE(Dim_CategoriesPermis[categorie_permis_id]), 1, 0)
+RETURN
+    ExamenFiltre + AnnexeFiltre + LangueFiltre + CategorieFiltre
+
+================================================================================
+SECTION 9: MESURES UTILITAIRES
+================================================================================
+
+-- ----------------------------------------------------------------------------
+-- 9.1 Indicateur Données Disponibles
+-- ----------------------------------------------------------------------------
+Données Disponibles =
+IF(
+    COUNTROWS(Fait_DossiersSessions) > 0,
+    "✓ Données disponibles",
+    "⚠ Aucune donnée"
+)
+
+-- ----------------------------------------------------------------------------
+-- 9.2 Date de Dernière Mise à Jour
+-- ----------------------------------------------------------------------------
+Dernière MAJ =
+"Dernière mise à jour : " &
+FORMAT(NOW(), "DD/MM/YYYY HH:mm")
+
+-- ----------------------------------------------------------------------------
+-- 9.3 Nombre Total d'Enregistrements
+-- ----------------------------------------------------------------------------
+Nombre Enregistrements =
+COUNTROWS(Fait_DossiersSessions)
+
+================================================================================
+SECTION 10: TABLES CALCULÉES (SI NÉCESSAIRE)
+================================================================================
+
+-- ----------------------------------------------------------------------------
+-- 10.1 Table Résumé Par Langue
+-- ----------------------------------------------------------------------------
+-- Nom de la table: Resume_Par_Langue
+-- À créer via : Modélisation > Nouvelle table
+
+Resume_Par_Langue =
+SUMMARIZE(
+    Fait_DossiersSessions,
+    Dim_Langues[langue_name],
+    "Total Candidats", [Total Candidats],
+    "Taux Réussite", [Taux Réussite Global]
+)
+
+-- ----------------------------------------------------------------------------
+-- 10.2 Table Résumé Par Catégorie
+-- ----------------------------------------------------------------------------
+Resume_Par_Categorie =
+SUMMARIZE(
+    Fait_DossiersSessions,
+    Dim_CategoriesPermis[categorie_permis_name],
+    "Total Candidats", [Total Candidats],
+    "Admis Définitifs", [Total Admis Définitifs],
+    "Taux Réussite", [Taux Réussite Global]
+)
+
+================================================================================
+FIN DU FICHIER MESURES DAX
+================================================================================
+
+NOTES IMPORTANTES:
+1. Créer toutes ces mesures dans une table dédiée nommée "_Mesures"
+2. Organiser les mesures par dossiers dans Power BI (Affichage > Dossiers d'affichage)
+3. Formater les mesures de pourcentage avec 2 décimales
+4. Utiliser les couleurs du thème SIGPCB: #006F6F (bleu-vert) et #F49E24 (orange)
+
+================================================================================
